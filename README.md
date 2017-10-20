@@ -23,3 +23,9 @@ https://ke.qq.com/course/203400
 
 * Hello MUI发布列表到详情最佳实践  
 http://ask.dcloud.net.cn/article/12575
+
+* **底部选择卡切换** 问题的解决：
+    * Hbuilder--mui--webview切换子页面问题  
+    http://blog.csdn.net/zhuyu19911016520/article/details/70270731
+    * HBuilder mui入门教程——（2）含tab选项卡的首页  
+    http://blog.csdn.net/anjingshen/article/details/74138717
