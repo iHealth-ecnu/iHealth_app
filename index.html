@@ -6,52 +6,76 @@
     <title></title>
     <script src="js/mui.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
-    <script type="text/javascript" charset="utf-8">
-      	mui.init({
-      		subpages:[{
-      			url:'index_content.html',
-      			id:'index_content',
-      			styles:{
-      				top:'45px',
-      				bottom:'50px'
-      			}
-      		}]
-      	});
-//    	// 预加载
-//		mui.preload({
-//		    url:'article.html',
-//		    id:'article.html'
-//		});
-      	mui.plusReady(function(){
-      		document.getElementById('tab-config').addEventListener('tap',function(){
-      			mui.openWindow({
-      				url:'config.html',
-      				id:'config'
-      			});
-      		});
-      	});
-    </script>
 </head>
 <body>
 	<!--头部-->
 	<header class="mui-bar mui-bar-nav">
-		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
-		<h1 class="mui-title">iHealth</h1>
+		<h1 class="mui-title" id="title">iHealth</h1>
 	</header>
 	<!--底部选择栏-->
 	<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item mui-active" id="tab-home">
+	    <a class="mui-tab-item mui-active" href="home.html">
 	        <span class="mui-icon mui-icon-home"></span>
 	        <span class="mui-tab-label">首页</span>
 	    </a>
-	    <a class="mui-tab-item" id="tab-im">
+	    <a class="mui-tab-item" href="chat.html">
 	        <span class="mui-icon mui-icon-email"></span>
 	        <span class="mui-tab-label">交流</span>
 	    </a>
-	    <a class="mui-tab-item" id="tab-config">
+	    <a class="mui-tab-item" href="setting.html">
 	        <span class="mui-icon mui-icon-gear"></span>
 	        <span class="mui-tab-label">设置</span>
 	    </a>
 	</nav>
+	
+    <script type="text/javascript" charset="utf-8">
+    	//mui插件初始化
+      	mui.init({
+      		swipeBack: true	//启动右滑关闭功能
+      	});
+      	//所有选择卡
+      	var subpages = ['home.html','chat.html', 'setting.html'];
+      	var subpage_style = {
+		    top: '45px',  
+		    bottom: '51px'  
+		}; 
+		//当前显示选择卡
+		var activeTab = subpages[0];
+      	//创建子页面，显示首页选择卡，隐藏其余页面
+      	mui.plusReady(function(){
+      		var self = plus.webview.currentWebview();
+      		for (var i = 0; i < subpages.length; i++){
+      			var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
+      			if (i >0){	//隐藏其他页面
+      				sub.hide(); 
+      			}
+      			self.append(sub); //加入子页面
+      		}
+      	});
+      	//选择卡点击事件
+      	mui('.mui-bar-tab').on('tap','a',function(e){
+      		var targetTab = this.getAttribute('href');
+      		if (targetTab == activeTab)
+      			return ;
+      		//更换标题
+			var title = document.getElementById('title');
+      		title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+      		//显示目标选择卡
+      		plus.webview.show(targetTab);
+      		//隐藏原选择卡
+      		plus.webview.hide(activeTab);
+      		//更改当前活跃选择卡
+      		activeTab = targetTab;
+      		
+//    		//为顶部添加返回键
+//    		mui.toast(activeTab);
+//    		if (activeTab == "article.html"){
+//	      		var headerTag = document.getElementsByTagName('header')[0];
+//	      		var back = document.createElement("a");
+//	      		back.setAttribute("class","mui-action-back mui-icon mui-icon-left-nav mui-pull-left");   //设置 a 标签属性
+//	      		headerTag.appendChild(back);
+//    		}
+      	});
+    </script>
 </body>
 </html>
