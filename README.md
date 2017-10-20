@@ -20,3 +20,6 @@ http://blog.csdn.net/hbcui1984/article/details/42156409
 
 * 跨平台APP开发框架 - MUI 全套教程【视频教程】  
 https://ke.qq.com/course/203400
+
+* Hello MUI发布列表到详情最佳实践  
+http://ask.dcloud.net.cn/article/12575
