@@ -31,3 +31,6 @@ http://ask.dcloud.net.cn/article/12575
     http://blog.csdn.net/anjingshen/article/details/74138717
     * tab选项卡示例教程-nativeObj原生模式tab（含底部凸起大图标）  
     https://github.com/dcloudio/mui/tree/master/examples/nativeTab
+    
+* 提升HTML5的性能体验系列之一 避免切页白屏  
+http://ask.dcloud.net.cn/article/25
