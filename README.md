@@ -1,7 +1,50 @@
 ## iHealth
 iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 
-### 开发笔记
+
+### MongoDB 配置
+1. 开启 MongoDB 权限认证：**在配置文件中加入 auth = true**
+
+2. 创建管理员用户（如果你是第一次使用 MongoDB）  
+```
+use admin
+db.createUser({user:"admin",pwd:"admin123",roles:["userAdminAnyDatabase"]})
+```
+管理员用户用来创建其他数据库和用户
+
+3. 使用管理员账户远程登录
+```
+C:\Users\cs>mongo [your_ip]:27017
+> use admin
+switched to db admin
+> db.auth('admin','admin123')
+1
+```
+
+4. 创建 iHealth 数据库，以及操作该数据库的用户
+```
+use iHealth         // 创建 iHealth 数据库，并作为认证数据库
+db.createUser({
+    user:'admin',   // 用户名
+    pwd:'admin123', // 用户密码
+    roles:[{role:'readWrite',db:'iHealth'}]     // 为该用户赋予数据库的读写权限
+})
+```
+
+5. 使用该用户远程登录 iHealth 数据库
+```
+C:\Users\cs>mongo [your_ip]:27017
+> use iHealth
+switched to db iHealth
+> db.auth('admin','admin123')
+1
+> db.getCollectionNames()
+[ ]
+```
+数据库刚刚创建，所以没有数据
+
+
+### 开发注意事项
 * 底部选择栏 单击跳转到新页面 不能用 ```<a href='...'>``` 的形式，也不能用 js 绑定 onclick 事件的方式。需要用绑定 id ，并在 init() 下面实现 mui.plusReady() 函数即可。
 
 
