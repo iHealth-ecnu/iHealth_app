@@ -10,122 +10,76 @@
 
 	<body>
 		<!--内容-->
-		<div class="mui-content">
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						小M
-						<p>发表于 2016-10-19 11:30</p>
-					</div>
-				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px">
-					【男性养生茶 男性如何正确喝茶】<br/>
-					 养生是现在很多人喜爱做的一件事情，养生对身体的帮助比较大，养生的方法有很多……</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞</a>
-					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link" onclick="readMore()">阅读更多</a>
-				</div>
-			</div>
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						小M
-						<p>发表于 2016-10-19 11:30</p>
-					</div>
-				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px">
-					【吃什么食物补脑效果好？】<br/>
-					 合理的营养对提高大脑智力有较为显著的效果，在日常生活中，一些有助于补脑健智的食品，并非昂贵难觅，而恰恰是廉价又普通之物，随处可见，下面我们就一起看看！
-				</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞</a>
-					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link">阅读更多</a>
-				</div>
-			</div>
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						小M
-						<p>发表于 2016-10-19 11:30</p>
-					</div>
-				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px">
-					【多家上市公司涉抗癌项目 靶向药研发成趋势】<br/>
-					 医药网10月19日讯　由于癌症凶如猛兽，所以各方人士正不遗余力地推动中国抗癌药物的研发。
-				</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞</a>
-					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link">阅读更多</a>
-				</div>
-			</div>
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						小M
-						<p>发表于 2016-10-19 11:30</p>
-					</div>
-				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px">
-					【女性吃什么能补气色？】<br/>
-					 吃一些简单的食物就能拥有完美好的气色，这是很多女人都梦寐以求的事，真的能简单吃吃就可以拥有好气色吗，这就需要吃对的食物了不是随便一般的食物都可以吃吃就能对肤色好，小编来告诉大家怎么吃东西就能对女人肤色好，超级简单的提亮自己的肤。
-				</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞</a>
-					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link">阅读更多</a>
-				</div>
-			</div>
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						小M
-						<p>发表于 2016-10-19 11:30</p>
-					</div>
-				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px">
-					【反弹势头延续 医药行业三季度业绩延续增长】<br/>
-					医药网10月19日讯　截至10月18日，177家医药上市公司披露了三季报业绩预告，103家净利润有所增长，48家下滑，26家不确定。整体看，医药行业运行平稳……
-				</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞</a>
-					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link">阅读更多</a>
-				</div>
-			</div>
+		<div class="mui-content" id="home">
 		</div>
 
+		<!--引用的 JS-->
 		<script src="js/mui.min.js"></script>
+		<script src="js/template-web.js"></script>
+		
+		<!--HTML模板-->
+		<script id="home-template" type="text/html">
+			{{each items item}}
+				<div class="mui-card">
+					<!--页眉，放置标题-->
+					<div class="mui-card-header mui-card-media">
+						<img src="./images/logo.png" />
+						<div class="mui-media-body">
+							{{item.publisher}}
+							<p>发表于 {{item.pubdate}}</p>
+						</div>
+					</div>
+					<!--内容区-->
+					<div class="mui-card-content" style="padding:10px;">
+						<h4>【{{item.title}}】</h4>
+						 {{item.intro}}</div>
+					<!--页脚，放置补充信息或支持的操作-->
+					<div class="mui-card-footer">
+						<a class="mui-card-link">点赞</a>
+						<a class="mui-card-link">评论</a>
+						<a class="mui-card-link" onclick="readMore(this)" id="{{item._id}}">阅读更多</a>
+					</div>
+				</div>
+			{{/each}}
+		</script>
+		
+		<!--JS代码-->
 		<script type="text/javascript">
 			mui.init();
-			function readMore(){
+			function readMore(e){
+				var id = e.getAttribute('id');
+				// 获得文章详情页面 webview
+				articlePage = plus.webview.getWebviewById('article.html');
+				// 注入数据
+				mui.fire(articlePage,'currentId',{
+					id:id
+				});
+				// 打开详情页面
 				mui.openWindow({
 					url:'article.html',
 					id:'article.html'
 				});
 			};
+			mui.plusReady(function(){
+				// 渲染
+				// 从后端获取数据
+				mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist',function(data){
+					// 根据模板将数据渲染成 HTML
+					var html = template('home-template', {'items':data});
+					// 将 HTML 插入到页面中
+					document.getElementById('home').innerHTML = html;
+				});
+				
+			    //预加载详情页
+			    webview_article = mui.preload({
+			        url: 'article.html',
+			        id: 'article.html',
+			        styles: {
+			            "render": "always",//一直渲染
+			            "popGesture": "hide"
+			        }
+			    });
+			});
 		</script>
 	</body>
 
