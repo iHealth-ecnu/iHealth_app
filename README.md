@@ -35,3 +35,6 @@ http://ask.dcloud.net.cn/article/12575
     
 * 提升HTML5的性能体验系列之一 避免切页白屏  
 http://ask.dcloud.net.cn/article/25
+
+* .git文件过大！删除大文件  
+http://www.cnblogs.com/lout/p/6111739.html
