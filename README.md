@@ -29,3 +29,5 @@ http://ask.dcloud.net.cn/article/12575
     http://blog.csdn.net/zhuyu19911016520/article/details/70270731
     * HBuilder mui入门教程——（2）含tab选项卡的首页  
     http://blog.csdn.net/anjingshen/article/details/74138717
+    * tab选项卡示例教程-nativeObj原生模式tab（含底部凸起大图标）  
+    https://github.com/dcloudio/mui/tree/master/examples/nativeTab
