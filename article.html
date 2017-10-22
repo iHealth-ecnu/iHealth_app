@@ -6,6 +6,15 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.article-content {
+				padding-top: 10px;
+				font-size: 18px;
+			}
+			.article-content p{
+				font-size: 18px;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -26,15 +35,16 @@
 			
 		<!--HTML模板-->
 		<script id="article-template" type="text/html">
-			<div class="v_c" style="padding: 10px;">
-		      <h1>{{item.title}}</h1>
-		      <div class="time">发表日期：{{item.pubdate}} <span class="v_xk01">|</span> 来源：<a href="http://www.ysbj.gg" style="color:#666;">{{item.publisher}}</a><span class="v_xk01"> |</span> 点击数：
-		        5296
-		        <span class="view_wb">收听：<div class="bdshare"><a href="http://weibo.com/u/5344860683" rel="nofollow" target="_blank"><img src="http://www.ysbj.gg/style/sine01.gif"></a> <a href="http://t.qq.com/ysw07654" rel="nofollow" target="_blank"><img src="http://www.ysbj.gg/style/qq01.gif"></a></div>
-		        </span>
-		      </div>
-		      {{#item.content}}
-		      
+			<div style="padding: 10px;">
+		    	<h2>{{item.title}}</h2>
+				<div>
+					发表日期：{{item.pubdate}} <span>|</span> 
+					来源：<a href="{{item.publisher_src}}" style="color:#666;">{{item.publisher}}</a><span> |</span>
+			  		点击数：5296
+			  	</div>
+				<div class="article-content">
+					{{@item.content}}		      	
+	  			</div>
 			</div>
 		</script>
 		
@@ -48,9 +58,23 @@
 				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id, function(data){
 					// 根据模板将数据渲染成 HTML
 					var html = template('article-template', {'item':data});
-					// 优化 img 标签显示效果
 					// 将 HTML 插入到页面中
 					document.getElementById('article').innerHTML = html;
+					// 优化 img 标签显示效果
+					var articleElement = document.getElementById('article');
+					var imgs = articleElement.getElementsByTagName('img');
+					for(var i = 0; i < imgs.length; i++){
+						imgs[i].style = 'width:100%;';
+					}
+					// 替换 h3 标签为 strong 标签
+					h3s = articleElement.getElementsByTagName('h3');
+					for(var i = h3s.length-1; i >=0 ; i--){
+						strongTag = document.createElement('strong');
+						strongTagChild = document.createElement('p');
+						strongTagChild.innerHTML = h3s[i].innerText;
+						strongTag.appendChild(strongTagChild);
+						h3s[i].parentNode.replaceChild(strongTag,h3s[i]);
+					}
 				});
 			});
 		</script>
