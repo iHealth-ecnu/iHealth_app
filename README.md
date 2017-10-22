@@ -1,6 +1,10 @@
 ## iHealth
 iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 
+### 使用技术及工具
+* MUI（前端框架）
+* artTemplate（JS模板引擎）
+* HBuilder（开发、调试、打包工具）
 
 ### 开发注意事项
 * 底部选择栏 单击跳转到新页面 不能用 ```<a href='...'>``` 的形式，也不能用 js 绑定 onclick 事件的方式。需要用绑定 id ，并在 init() 下面实现 mui.plusReady() 函数即可。
