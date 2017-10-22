@@ -42,3 +42,9 @@ http://ask.dcloud.net.cn/article/25
 
 * .git文件过大！删除大文件  
 http://www.cnblogs.com/lout/p/6111739.html
+
+* Python爬虫利器三之Xpath语法与lxml库的用法  
+http://cuiqingcai.com/2621.html
+
+* artTemplate 官方文档  
+https://aui.github.io/art-template/docs/syntax.html
