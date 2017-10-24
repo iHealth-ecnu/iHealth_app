@@ -1,6 +1,18 @@
 ## iHealth
 iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 
+
+### 使用技术及工具
+* [MUI](http://www.dcloud.io/mui.html)（前端框架）
+* [artTemplate](https://aui.github.io/art-template/docs/syntax.html)（JS模板引擎）
+* [HBuilder](http://www.dcloud.io/index.html)（开发、调试、打包工具）
+
+## 启动说明
+1. 下载 HBuilder，下载地址：http://www.dcloud.io/index.html
+2. 用 HBuilder 打开该项目目录
+3. 用 HBuilder 真机调试  
+  [HBuilder开发App教程02-环境搭建，HelloWorld以及真机调试](http://blog.csdn.net/uikoo9/article/details/46734079)
+
 ### TODO
 
 - [x] 底部选择卡切换
@@ -17,12 +29,6 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 - [ ] 上拉刷新
 
 ……
-
-
-### 使用技术及工具
-* [MUI](http://www.dcloud.io/mui.html)（前端框架）
-* [artTemplate](https://aui.github.io/art-template/docs/syntax.html)（JS模板引擎）
-* [HBuilder](http://www.dcloud.io/index.html)（开发、调试、打包工具）
 
 ### 开发注意事项
 * 底部选择栏 单击跳转到新页面 不能用 ```<a href='...'>``` 的形式，也不能用 js 绑定 onclick 事件的方式。需要用绑定 id ，并在 init() 下面实现 mui.plusReady() 函数即可。
