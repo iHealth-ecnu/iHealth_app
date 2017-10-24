@@ -14,14 +14,14 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
     - [x] 图片大小适配屏幕
     - [x] 替换 h3 标签为 strong 标签
 - [ ] 下拉刷新
-
+- [ ] 上拉刷新
 ……
 
 
 ### 使用技术及工具
-* MUI（前端框架）
-* artTemplate（JS模板引擎）
-* HBuilder（开发、调试、打包工具）
+* [MUI](http://www.dcloud.io/mui.html)（前端框架）
+* [artTemplate](https://aui.github.io/art-template/docs/syntax.html)（JS模板引擎）
+* [HBuilder](http://www.dcloud.io/index.html)（开发、调试、打包工具）
 
 ### 开发注意事项
 * 底部选择栏 单击跳转到新页面 不能用 ```<a href='...'>``` 的形式，也不能用 js 绑定 onclick 事件的方式。需要用绑定 id ，并在 init() 下面实现 mui.plusReady() 函数即可。
