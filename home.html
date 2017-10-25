@@ -10,7 +10,7 @@
 
 	<body>
 		<!--内容-->
-		<div class="mui-content mui-scroll-wrapper" id="home">
+		<div class="mui-content mui-scroll-wrapper" id="home" style="margin-top:-40px">
 	        <div class="mui-scroll">
 	        </div>
 		</div>
@@ -21,26 +21,30 @@
 		
 		<!--HTML模板-->
 		<script id="home-template" type="text/html">
-			<!--页眉，放置标题-->
-			<div class="mui-card-header mui-card-media">
-				<img src="./images/logo.png" />
-				<div class="mui-media-body">
-					{{item.publisher}}
-					<p>发表于 {{item.pubdate}}</p>
+			{{each items item}}
+			<div class="mui-card">
+				<!--页眉，放置标题-->
+				<div class="mui-card-header mui-card-media">
+					<img src="./images/logo.png" />
+					<div class="mui-media-body">
+						{{item.publisher}}
+						<p>发表于 {{item.pubdate}}</p>
+					</div>
+				</div>
+				<!--内容区-->
+				<div class="mui-card-content" style="padding:10px;">
+					<h4>{{item.title}}</h4>
+					<img alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
+					{{item.intro}}
+				</div>
+				<!--页脚，放置补充信息或支持的操作-->
+				<div class="mui-card-footer">
+					<a class="mui-card-link">点赞</a>
+					<a class="mui-card-link">评论</a>
+					<a class="mui-card-link" onclick="readMore(this)" id="{{item._id}}">阅读更多</a>
 				</div>
 			</div>
-			<!--内容区-->
-			<div class="mui-card-content" style="padding:10px;">
-				<h4>{{item.title}}</h4>
-				<img alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
-				{{item.intro}}
-			</div>
-			<!--页脚，放置补充信息或支持的操作-->
-			<div class="mui-card-footer">
-				<a class="mui-card-link">点赞</a>
-				<a class="mui-card-link">评论</a>
-				<a class="mui-card-link" onclick="readMore(this)" id="{{item._id}}">阅读更多</a>
-			</div>
+			{{/each}}
 		</script>
 		
 		<!--JS代码-->
@@ -50,7 +54,7 @@
 				    container:'#home',//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
 					up : {
 						height:50,//可选.默认50.触发上拉加载拖动距离
-						auto:false,//可选,默认false.自动上拉加载一次
+						auto:true,//可选,默认false.自动上拉加载一次
 						contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
 						contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
 						callback :function() {
@@ -61,26 +65,35 @@
 					}
 				}
 			});
+			// 当前应该加载的页数
+			var cur_page = 1;
 			var loadMore = function(pullRefresh) {
 			    // 加载更多的内容到列表中
-				// 从后端获取数据
-				mui.toast('正在加载数据……');
-				mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=2&limit=10',function(data){
-					var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
-					for (var i=0; i<data.length; i++){
+			    setTimeout(function(){
+					// 从后端获取数据
+					mui.toast('正在加载第' + cur_page + '页数据……');
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + cur_page++ + '&limit=5',function(data){
+						var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
 						// 根据模板将数据渲染成 HTML
-						var html = template('home-template', {'item':data[i]});
-						var card = document.createElement('div');
-						card.className = 'mui-card';
-						card.innerHTML = html
-						// 将 HTML 插入到页面中
-						article_list.appendChild(card)
-					}
-				});
-			    // 如果没有更多数据了，则关闭上拉加载
+						var html = template('home-template', {'items':data});
+						// 将 HTML 插入到列表后
+						article_list.innerHTML += html;
+//						for (var i=0; i<data.length; i++){
+//							// 根据模板将数据渲染成 HTML
+//							var html = template('home-template', {'item':data[i]});
+//							var card = document.createElement('div');
+//							card.className = 'mui-card';
+//							card.innerHTML = html;
+//							// 将 HTML 插入到页面中
+//							article_list.appendChild(card);
+//						}
+				    	// 超过一定页数便不再加载。参数为 true 表示不再更新数据。
+						pullRefresh.endPullupToRefresh( (cur_page>6) );
+					});			    	
+			    }, 500);			    // 如果没有更多数据了，则关闭上拉加载
 //			    pullRefresh.endPullupToRefresh(true);
 			    // 如果有更多数据，则继续
-			    pullRefresh.endPullupToRefresh(false);
+//			    pullRefresh.endPullupToRefresh(false);
 			};
 
 			function readMore(e){
@@ -100,25 +113,15 @@
 			mui.plusReady(function(){
 				// 初始化scroll控件
 				mui('.mui-scroll-wrapper').scroll({
+					scrollY: true, //是否竖向滚动
 					startX: 0, //初始化时滚动至x
 					startY: 0, //初始化时滚动至y
  					indicators: true, //是否显示滚动条
+   					bounce: true, //是否启用回弹
 					deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
 				});
 				// 渲染
-				// 从后端获取数据
-				mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist',function(data){
-					var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
-					for (var i=0; i<data.length; i++){
-						// 根据模板将数据渲染成 HTML
-						var html = template('home-template', {'item':data[i]});
-						var card = document.createElement('div');
-						card.className = 'mui-card';
-						card.innerHTML = html
-						// 将 HTML 插入到页面中
-						article_list.appendChild(card)
-					}
-				});
+				// pass
 				
 			    //预加载详情页
 			    webview_article = mui.preload({
