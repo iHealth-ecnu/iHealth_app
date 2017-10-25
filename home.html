@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px;">
+				<div class="mui-card-content" style="padding:10px;" id="{{item._id}}">
 					<h4>{{item.title}}</h4>
 					<img alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
 					{{item.intro}}
@@ -41,7 +41,8 @@
 				<div class="mui-card-footer">
 					<a class="mui-card-link">点赞</a>
 					<a class="mui-card-link">评论</a>
-					<a class="mui-card-link" onclick="readMore(this)" id="{{item._id}}">阅读更多</a>
+					<!--<a class="mui-card-link readmore" onclick="readMore(this)">阅读更多</a>-->
+					<a class="mui-card-link readmore">阅读更多</a>
 				</div>
 			</div>
 			{{/each}}
@@ -78,38 +79,44 @@
 						var html = template('home-template', {'items':data});
 						// 将 HTML 插入到列表后
 						article_list.innerHTML += html;
-//						for (var i=0; i<data.length; i++){
-//							// 根据模板将数据渲染成 HTML
-//							var html = template('home-template', {'item':data[i]});
-//							var card = document.createElement('div');
-//							card.className = 'mui-card';
-//							card.innerHTML = html;
-//							// 将 HTML 插入到页面中
-//							article_list.appendChild(card);
-//						}
 				    	// 超过一定页数便不再加载。参数为 true 表示不再更新数据。
 						pullRefresh.endPullupToRefresh( (cur_page>6) );
 					});			    	
 			    }, 500);			    // 如果没有更多数据了，则关闭上拉加载
-//			    pullRefresh.endPullupToRefresh(true);
-			    // 如果有更多数据，则继续
-//			    pullRefresh.endPullupToRefresh(false);
 			};
 
-			function readMore(e){
-				var id = e.getAttribute('id');
-				// 获得文章详情页面 webview
-				articlePage = plus.webview.getWebviewById('article.html');
-				// 注入数据
-				mui.fire(articlePage,'currentId',{
-					id:id
-				});
-				// 打开详情页面
-				mui.openWindow({
-					url:'article.html',
-					id:'article.html'
-				});
-			};
+//			function readMore(e){
+//				console.log('readMore');
+//				var id = e.getAttribute('id');
+//				// 获得文章详情页面 webview
+//				articlePage = plus.webview.getWebviewById('article.html');
+//				// 注入数据
+//				mui.fire(articlePage,'currentId',{
+//					id:id
+//				});
+//				// 打开详情页面
+//				mui.openWindow({
+//					url:'article.html',
+//					id:'article.html'
+//				});
+//			};
+
+//			document.getElementsByClassName('mui-card-content')[0].addEventListener('click',function(e){
+//				console.log('dfs');
+//				var id = e.getAttribute('id');
+//				// 获得文章详情页面 webview
+//				articlePage = plus.webview.getWebviewById('article.html');
+//				// 注入数据
+//				mui.fire(articlePage,'currentId',{
+//					id:id
+//				});
+//				// 打开详情页面
+//				mui.openWindow({
+//					url:'article.html',
+//					id:'article.html'
+//				});
+//			},false);
+			
 			mui.plusReady(function(){
 				// 初始化scroll控件
 				mui('.mui-scroll-wrapper').scroll({
@@ -132,6 +139,27 @@
 			            "popGesture": "hide"
 			        }
 			    });
+			    
+			    document.querySelector('body').addEventListener('tap',function (e) {
+				    if (e.target.className == 'mui-card-content'){
+						var id = e.target.getAttribute('id');
+						// 获得文章详情页面 webview
+						articlePage = plus.webview.getWebviewById('article.html');
+						// 注入数据
+						mui.fire(articlePage,'currentId',{
+							id:id
+						});
+						// 打开详情页面 
+						mui.openWindow({
+							url:'article.html',
+							id:'article.html'
+						});
+				    }
+				});
+//				mui('.mui-card-footer').on('tap','.a',function(e){
+//					mui.toast('fdsafd');
+//					this.click();
+//				});
 			});
 		</script>
 	</body>
