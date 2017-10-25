@@ -56,6 +56,7 @@
       	mui('.mui-bar-tab').on('tap','a',function(e){
       		var targetTab = this.getAttribute('href');
       		if (targetTab == activeTab)
+//    			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
       			return ;
       		//更换标题
 			var title = document.getElementById('title');
