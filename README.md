@@ -19,6 +19,9 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 - [x] 首页文章列表
 - [x] 文章详情页
 - [x] 使用JS模板引擎（artTemplate）渲染页面
+- [x] 上拉刷新
+- [x] 回到顶部
+- [x] 阅读更多
 - [ ] 阅读量动态增加
 - [ ] 点赞数动态增加
 - [ ] 评论
@@ -26,7 +29,6 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
     - [x] 图片大小适配屏幕
     - [x] 替换 h3 标签为 strong 标签
 - [ ] 下拉刷新
-- [ ] 上拉刷新
 
 ……
 
@@ -72,3 +74,21 @@ http://cuiqingcai.com/2621.html
 
 * artTemplate 官方文档  
 https://aui.github.io/art-template/docs/syntax.html
+
+* 【回到顶部】解决动态增加内容后调用 scroll().scrollTo(0,0,100) 失效的问题
+    * MUI动态加载数据后，scrollToBottom无效的解决方案  
+      http://blog.csdn.net/sbt0198/article/details/51755843
+    * evalJS和自定义事件，在ios 下不执行？  
+      http://ask.dcloud.net.cn/question/11022
+    * MUI 官方文档  
+      http://dev.dcloud.net.cn/mui/ui/#scroll
+    * MUI scroll(区域滚动)问题  
+      http://luckylearn.iteye.com/blog/2366710
+      
+* 【阅读更多】mui mui-scroll 中的 onclick 事件无效  
+    * mui的onclick事件无效  
+      http://ask.dcloud.net.cn/question/21432
+    * mui-scroll与onclick事件冲突  
+      http://ask.dcloud.net.cn/question/19170
+    * 官网下的 demo MUI ， 为什么 a链接都是失效的  
+      http://ask.dcloud.net.cn/question/6444
