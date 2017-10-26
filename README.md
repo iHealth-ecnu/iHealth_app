@@ -46,6 +46,9 @@ http://ask.dcloud.net.cn/article/786
 * mui官方文档  
 http://dev.dcloud.net.cn/mui/ui/
 
+* artTemplate 官方文档  
+https://aui.github.io/art-template/docs/syntax.html
+
 * mui开发注意事项  
 http://blog.csdn.net/hbcui1984/article/details/42156409
 
@@ -72,8 +75,13 @@ http://www.cnblogs.com/lout/p/6111739.html
 * Python爬虫利器三之Xpath语法与lxml库的用法  
 http://cuiqingcai.com/2621.html
 
-* artTemplate 官方文档  
-https://aui.github.io/art-template/docs/syntax.html
+* 【上拉刷新】
+    * 上拉加载（官方文档）  
+      http://dev.dcloud.net.cn/mui/pullup/
+    * 7、mui下拉加载、上拉刷新(包括分页，vue.js)  
+      http://blog.csdn.net/u012453773/article/details/52292816
+    * MUI的上拉加载功能实现  
+      http://blog.csdn.net/sbt0198/article/details/52215614
 
 * 【回到顶部】解决动态增加内容后调用 scroll().scrollTo(0,0,100) 失效的问题
     * MUI动态加载数据后，scrollToBottom无效的解决方案  
