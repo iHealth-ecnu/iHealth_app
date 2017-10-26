@@ -33,8 +33,8 @@
 				</div>
 				<!--内容区-->
 				<div class="mui-card-content" style="padding:10px;" id="{{item._id}}">
-					<h4>{{item.title}}</h4>
-					<img alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
+					<h4 class='card-title'>{{item.title}}</h4>
+					<img class="card-img" alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
 					{{item.intro}}
 				</div>
 				<!--页脚，放置补充信息或支持的操作-->
@@ -42,7 +42,7 @@
 					<a class="mui-card-link">点赞</a>
 					<a class="mui-card-link">评论</a>
 					<!--<a class="mui-card-link readmore" onclick="readMore(this)">阅读更多</a>-->
-					<a class="mui-card-link readmore">阅读更多</a>
+					<a class="mui-card-link readmore" id="{{item._id}}">阅读更多</a>
 				</div>
 			</div>
 			{{/each}}
@@ -125,7 +125,7 @@
 					startY: 0, //初始化时滚动至y
  					indicators: true, //是否显示滚动条
    					bounce: true, //是否启用回弹
-					deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+					deceleration: 0.0035 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
 				});
 				// 渲染
 				// pass
@@ -141,8 +141,11 @@
 			    });
 			    
 			    document.querySelector('body').addEventListener('tap',function (e) {
-				    if (e.target.className == 'mui-card-content'){
-						var id = e.target.getAttribute('id');
+				    if (e.target.className == 'card-title' || e.target.className == 'card-img' || e.target.className == 'mui-card-content' || e.target.className == 'mui-card-link readmore'){
+				    	if (e.target.className == 'card-img' || e.target.className == 'card-title')
+							var id = e.target.parentNode.getAttribute('id');
+						else
+							var id = e.target.getAttribute('id');
 						// 获得文章详情页面 webview
 						articlePage = plus.webview.getWebviewById('article.html');
 						// 注入数据
@@ -155,10 +158,14 @@
 							id:'article.html'
 						});
 				    }
+				    else if (e.target.className == 'card-img'){
+				    	console.log('hhh');
+				    }
 				});
-//				mui('.mui-card-footer').on('tap','.a',function(e){
+
+//				mui('.mui-card-footer').on('tap','.mui-card-link .readmore',function(e){
 //					mui.toast('fdsafd');
-//					this.click();
+//					this.click(); 
 //				});
 			});
 		</script>
