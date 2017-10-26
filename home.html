@@ -84,38 +84,6 @@
 					});			    	
 			    }, 500);			    // 如果没有更多数据了，则关闭上拉加载
 			};
-
-//			function readMore(e){
-//				console.log('readMore');
-//				var id = e.getAttribute('id');
-//				// 获得文章详情页面 webview
-//				articlePage = plus.webview.getWebviewById('article.html');
-//				// 注入数据
-//				mui.fire(articlePage,'currentId',{
-//					id:id
-//				});
-//				// 打开详情页面
-//				mui.openWindow({
-//					url:'article.html',
-//					id:'article.html'
-//				});
-//			};
-
-//			document.getElementsByClassName('mui-card-content')[0].addEventListener('click',function(e){
-//				console.log('dfs');
-//				var id = e.getAttribute('id');
-//				// 获得文章详情页面 webview
-//				articlePage = plus.webview.getWebviewById('article.html');
-//				// 注入数据
-//				mui.fire(articlePage,'currentId',{
-//					id:id
-//				});
-//				// 打开详情页面
-//				mui.openWindow({
-//					url:'article.html',
-//					id:'article.html'
-//				});
-//			},false);
 			
 			mui.plusReady(function(){
 				// 初始化scroll控件
@@ -158,15 +126,8 @@
 							id:'article.html'
 						});
 				    }
-				    else if (e.target.className == 'card-img'){
-				    	console.log('hhh');
-				    }
 				});
 
-//				mui('.mui-card-footer').on('tap','.mui-card-link .readmore',function(e){
-//					mui.toast('fdsafd');
-//					this.click(); 
-//				});
 			});
 		</script>
 	</body>
