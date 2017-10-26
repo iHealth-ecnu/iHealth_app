@@ -3,7 +3,7 @@
 	"id": "H50D41D26",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "iHealth",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0.0",/*应用版本名称*/
+		"name": "0.0.1",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "",/*应用描述信息*/
@@ -31,7 +31,7 @@
         
         "Events": {
             "description": "应用扩展事件"
-        },"Device":{},"Webview":{},"Runtime":{},"NativeUI":{},"Navigator":{},"NativeObj":{}
+        },"Device":{},"Webview":{},"Runtime":{},"NativeUI":{},"Navigator":{},"NativeObj":{},"Invocation":{}
 	},
 	"plus": {
 		"splashscreen": {
@@ -121,88 +121,119 @@
 		}
 	},
 	"dependencies":{
-	  "pages": {
-	    "config_content.html": {
-	      "href": "config_content.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js",
-	        "images/logo.png"
-	      ],
-	      "priority": 1
-	    },
-	    "config.html": {
-	      "href": "config.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js"
-	      ],
-	      "refer": [
-	        "index.html",
-	        "config_content.html"
-	      ],
-	      "priority": 0
-	    },
-	    "article_content.html": {
-	      "href": "article_content.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js",
-	        "images/1.png"
-	      ],
-	      "priority": 3
-	    },
-	    "article.html": {
-	      "href": "article.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js"
-	      ],
-	      "refer": [
-	        "config.html",
-	        "index.html",
-	        "article_content.html"
-	      ],
-	      "priority": 1
-	    },
-	    "index_content.html": {
-	      "href": "index_content.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js",
-	        "images/logo.png"
-	      ],
-	      "refer": [
-	        "article.html"
-	      ],
-	      "priority": 1
-	    },
-	    "index.html": {
-	      "href": "index.html",
-	      "resources": [
-	        "js/mui.min.js",
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "index_content.html"
-	      ],
-	      "refer": [
-	        "config.html"
-	      ],
-	      "priority": 0
-	    }
-	  },
-	  "idle": {
-	    "resources": [
-	      "js/mui.js",
-	      "css/mui.css",
-	      "README.md"
-	    ]
-	  }
+		"pages": {
+			"config_content.html": {
+				"href": "config_content.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"images/logo.png"
+				],
+				"priority": 1
+			},
+			"config.html": {
+				"href": "config.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js"
+				],
+				"refer": [
+					"index.html",
+					"config_content.html"
+				],
+				"priority": 0
+			},
+			"article_content.html": {
+				"href": "article_content.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"images/1.png"
+				],
+				"priority": 3
+			},
+			"article.html": {
+				"href": "article.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"js/template-web.js"
+				],
+				"refer": [
+					"config.html",
+					"index.html",
+					"article_content.html"
+				],
+				"priority": 1
+			},
+			"index_content.html": {
+				"href": "index_content.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"images/logo.png"
+				],
+				"refer": [
+					"article.html"
+				],
+				"priority": 1
+			},
+			"index.html": {
+				"href": "index.html",
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"index_content.html",
+					"home.html"
+				],
+				"refer": [
+					"config.html",
+					"setting.html",
+					"chat.html"
+				],
+				"priority": 0
+			},
+			"home.html": {
+				"resources": [
+					"images/logo.png",
+					"js/mui.min.js",
+					"js/template-web.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"article.html"
+				],
+				"priority": 0
+			},
+			"setting.html": {
+				"resources": [
+					"images/logo.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"chat.html": {
+				"resources": [
+					"js/mui.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"js/mui.js",
+				"css/mui.css",
+				"README.md"
+			]
+		}
 	},
 	"unpackage":[
 	  "README.md"
