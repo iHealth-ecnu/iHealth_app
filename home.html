@@ -81,6 +81,8 @@
 						article_list.innerHTML += html;
 				    	// 超过一定页数便不再加载。参数为 true 表示不再更新数据。
 						pullRefresh.endPullupToRefresh( (cur_page>6) );
+				    	// 重新计算布局
+				    	mui('.mui-scroll-wrapper').scroll().reLayout();
 					});			    	
 			    }, 500);			    // 如果没有更多数据了，则关闭上拉加载
 			};
@@ -92,7 +94,7 @@
 					startX: 0, //初始化时滚动至x
 					startY: 0, //初始化时滚动至y
  					indicators: true, //是否显示滚动条
-   					bounce: true, //是否启用回弹
+   					bounce: false, //是否启用滚动条回弹
 					deceleration: 0.0035 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
 				});
 				// 渲染
@@ -108,7 +110,17 @@
 			        }
 			    });
 			    
+			    //监听回到顶部事件
+			    window.addEventListener('backTop',function(){
+			    	//重新计算布局
+			    	mui('.mui-scroll-wrapper').scroll().reLayout();
+			    	//500毫秒滚动到顶
+	      			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,500);
+			    });
+			    
+			    // 监听 阅读更多 事件
 			    document.querySelector('body').addEventListener('tap',function (e) {
+			    	// 点击每个 card 上的 标题、图片、文字简介 时，打开文章详情页面
 				    if (e.target.className == 'card-title' || e.target.className == 'card-img' || e.target.className == 'mui-card-content' || e.target.className == 'mui-card-link readmore'){
 				    	if (e.target.className == 'card-img' || e.target.className == 'card-title')
 							var id = e.target.parentNode.getAttribute('id');

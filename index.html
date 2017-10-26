@@ -51,23 +51,28 @@
       			}
       			self.append(sub); //加入子页面
       		}
+      		
+      		//选择卡切换
+	      	mui('.mui-bar-tab').on('tap','a',function(e){
+	      		var targetTab = this.getAttribute('href');
+	      		if (targetTab == activeTab){
+	      			// 传递 回到顶部 自定义事件（需要 触发 loaded 事件之后 fire 才生效，即页面加载完毕才生效）
+	      			var currentWebView = plus.webview.getWebviewById(targetTab);
+	      			mui.fire(currentWebView,'backTop',{});
+	      			return ;
+	      		}
+	      		//更换标题
+				var title = document.getElementById('title');
+	      		title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+	      		//显示目标选择卡
+	      		plus.webview.show(targetTab);
+	      		//隐藏原选择卡
+	      		plus.webview.hide(activeTab);
+	      		//更改当前活跃选择卡
+	      		activeTab = targetTab;
+	      	});
       	});
-      	//选择卡点击事件
-      	mui('.mui-bar-tab').on('tap','a',function(e){
-      		var targetTab = this.getAttribute('href');
-      		if (targetTab == activeTab)
-//    			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
-      			return ;
-      		//更换标题
-			var title = document.getElementById('title');
-      		title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
-      		//显示目标选择卡
-      		plus.webview.show(targetTab);
-      		//隐藏原选择卡
-      		plus.webview.hide(activeTab);
-      		//更改当前活跃选择卡
-      		activeTab = targetTab;
-      	});
+      	
     </script>
 </body>
 </html>
