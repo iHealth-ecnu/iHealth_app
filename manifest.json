@@ -190,11 +190,11 @@
 					"css/mui.min.css",
 					"fonts/mui.ttf",
 					"index_content.html",
-					"home.html"
+					"home.html",
+					"setting.html"
 				],
 				"refer": [
 					"config.html",
-					"setting.html",
 					"chat.html"
 				],
 				"priority": 0

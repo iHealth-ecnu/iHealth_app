@@ -71,7 +71,7 @@
 			    // 加载更多的内容到列表中
 			    setTimeout(function(){
 					// 从后端获取数据
-					mui.toast('正在加载第' + cur_page + '页数据……');
+//					mui.toast('正在加载第' + cur_page + '页数据……');
 					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + cur_page++ + '&limit=5',function(data){
 						var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
 						// 根据模板将数据渲染成 HTML
