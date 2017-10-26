@@ -221,7 +221,12 @@
 			},
 			"chat.html": {
 				"resources": [
-					"js/mui.min.js"
+					"js/mui.min.js",
+					"images/1.png",
+					"js/template-web.js",
+					"images/logo.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
