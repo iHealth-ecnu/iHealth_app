@@ -100,12 +100,23 @@ http://cuiqingcai.com/2621.html
       http://ask.dcloud.net.cn/question/19170
     * 官网下的 demo MUI ， 为什么 a链接都是失效的  
       http://ask.dcloud.net.cn/question/6444
+      
 * 【安卓端无法滑动的 bug】ios 中是 div 滑动，原因是安卓中是 webview 滑动，所以 mui('.mui-scroll-wrapper').scroll(); 失效，安卓端不运行相关代码就好。
     * pullRefresh 安卓无法滑动，iOS正常  
       https://ask.dcloud.net.cn/article/12681
+      
 * 【安卓端无法回到顶部的 bug】原因同上，不同平台采用不同的回到顶端函数。
     * mui.fire srcolltop如何返回到页面的顶部  
       http://ask.dcloud.net.cn/question/3186
+      
 * 【文章图片自适应屏幕】
     * css控制图片自适应大小  
       http://blog.csdn.net/plutohusky/article/details/6043366
+      
+* 【即时通讯】
+    * 新手入门贴：史上最全Web端即时通讯技术原理详解  
+      http://www.52im.net/thread-338-1-1.html
+    * Web端即时通讯技术盘点：短轮询、Comet、Websocket、SSE  
+      http://www.52im.net/thread-336-1-1.html
+    * Socket.IO介绍：支持WebSocket、用于WEB端的即时通讯的框架  
+      http://www.52im.net/forum.php?mod=viewthread&tid=190&ctid=15
