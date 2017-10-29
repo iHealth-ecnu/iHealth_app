@@ -308,6 +308,7 @@
 			    if(validateReg.test(msg)){
 			        // 消息展示出来
 			        msgShow('sender','text',msg);
+			        
 			        // 发送文本消息到服务器
 					socket.emit('message', {
 						'from' : '杨英明',
@@ -330,11 +331,19 @@
 			
 			mui.plusReady(function(){
 				// 初始化scroll控件
+				var username = null;
 				if(mui.os.ios){
 					document.getElementById('chat').style = 'margin-top:-40px;padding-bottom:20px;';
+					username = 'ios';
+				}
+				else{
+					username = 'android';
 				}
 				// 和即时通讯服务器建立连接
 				var socket = io.connect('http://yangyingming.com:8080');
+				
+				// 发送一个消息加入 'ios_android' room
+				socket.emit('join');
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {

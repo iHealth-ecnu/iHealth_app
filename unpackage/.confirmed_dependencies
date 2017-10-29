@@ -45,7 +45,8 @@
       "js/template-web.js",
       "images/logo.png",
       "fonts/mui.ttf",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "js/socket.io.js"
     ],
     "refer": []
   }
