@@ -226,6 +226,7 @@
 		
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
+		<script src="js/socket.io.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			
@@ -280,10 +281,6 @@
 			    msgSendText: mui('#msg-send-text')[0]
 			}
 			
-			// 发送文本消息
-			ui.msgSendText.addEventListener('tap',function(){
-			    sendText();
-			});
 			
 			// 发送文本
 			// 获得输入框键盘焦点
@@ -303,7 +300,7 @@
 			    ui.footer.style.height = this.scrollHeight + 'px';
 			});
 			
-			var sendText = function(){
+			var sendText = function(socket){
 			    var msg = ui.msgText.value.replace(new RegExp('\n', 'gm'), '<br/>');
 			    var validateReg = /^\S+$/;
 			    // 获得键盘焦点
@@ -311,13 +308,13 @@
 			    if(validateReg.test(msg)){
 			        // 消息展示出来
 			        msgShow('sender','text',msg);
-			        // 发送文本消息到环信服务器
-//			        conn.sendTextMessage({
-//			            to: chatName, //用户登录名，SDK根据AppKey和domain组织jid，如easemob-demo#chatdemoui_**TEST**@easemob.com，中"to:TEST",下同
-//			            msg: msg, //文本消息
-//			            type: "chat"
-//			            //ext :{"extmsg":"extends messages"}//用户自扩展的消息内容（群聊用法相同）
-//			        });    
+			        // 发送文本消息到服务器
+					socket.emit('message', {
+						'from' : '杨英明',
+						'to' : '主机',
+						'msg' : msg
+					});			
+					
 			        // 清空文本框
 			        ui.msgText.value = '';
 			        // 恢复输入框高度(因为我们这里是50px，你可以写一个全局变量)
@@ -336,6 +333,25 @@
 				if(mui.os.ios){
 					document.getElementById('chat').style = 'margin-top:-40px;padding-bottom:20px;';
 				}
+				// 和即时通讯服务器建立连接
+				var socket = io.connect('http://yangyingming.com:8080');
+				
+				// 接受发来的消息
+			    socket.on('message', function (data) {
+			    	console.log(data['msg']);
+			        // 消息展示出来
+			        msgShow('receiver','text',data['msg']);
+			        // 消息滚动
+        			msgScrollTop();
+			    });
+				
+				
+				// 监听事件：发送文本消息
+				ui.msgSendText.addEventListener('tap',function(){
+				    sendText(socket);
+				});
+
+				
 			});
 		</script>
 	</body>
