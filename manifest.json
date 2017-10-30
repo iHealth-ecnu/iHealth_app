@@ -31,7 +31,7 @@
         
         "Events": {
             "description": "应用扩展事件"
-        },"Device":{},"Webview":{},"Runtime":{},"NativeUI":{},"Navigator":{},"NativeObj":{},"Invocation":{}
+        },"Device":{},"Webview":{},"Runtime":{},"NativeUI":{},"Navigator":{},"NativeObj":{},"Invocation":{},"OAuth":{}
 	},
 	"plus": {
 		"splashscreen": {

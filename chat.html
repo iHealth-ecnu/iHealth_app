@@ -227,8 +227,22 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
 		<script src="js/socket.io.js"></script>
+		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init();
+			
+			// 判断是否在线
+			window.addEventListener('chat.html_show', function() {
+				var state = app.getState();
+				if (JSON.stringify(state) == '{}' || state.hasOwnProperty('account')){
+					// 当前不在线
+					console.log('当前没有session');
+	//				var loginPage = plus.webview.create('login.html','login.html');
+					mui.openWindow('login.html','login.html');
+				}
+				console.log(JSON.stringify(state)); 
+				console.log(state.hasOwnProperty('account')); 
+			}, false);
 			
 			/**
 			 * @description 显示消息
@@ -359,7 +373,7 @@
 				ui.msgSendText.addEventListener('tap',function(){
 				    sendText(socket);
 				});
-
+				
 				
 			});
 		</script>
