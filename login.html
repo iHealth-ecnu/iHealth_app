@@ -90,6 +90,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
 			<h1 class="mui-title">登录</h1>
 		</header>
 		<div class="mui-content">
@@ -128,8 +129,10 @@
 		<script>
 			(function($, doc) {
 				$.init({
-					statusBarBackground: '#f7f7f7'
+					statusBarBackground: '#f7f7f7',
+					swipeBack:true //启用右滑关闭功能
 				});
+				
 				$.plusReady(function() {
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
@@ -149,15 +152,20 @@
 						main_loaded_flag = true;
 					});
 					var toMain = function() {
+						// 登陆成功后的跳转页面
+			      		//显示 chat
+			      		plus.webview.show('chat.html');
+			      		//关闭登陆页面
+			      		plus.webview.close('login.html');
 						//使用定时器的原因：
 						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
-						var id = setInterval(function () {
-							if(main_loaded_flag){
-								clearInterval(id);
-								$.fire(mainPage, 'show', null);
-								mainPage.show("pop-in");
-							}
-						},20);
+//						var id = setInterval(function () {
+//							if(main_loaded_flag){
+//								clearInterval(id);
+//								$.fire(mainPage, 'show', null);
+//								mainPage.show("pop-in");
+//							}
+//						},20);
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {
@@ -236,15 +244,9 @@
 					var forgetButton = doc.getElementById('forgetPassword');
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
-							account: accountBox.value,
+							email: accountBox.value,
 							password: passwordBox.value
 						};
-						
-						mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data){
-							//服务器返回响应，根据响应结果，分析是否登录成功；
-							console.log('等待服务器响应');
-							console.log(data);
-						},'json');
 						
 						app.login(loginInfo, function(err) {
 							if (err) {
@@ -302,18 +304,25 @@
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
 					}, false);
 					//
-					var backButtonPress = 0;
+//					var backButtonPress = 0;
+//					$.back = function(event) {
+//						backButtonPress++;
+//						if (backButtonPress > 1) {
+//							plus.runtime.quit();
+//						} else {
+//							plus.nativeUI.toast('再按一次退出应用');
+//						}
+//						setTimeout(function() {
+//							backButtonPress = 0;
+//						}, 1000);
+//						return false;
+//					};
 					$.back = function(event) {
-						backButtonPress++;
-						if (backButtonPress > 1) {
-							plus.runtime.quit();
-						} else {
-							plus.nativeUI.toast('再按一次退出应用');
-						}
-						setTimeout(function() {
-							backButtonPress = 0;
-						}, 1000);
-						return false;
+						// 显示主页
+						plus.webview.show('home.html');
+						// 关闭登录页面
+						var curWebview = plus.webview.currentWebview();
+						curWebview.close();
 					};
 				});
 			}(mui, document));

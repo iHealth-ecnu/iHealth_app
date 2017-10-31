@@ -231,17 +231,30 @@
 		<script type="text/javascript">
 			mui.init();
 			
+		    //预加载登录页面
+//		    var webview_login = mui.preload({
+//		        url: 'login.html',
+//		        id: 'login.html',
+//		        styles: {
+//		            "render": "always",//一直渲染
+//		            "popGesture": "hide"
+//		        }
+//		    });
+			
 			// 判断是否在线
 			window.addEventListener('chat.html_show', function() {
 				var state = app.getState();
-				if (JSON.stringify(state) == '{}' || state.hasOwnProperty('account')){
+				if (JSON.stringify(state) == '{}' || !state.hasOwnProperty('email')){
 					// 当前不在线
 					console.log('当前没有session');
-	//				var loginPage = plus.webview.create('login.html','login.html');
-					mui.openWindow('login.html','login.html');
+					mui.openWindow({
+						url:'login.html',
+						id:'login.html',
+						styles:{popGesture:'close'}		// 启动侧滑关闭功能（注意不是侧滑隐藏）
+					});
 				}
 				console.log(JSON.stringify(state)); 
-				console.log(state.hasOwnProperty('account')); 
+				console.log(state.hasOwnProperty('email')); 
 			}, false);
 			
 			/**

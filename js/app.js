@@ -10,36 +10,34 @@
 	owner.login = function(loginInfo, callback) {
 		callback = callback || $.noop;
 		loginInfo = loginInfo || {};
-		loginInfo.account = loginInfo.account || '';
+		loginInfo.email = loginInfo.email || '';
 		loginInfo.password = loginInfo.password || '';
-		if (loginInfo.account.length < 5) {
+		if (loginInfo.email.length < 5) {
 			return callback('账号最短为 5 个字符');
 		}
 		if (loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		}
 		
-		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', JSON.stringify(loginInfo), function(data){
+		// 从服务端获取用户名密码的验证结果
+		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			console.log('等待服务器响应');
-			console.log(data);
+			console.log(JSON.stringify(data));
+			//获取认证结果
+			authed = data.reason;
+			if (authed) {
+				return owner.createState(loginInfo.email, callback);
+			} else {
+				return callback(data.info);
+			}
 		},'json');
 		
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		
-		var authed = users.some(function(user) {
-			return loginInfo.account == user.account && loginInfo.password == user.password;
-		});
-		if (authed) {
-			return owner.createState(loginInfo.account, callback);
-		} else {
-			return callback('用户名或密码错误');
-		}
 	};
 
 	owner.createState = function(name, callback) {
 		var state = owner.getState();
-		state.account = name;
+		state.email = name;
 		state.token = "token123456789";
 		owner.setState(state);
 		return callback();
