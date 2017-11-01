@@ -241,21 +241,6 @@
 //		        }
 //		    });
 			
-			// 判断是否在线
-			window.addEventListener('chat.html_show', function() {
-				var state = app.getState();
-				if (JSON.stringify(state) == '{}' || !state.hasOwnProperty('email')){
-					// 当前不在线
-					console.log('当前没有session');
-					mui.openWindow({
-						url:'login.html',
-						id:'login.html',
-						styles:{popGesture:'close'}		// 启动侧滑关闭功能（注意不是侧滑隐藏）
-					});
-				}
-				console.log(JSON.stringify(state)); 
-				console.log(state.hasOwnProperty('email')); 
-			}, false);
 			
 			/**
 			 * @description 显示消息
@@ -404,7 +389,24 @@
 		      	document.querySelector('body').addEventListener('swiperight',function(e){
 		      		changeTab('chat.html','home.html','首页');
 		      	});
-				
+		      	
+	      		// 监听页面显示事件
+	            var self = plus.webview.currentWebview();
+	            self.addEventListener('show',function(){
+					// 判断是否在线
+					var state = app.getState();
+					if (JSON.stringify(state) == '{}' || !state.hasOwnProperty('email')){
+						// 当前不在线
+						console.log('当前没有session');
+						mui.openWindow({
+							url:'login.html',
+							id:'login.html',
+							styles:{popGesture:'close'}		// 启动侧滑关闭功能（注意不是侧滑隐藏）
+						});
+					}
+					console.log(JSON.stringify(state)); 
+					console.log(state.hasOwnProperty('email'));
+				});
 				
 			});
 		</script>

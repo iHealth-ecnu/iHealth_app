@@ -22,12 +22,10 @@
 		// 从服务端获取用户名密码的验证结果
 		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-			console.log('等待服务器响应');
-			console.log(JSON.stringify(data));
 			//获取认证结果
 			authed = data.reason;
 			if (authed) {
-				return owner.createState(loginInfo.email, callback);
+				return owner.createState(data.data, callback);
 			} else {
 				return callback(data.info);
 			}
@@ -35,11 +33,12 @@
 		
 	};
 
-	owner.createState = function(name, callback) {
-		var state = owner.getState();
-		state.email = name;
-		state.token = "token123456789";
-		owner.setState(state);
+	owner.createState = function(data, callback) {
+//		var state = owner.getState();
+//		state.email = name;
+//		state.token = "token123456789";
+		console.log(JSON.stringify(data));
+		owner.setState(data);
 		return callback();
 	};
 

@@ -151,21 +151,22 @@
 					mainPage.addEventListener("loaded",function () {
 						main_loaded_flag = true;
 					});
+					
+					// 页面跳转函数
+			     	var changeTab = function(curTab, targetTab, targetTabTitle){
+			      		var curWebview = plus.webview.currentWebview();		     		
+			      		var targetWebview = plus.webview.getWebviewById(targetTab);
+			      		targetWebview.show();
+			      		curWebview.hide();
+						// 获取当前页面的父页面（创建它的页面）
+						var index = plus.webview.getLaunchWebview();
+//						var index = curWebview.opener();
+			      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+						index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+			     	};
 					var toMain = function() {
 						// 登陆成功后的跳转页面
-			      		//显示 chat
-			      		plus.webview.show('chat.html');
-			      		//关闭登陆页面
-			      		plus.webview.close('login.html');
-						//使用定时器的原因：
-						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
-//						var id = setInterval(function () {
-//							if(main_loaded_flag){
-//								clearInterval(id);
-//								$.fire(mainPage, 'show', null);
-//								mainPage.show("pop-in");
-//							}
-//						},20);
+						changeTab('chat.html','home.html','首页');
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {
@@ -303,26 +304,11 @@
 					window.addEventListener('resize', function() {
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
 					}, false);
-					//
-//					var backButtonPress = 0;
-//					$.back = function(event) {
-//						backButtonPress++;
-//						if (backButtonPress > 1) {
-//							plus.runtime.quit();
-//						} else {
-//							plus.nativeUI.toast('再按一次退出应用');
-//						}
-//						setTimeout(function() {
-//							backButtonPress = 0;
-//						}, 1000);
-//						return false;
-//					};
+					
+					// 重写 back 方法
 					$.back = function(event) {
-						// 显示主页
-						plus.webview.show('home.html');
-						// 关闭登录页面
-						var curWebview = plus.webview.currentWebview();
-						curWebview.close();
+						// 返回跳转到首页
+						changeTab('chat.html','home.html','首页');
 					};
 				});
 			}(mui, document));

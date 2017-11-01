@@ -39,8 +39,7 @@
 		    top: '45px',  
 		    bottom: '51px'  
 		}; 
-		//当前显示选择卡
-		var activeTab = subpages[0];
+		
       	//创建子页面，显示首页选择卡，隐藏其余页面
       	mui.plusReady(function(){
       		var self = plus.webview.currentWebview();
@@ -54,8 +53,10 @@
       		
       		//选择卡切换
       		var changeTab = function(e,targetTab){
+      			var curTab = document.getElementsByClassName('mui-active')[0].getAttribute('href');
+      			var curWebView = plus.webview.getWebviewById(curTab);
 	      		var targetWebView = plus.webview.getWebviewById(targetTab);
-	      		if (targetTab == activeTab){ 
+	      		if (targetWebView == curWebView){ 
 	      			// 传递 回到顶部 自定义事件（需要 触发 loaded 事件之后 fire 才生效，即页面加载完毕才生效）
 	      			mui.fire(targetWebView,'backTop',{});
 	      			return ;
@@ -64,12 +65,9 @@
 				var title = document.getElementById('title');
 	      		title.innerHTML = e.querySelector('.mui-tab-label').innerHTML;
 	      		//显示目标选择卡
-	      		plus.webview.show(targetTab);
-	      		mui.fire(targetWebView,targetTab + '_show',{});
+	      		targetWebView.show();
 	      		//隐藏原选择卡
-	      		plus.webview.hide(activeTab);
-	      		//更改当前活跃选择卡
-	      		activeTab = targetTab;
+	      		curWebView.hide();
       		};
       		// 监听选择卡点击事件
 	      	mui('.mui-bar-tab').on('tap','a',function(e){

@@ -10,13 +10,17 @@
 
 	<body>
 		<!--内容-->
-		<div class="mui-content" style="align-content: center;">
+		<div class="mui-content" style="align-content: center;" id="setting">
+		</div>
+		
+		<!--HTML模板-->
+		<script id="setting-template" type="text/html">
 			<div class="mui-card">
 				<!--页眉，放置标题-->
 				<div class="mui-card-header mui-card-media">
 					<img src="./images/logo.png" style="width:20%;height:auto;margin-left:10px;margin-right:20px;"/>
 					<div class="mui-media-body" style="padding:8px;">
-						<h3>杨英明</h3>
+						<h3>{{item.name}}</h3>
 						<p>查看或编辑个人资料</p>
 					</div>
 				</div>
@@ -32,27 +36,37 @@
 					    <li class="mui-table-view-cell">
 					    	<a class="mui-navigate-right">我的关注</a>
 					    </li>
-					</ul>
-					<hr style="margin-left:13px;margin-right:13px;height:1px;border:none;border-top:1px dotted #185598;" />
-					<ul class="mui-table-view">
 					    <li class="mui-table-view-cell">
 					    	<a class="mui-navigate-right">设置</a>
 					    </li>
+					    <li class="mui-table-view-cell" id="signout">
+					    	<a class="mui-navigate-right">退出登录</a>
+					    </li>
 					</ul>
-			<!--页脚，放置补充信息或支持的操作-->
-			<!--<div class="mui-card-footer">
-				<a class="mui-card-link">点赞</a>
-				<a class="mui-card-link">评论</a>
-				<a href="content.html" class="mui-card-link">阅读更多</a>
-			</div>-->
-			
+				</div>
 			</div>	
-		</div>
+		</script>
 		
 		<script src="js/mui.min.js"></script>
+		<script src="js/template-web.js"></script>
+		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init()
 			
+			// 渲染页面
+			// 从本地取出用户数据
+			var data = app.getState();
+			if (JSON.stringify(data) == '{}'){
+				// 用户未登录
+				data = {'name':'您还未登录'}
+			}
+			// 根据模板将数据渲染成 HTML
+			var html = template('setting-template', {'item':data});
+			// 将 HTML 插入到列表后
+			settingElement = document.getElementById('setting');
+			settingElement.innerHTML = html;
+			
+				    	
 	     	// 监听滑动事件
 	     	var changeTab = function(curTab, targetTab, targetTabTitle){
 	      		var curWebview = plus.webview.currentWebview();		     		
@@ -66,6 +80,21 @@
 	     	};
 	      	document.querySelector('body').addEventListener('swiperight',function(e){
 	      		changeTab('setting.html','chat.html','交流');
+	      	});
+	      	
+	      	// 监听退出登录事件
+	      	document.getElementById('signout').addEventListener('tap',function(){
+	      		app.setState(null);
+	      		mui.toast('退出登录成功');
+	      		location.reload();
+	      	});
+	      	
+	      	mui.plusReady(function(){
+	      		// 监听页面显示事件
+	            var self = plus.webview.currentWebview();
+	            self.addEventListener('show',function(){
+	            	location.reload();
+	            });
 	      	});
 		</script>
 	</body>
