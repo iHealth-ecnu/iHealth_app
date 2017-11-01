@@ -62,22 +62,19 @@ https://ke.qq.com/course/203400
 * Hello MUI发布列表到详情最佳实践  
 http://ask.dcloud.net.cn/article/12575
 
-* **底部选择卡切换** 问题的解决：
-    * Hbuilder--mui--webview切换子页面问题  
-    http://blog.csdn.net/zhuyu19911016520/article/details/70270731
-    * HBuilder mui入门教程——（2）含tab选项卡的首页  
-    http://blog.csdn.net/anjingshen/article/details/74138717
-    * tab选项卡示例教程-nativeObj原生模式tab（含底部凸起大图标）  
-    https://github.com/dcloudio/mui/tree/master/examples/nativeTab
-    
 * 提升HTML5的性能体验系列之一 避免切页白屏  
 http://ask.dcloud.net.cn/article/25
 
 * .git文件过大！删除大文件  
 http://www.cnblogs.com/lout/p/6111739.html
 
-* Python爬虫利器三之Xpath语法与lxml库的用法  
-http://cuiqingcai.com/2621.html
+* 【底部选择卡切换】问题的解决
+    * Hbuilder--mui--webview切换子页面问题  
+    http://blog.csdn.net/zhuyu19911016520/article/details/70270731
+    * HBuilder mui入门教程——（2）含tab选项卡的首页  
+    http://blog.csdn.net/anjingshen/article/details/74138717
+    * tab选项卡示例教程-nativeObj原生模式tab（含底部凸起大图标）  
+    https://github.com/dcloudio/mui/tree/master/examples/nativeTab
 
 * 【上拉刷新】
     * 上拉加载（官方文档）  
