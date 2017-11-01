@@ -125,3 +125,16 @@ http://cuiqingcai.com/2621.html
       http://www.52im.net/thread-336-1-1.html
     * Socket.IO介绍：支持WebSocket、用于WEB端的即时通讯的框架  
       http://www.52im.net/forum.php?mod=viewthread&tid=190&ctid=15
+
+* 【手势滑动】解决选择卡左右滑动切换的问题
+	* MUI各种手势事件：滑动、拖动、点击等  
+	  http://ask.dcloud.net.cn/article/788
+	* mui开发APP中子页面操作父页面的方式总结。  
+	  http://blog.csdn.net/well2049/article/details/69499644
+	* mui 获取index页面webview的id  
+	  http://www.bcty365.com/content-146-5242-1.html  
+	* 如何获取上一级webview的id或者对象的方法  
+	  http://ask.dcloud.net.cn/question/3903
+	* 用JS添加和删除class类名  
+	  http://www.cnblogs.com/dealblog/p/6885437.html
+ 

@@ -52,6 +52,21 @@
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript">
 			mui.init()
+			
+	     	// 监听滑动事件
+	     	var changeTab = function(curTab, targetTab, targetTabTitle){
+	      		var curWebview = plus.webview.currentWebview();		     		
+	      		var targetWebview = plus.webview.getWebviewById(targetTab);
+	      		targetWebview.show();
+	      		curWebview.hide();
+				// 获取当前页面的父页面（创建它的页面）
+				var index = curWebview.opener();
+	      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+				index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+	     	};
+	      	document.querySelector('body').addEventListener('swiperight',function(e){
+	      		changeTab('setting.html','chat.html','交流');
+	      	});
 		</script>
 	</body>
 

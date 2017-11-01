@@ -370,7 +370,7 @@
 				var socket = io.connect('http://yangyingming.com:8080');
 				
 				// 发送一个消息加入 'ios_android' room
-				socket.emit('join');
+				socket.emit('join'); 
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {
@@ -386,6 +386,24 @@
 				ui.msgSendText.addEventListener('tap',function(){
 				    sendText(socket);
 				});
+				
+		     	// 监听滑动事件
+		     	var changeTab = function(curTab, targetTab, targetTabTitle){
+		      		var curWebview = plus.webview.currentWebview();		     		
+		      		var targetWebview = plus.webview.getWebviewById(targetTab);
+		      		targetWebview.show();
+		      		curWebview.hide();
+					// 获取当前页面的父页面（创建它的页面）
+					var index = curWebview.opener();
+		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+					index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+		     	};
+		      	document.querySelector('body').addEventListener('swipeleft',function(e){
+		      		changeTab('chat.html','setting.html','设置');
+		      	});
+		      	document.querySelector('body').addEventListener('swiperight',function(e){
+		      		changeTab('chat.html','home.html','首页');
+		      	});
 				
 				
 			});
