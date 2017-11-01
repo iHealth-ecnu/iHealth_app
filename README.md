@@ -6,6 +6,7 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 * [MUI](http://www.dcloud.io/mui.html)（前端框架）
 * [artTemplate](https://aui.github.io/art-template/docs/syntax.html)（JS模板引擎）
 * [HBuilder](http://www.dcloud.io/index.html)（开发、调试、打包工具）
+* [socket.io](https://socket.io/docs/)（实时通讯引擎）
 
 ## 启动说明
 1. 下载 HBuilder，下载地址：http://www.dcloud.io/index.html
@@ -43,9 +44,6 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
 
 
 ### 参考资料
-* mui初级入门教程（五）— 聊聊即时通讯（IM），基于环信 web im SDK（数据绑定，渲染页面）  
-https://segmentfault.com/a/1190000005729743#articleHeader11
-
 * MUI从入门到精通系列汇总  
 http://ask.dcloud.net.cn/article/786
 
@@ -120,6 +118,8 @@ http://cuiqingcai.com/2621.html
       http://blog.csdn.net/plutohusky/article/details/6043366
       
 * 【即时通讯】
+    * mui初级入门教程（五）— 聊聊即时通讯（IM），基于环信 web im SDK（数据绑定，渲染页面）  
+      https://segmentfault.com/a/1190000005729743#articleHeader11
     * 新手入门贴：史上最全Web端即时通讯技术原理详解  
       http://www.52im.net/thread-338-1-1.html
     * Web端即时通讯技术盘点：短轮询、Comet、Websocket、SSE  
