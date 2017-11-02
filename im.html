@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			.chat-history-date{ 
+			    display: block;
+			    padding-top: 5px;
+			    text-align: center;
+			    font-size: 12px;
+			}
+			.chat-receiver,.chat-sender{
+			    margin: 5px;
+			    clear:both;  
+			}
+			.chat-avatar img{
+			    width: 40px;
+			    height: 40px;
+			    border-radius: 50%;
+			}
+			.chat-receiver .chat-avatar{
+			    float: left;
+			}
+			.chat-sender .chat-avatar{
+			    float: right;
+			}
+			.chat-content{
+			    position: relative;
+			    max-width: 60%;
+			    min-height: 20px;
+			    margin: 0 10px 10px 10px;
+			    padding: 10px;
+			    font-size:15px;
+			    border-radius:7px; 
+			}
+			.chat-content img{
+			    width: 100%;
+			}
+			.chat-receiver .chat-content{
+			    float: left; 
+			    color: #383838; 
+			    background-color: #f5f5f5;
+			}
+			.chat-sender .chat-content{
+			    float:right;   
+			    color: #ffffff; 
+			    background-color: #15b5e9; 
+			}
+			.chat-triangle{
+			    position: absolute;
+			    top:6px;
+			    width:0px; 
+			    height:0px;        
+			    border-width:8px; 
+			    border-style:solid;   
+			}
+			.chat-receiver .chat-triangle{ 
+			    left:-16px;
+			    border-color:transparent #f5f5f5 transparent transparent;      
+			}
+			.chat-sender .chat-triangle{ 
+			    right:-16px;
+			    border-color:transparent transparent transparent #15b5e9;      
+			}
+			/*输入框部分*/
+			footer {
+			    position: fixed;
+			    width: 100%;
+			    height: 50px;
+			    min-height: 50px;
+			    border-top: solid 1px #bbb;
+			    left: 0px;
+			    bottom: 0px;
+			    overflow: hidden;
+			    padding: 0px 50px;
+			    background-color: #fafafa;
+			}
+			.footer-left {
+			    position: absolute;
+			    width: 50px;
+			    height: 50px;
+			    left: 0px;
+			    bottom: 0px;
+			    text-align: center;
+			    vertical-align: middle;
+			    line-height: 100%;
+			    padding: 12px 4px;
+			}
+			.footer-right {
+			    position: absolute;
+			    width: 50px;
+			    height: 50px;
+			    right: 0px;
+			    bottom: 0px;
+			    text-align: center;
+			    vertical-align: middle;
+			    line-height: 100%;
+			    padding: 12px 5px;
+			    display: inline-block;
+			}
+			.footer-center {
+			    height: 100%;
+			    padding: 5px 0px;
+			}
+			.footer-center [class*=input] {
+			    width: 100%;
+			    height: 100%;
+			    border-radius: 5px;
+			}
+			.footer-center .input-text {
+			    background: #fff;
+			    border: solid 1px #ddd;
+			    padding: 10px !important;
+			    font-size: 16px !important;
+			    line-height: 18px !important;
+			    font-family: verdana !important;
+			    overflow: hidden;
+			}
+			footer .mui-icon {
+			        color: #000;
+			}
+			footer .mui-icon:active {
+			    color: #007AFF !important;
+			}
+			.footer-right span{
+			    color: #0062CC;
+			    line-height: 30px;
+			}
+			/*内滚动布局*/
+			html,
+			body {
+			    height: 100%;
+			    margin: 0px;
+			    padding: 0px;
+			    overflow: hidden;
+			    -webkit-touch-callout: none;
+			    -webkit-user-select: none;
+			}
+			.mui-content{
+			    height: 100%;
+			    padding: 0px 0px 50px 0px;
+			    overflow: auto;
+			    background-color: #eaeaea;
+			}
+			#msg-list {
+			    height: 100%;
+			    overflow: auto;
+			    -webkit-overflow-scrolling: touch;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<!--聊天框-->
+		<div class="mui-content" id="chat">
+			<!--聊天界面-->
+    		<div id="msg-list" style="padding-top:40px;">
+			    <!--消息最后历史时间-->
+				<p class="chat-history-date">01:59</p>
+				<!--接收文本消息-->
+				<div class="chat-receiver">
+				    <div class="chat-avatar">
+				          <img src="./images/logo.png">
+				      </div>
+				      <div class="chat-content">
+				          <div class="chat-triangle"></div>
+				          <span>如果是接受消息，请使用.chat-receiver类，如果是发送消息，请使用.chat-sender，头像是.chat-avatar类，内容是.chat-content类。.chat-content下如果是span标签则为文本消息，若为img标签则为图片消息。</span>
+				      </div>
+				</div>
+				<!--发送文本消息-->
+				<div class="chat-sender">
+				      <div class="chat-avatar">
+				          <img src="./images/logo.png">
+				      </div>
+				      <div class="chat-content">
+				          <div class="chat-triangle"></div>
+				          <span>如果你要修改聊天气泡的背景颜色，请修改.chat-content的background-color和.chat-triangle的border-color</span>
+				      </div>
+				</div>
+				<!--发送图片消息-->
+				<div class="chat-sender">
+				      <div class="chat-avatar">
+				          <img src="./images/logo.png">
+				      </div>
+				      <div class="chat-content">
+				          <div class="chat-triangle"></div>
+				          <img src="./images/1.png"/>
+				      </div>
+				</div>
+    		</div>
+		</div>
+		<!--底部输入框-->
+		<footer>
+		    <div class="footer-left">
+		        <i id='msg-choose-img' class="mui-icon mui-icon-camera" style="font-size: 28px;"></i>
+		    </div>
+		    <div class="footer-center">
+		        <textarea id='msg-text' type="text" class='input-text'></textarea>
+		    </div>
+		    <div class="footer-right">
+		        <span id='msg-send-text'>发送</span>
+		    </div>
+		</footer>
+		
+		<!--消息框模板-->
+		<script id="msg-tpl" type="text/html">
+		    <div class="chat-{{who}}">
+		           <div class="chat-avatar">
+		               <img src="{{avatar}}">
+		           </div>
+		           <div class="chat-content">
+		               <div class="chat-triangle"></div>
+		               {{if type=="text"}}
+		                <span>{{msg}}</span>
+		            {{else if type=="url"}}
+		                <a href="{{msg}}">{{msg}}</a>
+		            {{else if type=="img"}}
+		                <img src="{{msg}}"/>
+		            {{/if}}
+		           </div>
+		       </div>
+		</script>
+		
+		<script src="js/mui.min.js"></script>
+		<script src="js/template-web.js"></script>
+		<script src="js/socket.io.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			/**
+			 * @description 显示消息
+			 * @param {String} who 消息来源,可选参数: {params} 'sender','receiver'
+			 * @param {Object} type 消息类型,可选参数: {params} 'text','url','img'
+			 * @param {JSON} data 消息数据,可选参数: {params} {{el:'消息容器选择器'},{senderAvatar:'发送者头像地址'},{receiverAvatar:'接收者头像地址'},{msg:'消息内容'}}
+			 * ('text'和'url'类型的msg是文字，img类型的msg是img地址)
+			 */
+			var appendMsg = function(who,type,data){
+			    var html = template('msg-tpl', {
+			        who: who,
+			        type: type,
+			        avatar: who=='sender'?data.senderAvatar:data.receiverAvatar,
+			        msg: data.msg
+			    });
+			    document.querySelector(data.el).innerHTML += html;
+			}
+			
+			/**
+			 * 消息初始化
+			 */
+			var msgInit = {
+			    el: '#msg-list', //消息容器
+			    senderAvatar: './images/logo.png',  //发送者头像
+			    receiverAvatar: './images/logo.png', //接收者头像
+			}
+			
+			/**
+			 * @description 展示消息精简版
+			 * @param {String} who 消息来源,可选参数: {params} 'sender','receiver'
+			 * @param {Object} type 消息类型,可选参数: {params} 'text','url','img'
+			 * @param {Object} msg ('text'和'url'类型的msg是文字，img类型的msg是img地址)
+			 */
+			var msgShow = function(who,type,msg){
+			    appendMsg(who,type,{
+			        el: msgInit.el,
+			        senderAvatar: msgInit.senderAvatar,
+			        receiverAvatar: msgInit.receiverAvatar,
+			        msg: msg
+			    });
+			}
+			
+			// UI控件对象
+			var ui = {
+			    content: mui('.mui-content'[0]),
+			    msgList: mui('#msg-list')[0],
+			    footer: mui('footer')[0],
+			    msgChooseImg: mui("#msg-choose-img")[0],
+			    msgText: mui('#msg-text')[0],
+			    msgSendText: mui('#msg-send-text')[0]
+			}
+			
+			
+			// 发送文本
+			// 获得输入框键盘焦点
+			var msgTextFocus = function(){
+			    ui.msgText.focus();
+			    setTimeout(function() {
+			        ui.msgText.focus();
+			    }, 150);
+			}
+			// 消息滚动
+			var msgScrollTop = function(){
+			    ui.msgList.scrollTop = ui.msgList.scrollHeight + ui.msgList.offsetHeight;
+			}
+			// 输入框监听事件
+			ui.msgText.addEventListener('input', function(event) {
+			    msgTextFocus();
+			    ui.footer.style.height = this.scrollHeight + 'px';
+			});
+			
+			var sendText = function(socket){
+			    var msg = ui.msgText.value.replace(new RegExp('\n', 'gm'), '<br/>');
+			    var validateReg = /^\S+$/;
+			    // 获得键盘焦点
+			    msgTextFocus();
+			    if(validateReg.test(msg)){
+			        // 消息展示出来
+			        msgShow('sender','text',msg);
+			        
+			        // 发送文本消息到服务器
+					socket.emit('message', {
+						'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2',
+						'msg' : msg
+					});			
+					
+			        // 清空文本框
+			        ui.msgText.value = '';
+			        // 恢复输入框高度(因为我们这里是50px，你可以写一个全局变量)
+			        ui.footer.style.height = '50px';
+			        // 保持输入状态
+			        mui.trigger(ui.msgText, 'input', null);
+			        // 这一句让内容滚动起来
+			        msgScrollTop();
+			    }else{
+			        mui.toast("文本消息不能为空");
+			    }
+			}
+			
+			mui.plusReady(function(){
+				// 初始化scroll控件
+				var username = null;
+				if(mui.os.ios){
+					document.getElementById('chat').style = 'margin-top:-40px;padding-bottom:20px;';
+					username = 'ios';
+				}
+				else{
+					username = 'android';
+				}
+				// 和即时通讯服务器建立连接
+				var socket = io.connect('http://yangyingming.com:8080');
+				
+				// 发送一个消息加入 room
+				socket.emit('join', { 'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2' }); 
+				
+				// 接受发来的消息
+			    socket.on('message', function (data) {
+			    	console.log(data['msg']);
+			        // 消息展示出来
+			        msgShow('receiver','text',data['msg']);
+			        // 消息滚动
+        			msgScrollTop();
+			    });
+				
+				
+				// 监听事件：发送文本消息
+				ui.msgSendText.addEventListener('tap',function(){
+				    sendText(socket);
+				});
+				
+				
+			});
+		</script>
+	</body>
+</html>
