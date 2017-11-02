@@ -155,9 +155,28 @@
 	</head>
 
 	<body>
+		<!--搜索框-->
+		<header class="mui-bar mui-bar-nav">
+            <div class="mui-bar mui-bar-standard">
+                <div class="mui-input-row mui-search">
+             		<input id="search" type="search" class="mui-input-clear" placeholder="搜索 医生/朋友">
+                </div>
+            </div>
+        </header>
+		<!--弹出菜单 (默认隐藏)-->
+		<div id="popover" class="mui-popover" style="margin-top:20px;">
+		  <ul class="mui-table-view">
+		    <li class="mui-table-view-cell"><a href="#">Item1</a></li>
+		    <li class="mui-table-view-cell"><a href="#">Item2</a></li>
+		    <li class="mui-table-view-cell"><a href="#">Item3</a></li>
+		    <li class="mui-table-view-cell"><a href="#">Item4</a></li>
+		    <li class="mui-table-view-cell"><a href="#">Item5</a></li>
+		  </ul>
+		</div>
 		<!--聊天框-->
 		<div class="mui-content" id="chat">
-    		<div id="msg-list">
+			<!--聊天界面-->
+    		<div id="msg-list" style="padding-top:40px;">
 			    <!--消息最后历史时间-->
 				<p class="chat-history-date">01:59</p>
 				<!--接收文本消息-->
@@ -379,6 +398,12 @@
 		      		changeTab('chat.html','home.html','首页');
 		      	});
 		      	
+		      	// 监听搜索框输入事件
+		      	var searchInput = document.getElementById('search');
+		      	searchInput.addEventListener('input', function(e){
+		      		console.log(searchInput.value);
+		      		mui('#popover').popover('toggle',document.getElementById("popover"));
+		      	});
 				
 			});
 		</script>
