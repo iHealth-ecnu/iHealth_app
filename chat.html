@@ -17,17 +17,14 @@
                 </div>
             </div>
         </header>
-		
-		<!--弹出菜单 (默认隐藏)-->
-		<div id="popover" class="mui-popover" style="margin-top:20px;">
-		  	<ul class="mui-table-view">
-			    <li class="mui-table-view-cell"><a href="#">Item1</a></li>
-			    <li class="mui-table-view-cell"><a href="#">Item2</a></li>
-			    <li class="mui-table-view-cell"><a href="#">Item3</a></li>
-		    	<li class="mui-table-view-cell"><a href="#">Item4</a></li>
-		    	<li class="mui-table-view-cell"><a href="#">Item5</a></li>
-			</ul>
-		</div>
+        
+        <!--弹出菜单 (默认隐藏)-->
+        <div style="text-align: center;">
+			<div id="popover" class="mui-popover" style="width:50%;margin:0 auto;text-align: center;">
+			  	<ul id="searchResult" class="mui-table-view">
+				</ul>
+			</div>
+        </div>
 		
 		<!--好友列表-->
 		<div class="mui-content mui-scroll-wrapper" id="home">
@@ -44,6 +41,13 @@
 	        </div>
 		</div>
 		
+		<!--HTML模板（弹出菜单）-->
+		<script id="search-template" type="text/html">
+			{{ each items item }}
+	    	<li class="mui-table-view-cell"><a href="#">{{item.name}}</a></li>
+	    	{{ /each }}
+    	</script>
+		
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
 		<script src="js/app.js"></script>
@@ -51,7 +55,6 @@
 			mui.init()
 			
 			mui.plusReady(function(){
-				
 		     	// 监听滑动事件
 		     	var changeTab = function(curTab, targetTab, targetTabTitle){
 		      		var curWebview = plus.webview.currentWebview();		     		
@@ -74,8 +77,29 @@
 		      	// 监听搜索框输入事件
 		      	var searchInput = document.getElementById('search');
 		      	searchInput.addEventListener('input', function(e){
-		      		console.log(searchInput.value);
-		      		mui('#popover').popover('toggle',document.getElementById("popover"));
+		      		// 获取搜索框内容
+		      		var name = searchInput.value;
+		      		// 输入空串不做处理
+		      		if (name.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
+		      			mui('#popover').popover('hide');
+		      			return ;
+		      		}
+		      		// 先隐藏之前的弹出菜单
+		      		mui('#popover').popover('hide');
+		      		// 模糊匹配指定用户名
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlist?name=' + name + '&limit=10',function(data){
+						var searchResult = document.getElementById('searchResult');
+						// 根据模板将数据渲染成 HTML
+						var html = template('search-template', {'items':data});
+						if (html.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
+							html = '<li class="mui-table-view-cell"><a href="#">没有找到这个人耶</a></li>'; 
+						}
+						// 将HTML插入到弹出菜单中
+						searchResult.innerHTML = html;
+//		      			mui('#popover').popover('toggle',document.getElementById("popover"));
+						// 显示弹出菜单
+		      			mui('#popover').popover('show');
+					});
 		      	});
 			});
 		</script>
