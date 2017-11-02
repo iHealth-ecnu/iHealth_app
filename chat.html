@@ -19,12 +19,8 @@
         </header>
         
         <!--弹出菜单 (默认隐藏)-->
-        <div style="text-align: center;">
-			<div id="popover" class="mui-popover" style="width:50%;margin:0 auto;text-align: center;">
-			  	<ul id="searchResult" class="mui-table-view">
-				</ul>
-			</div>
-        </div>
+		<div id="popover" class="mui-popover">
+		</div>
 		
 		<!--好友列表-->
 		<div class="mui-content mui-scroll-wrapper" id="home">
@@ -44,7 +40,13 @@
 		<!--HTML模板（弹出菜单）-->
 		<script id="search-template" type="text/html">
 			{{ each items item }}
-	    	<li class="mui-table-view-cell"><a href="#">{{item.name}}</a></li>
+			<div class="mui-card-header mui-card-media" id="{{item._id}}">
+				<img src="./images/logo.png"/>
+				<div class="mui-media-body">
+					<span>{{item.name}}（{{item.nickname}}）</span>
+					<p>{{item.introduction}}</p>
+				</div>
+			</div>
 	    	{{ /each }}
     	</script>
 		
@@ -88,19 +90,37 @@
 		      		mui('#popover').popover('hide');
 		      		// 模糊匹配指定用户名
 					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlist?name=' + name + '&limit=10',function(data){
-						var searchResult = document.getElementById('searchResult');
+						var searchResult = document.getElementById('popover');
 						// 根据模板将数据渲染成 HTML
 						var html = template('search-template', {'items':data});
 						if (html.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
-							html = '<li class="mui-table-view-cell"><a href="#">没有找到这个人耶</a></li>'; 
+							html = '<div style="text-align:center;margin:10px;font-size:14px;">没有找到这个人耶  >_<|||</div>'; 
 						}
 						// 将HTML插入到弹出菜单中
 						searchResult.innerHTML = html;
-//		      			mui('#popover').popover('toggle',document.getElementById("popover"));
 						// 显示弹出菜单
-		      			mui('#popover').popover('show');
+		      			mui('#popover').popover('toggle',document.getElementsByTagName('header')[0]);
+//		      			mui('#popover').popover('show');
 					});
 		      	});
+		      	
+		      	// 监听搜索框点击事件
+			    document.querySelector('body').addEventListener('tap',function (e) {
+			    	// 点击每个 card 上的 标题、图片、文字简介 时，捕获事件
+			    	// 获取选中用户的 id
+				    if ( e.target.parentNode.classList.contains('mui-card-header') ){
+				    	var id = e.target.parentNode.getAttribute('id');
+				    }
+				    else if( e.target.parentNode.className == 'mui-media-body' ){
+				    	var id = e.target.parentNode.parentNode.getAttribute('id');
+				    }
+				    else{
+				    	// 没有捕获到事件，直接退出
+				    	return ;
+				    }
+				    // 响应捕获事件
+				    console.log(id);
+				});
 			});
 		</script>
 	</body>
