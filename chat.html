@@ -230,16 +230,7 @@
 		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			
-		    //预加载登录页面
-//		    var webview_login = mui.preload({
-//		        url: 'login.html',
-//		        id: 'login.html',
-//		        styles: {
-//		            "render": "always",//一直渲染
-//		            "popGesture": "hide"
-//		        }
-//		    });
+					    	
 			
 			
 			/**
@@ -381,7 +372,7 @@
 					// 获取当前页面的父页面（创建它的页面）
 					var index = curWebview.opener();
 		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
-					index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+					index.evalJS("document.getElementById('chat.html').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
 		     	};
 		      	document.querySelector('body').addEventListener('swipeleft',function(e){
 		      		changeTab('chat.html','setting.html','设置');
@@ -390,23 +381,6 @@
 		      		changeTab('chat.html','home.html','首页');
 		      	});
 		      	
-	      		// 监听页面显示事件
-	            var self = plus.webview.currentWebview();
-	            self.addEventListener('show',function(){
-					// 判断是否在线
-					var state = app.getState();
-					if (JSON.stringify(state) == '{}' || !state.hasOwnProperty('email')){
-						// 当前不在线
-						console.log('当前没有session');
-						mui.openWindow({
-							url:'login.html',
-							id:'login.html',
-							styles:{popGesture:'close'}		// 启动侧滑关闭功能（注意不是侧滑隐藏）
-						});
-					}
-					console.log(JSON.stringify(state)); 
-					console.log(state.hasOwnProperty('email'));
-				});
 				
 			});
 		</script>

@@ -89,10 +89,10 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
+		<!--<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
 			<h1 class="mui-title">登录</h1>
-		</header>
+		</header>-->
 		<div class="mui-content">
 			<form id='login-form' class="mui-input-group">
 				<div class="mui-input-row">
@@ -123,14 +123,14 @@
 
 			</div>
 		</div>
+		
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/app.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
-					statusBarBackground: '#f7f7f7',
-					swipeBack:true //启用右滑关闭功能
+					statusBarBackground: '#f7f7f7'
 				});
 				
 				$.plusReady(function() {
@@ -305,11 +305,23 @@
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
 					}, false);
 					
-					// 重写 back 方法
-					$.back = function(event) {
-						// 返回跳转到首页
-						changeTab('chat.html','home.html','首页');
-					};
+			     	// 监听滑动事件
+			     	var changeTab = function(curTab, targetTab, targetTabTitle){
+			      		var curWebview = plus.webview.currentWebview();		     		
+			      		var targetWebview = plus.webview.getWebviewById(targetTab);
+			      		targetWebview.show();
+			      		curWebview.hide();
+						// 获取当前页面的父页面（创建它的页面）
+						var index = curWebview.opener();
+			      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+						index.evalJS("document.getElementById('chat.html').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+			     	};
+			      	document.querySelector('body').addEventListener('swipeleft',function(e){
+			      		changeTab('chat.html','setting.html','设置');
+			      	});
+			      	document.querySelector('body').addEventListener('swiperight',function(e){
+			      		changeTab('chat.html','home.html','首页');
+			      	});
 				});
 			}(mui, document));
 		</script>

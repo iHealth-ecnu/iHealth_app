@@ -17,6 +17,7 @@
 
 		<!--引用的 JS-->
 		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
 		<script src="js/template-web.js"></script>
 		
 		<!--HTML模板-->
@@ -160,10 +161,15 @@
 					// 获取当前页面的父页面（创建它的页面）
 					var index = curWebview.opener();
 		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
-					index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+					index.evalJS("document.getElementById('home.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
 		     	};
 		      	document.querySelector('body').addEventListener('swipeleft',function(e){
-		      		changeTab('home.html','chat.html','交流');
+	      			if ( JSON.stringify(app.getState()) == '{}' ){
+		      			changeTab('home.html','login.html','登录');
+		      		}
+	      			else{
+		      			changeTab('home.html','chat.html','交流');	      				
+	      			}
 		      	});
 
 			});

@@ -76,16 +76,26 @@
 				// 获取当前页面的父页面（创建它的页面）
 				var index = curWebview.opener();
 	      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
-				index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+				index.evalJS("document.getElementById('setting.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
 	     	};
 	      	document.querySelector('body').addEventListener('swiperight',function(e){
-	      		changeTab('setting.html','chat.html','交流');
+	      		if ( JSON.stringify(app.getState()) == '{}' ){
+	      			changeTab('setting.html','login.html','登录');
+	      		}
+	      		else{
+	      			changeTab('setting.html','chat.html','交流');
+	      		}
 	      	});
 	      	
 	      	// 监听退出登录事件
 	      	document.getElementById('signout').addEventListener('tap',function(){
-	      		app.setState(null);
-	      		mui.toast('退出登录成功');
+	      		if ( JSON.stringify(app.getState()) == '{}' ){
+	      			mui.toast('您还没登录呢！')
+	      		}
+	      		else{
+		      		app.setState(null);
+		      		mui.toast('退出登录成功');	
+	      		}
 	      		location.reload();
 	      	});
 	      	

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title></title>
     <script src="js/mui.min.js"></script>
+    <script src="js/app.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
 </head>
 <body>	
@@ -30,15 +31,14 @@
 	
     <script type="text/javascript" charset="utf-8">
     	//mui插件初始化
-      	mui.init({
-      		swipeBack: true	//启动右滑关闭功能
-      	});
+      	mui.init();
       	//所有选择卡
-      	var subpages = ['home.html','chat.html', 'setting.html'];
+      	var subpages = ['home.html','chat.html', 'setting.html', 'login.html'];
       	var subpage_style = {
 		    top: '45px',  
 		    bottom: '51px'  
 		}; 
+		
 		
       	//创建子页面，显示首页选择卡，隐藏其余页面
       	mui.plusReady(function(){
@@ -63,7 +63,10 @@
 	      		}
 	      		//更换标题
 				var title = document.getElementById('title');
-	      		title.innerHTML = e.querySelector('.mui-tab-label').innerHTML;
+				if (targetTab == 'login.html')
+	      			title.innerHTML = '登录';
+				else
+	      			title.innerHTML = e.querySelector('.mui-tab-label').innerHTML;
 	      		//显示目标选择卡
 	      		targetWebView.show();
 	      		//隐藏原选择卡
@@ -73,6 +76,10 @@
 	      	mui('.mui-bar-tab').on('tap','a',function(e){
 	      		// 获取目标选择卡id
 	      		var targetTab = this.getAttribute('href');
+	      		if (targetTab == 'chat.html' && JSON.stringify(app.getState()) == '{}' ){
+	      			// 未登录
+      				targetTab = 'login.html';
+	      		}
 	      		// 切换选择卡
 	      		changeTab(this,targetTab);
 	      	});
