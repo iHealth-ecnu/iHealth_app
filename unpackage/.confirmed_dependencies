@@ -1,53 +1,55 @@
 {
-  "index.html": {
-    "resources": [
-      "js/mui.min.js",
-      "fonts/mui.ttf",
-      "css/mui.min.css",
-      "home.html"
-    ],
-    "refer": [
-      "setting.html",
-      "chat.html"
-    ]
-  },
-  "home.html": {
-    "resources": [
-      "images/logo.png",
-      "js/mui.min.js",
-      "js/template-web.js",
-      "fonts/mui.ttf",
-      "css/mui.min.css"
-    ],
-    "refer": [
-      "article.html"
-    ]
-  },
-  "article.html": {
-    "resources": [
-      "js/mui.min.js",
-      "fonts/mui.ttf",
-      "js/template-web.js",
-      "css/mui.min.css"
-    ],
-    "refer": []
-  },
-  "setting.html": {
-    "resources": [
-      "images/logo.png"
-    ],
-    "refer": []
-  },
-  "chat.html": {
-    "resources": [
-      "js/mui.min.js",
-      "images/1.png",
-      "js/template-web.js",
-      "images/logo.png",
-      "fonts/mui.ttf",
-      "css/mui.min.css",
-      "js/socket.io.js"
-    ],
-    "refer": []
-  }
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"home.html"
+		],
+		"refer": [
+			"setting.html",
+			"chat.html",
+			"home.html",
+			"login.html"
+		]
+	},
+	"home.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"js/template-web.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"article.html"
+		]
+	},
+	"article.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"js/template-web.js",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"setting.html": {
+		"resources": [
+			"images/logo.png"
+		],
+		"refer": []
+	},
+	"chat.html": {
+		"resources": [
+			"js/mui.min.js",
+			"images/1.png",
+			"js/template-web.js",
+			"images/logo.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/socket.io.js"
+		],
+		"refer": []
+	}
 }

@@ -195,7 +195,8 @@
 				],
 				"refer": [
 					"config.html",
-					"chat.html"
+					"chat.html",
+					"login.html"
 				],
 				"priority": 0
 			},

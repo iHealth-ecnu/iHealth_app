@@ -230,8 +230,6 @@
 		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init();
-					    	
-			
 			
 			/**
 			 * @description 显示消息
@@ -314,8 +312,7 @@
 			        
 			        // 发送文本消息到服务器
 					socket.emit('message', {
-						'from' : '杨英明',
-						'to' : '主机',
+						'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2',
 						'msg' : msg
 					});			
 					
@@ -345,8 +342,8 @@
 				// 和即时通讯服务器建立连接
 				var socket = io.connect('http://yangyingming.com:8080');
 				
-				// 发送一个消息加入 'ios_android' room
-				socket.emit('join'); 
+				// 发送一个消息加入 room
+				socket.emit('join', { 'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2' }); 
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {
