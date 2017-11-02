@@ -54,9 +54,19 @@
 		<script src="js/template-web.js"></script>
 		<script src="js/app.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
 			
 			mui.plusReady(function(){
+			    //预加载 im 页
+			    mui.preload({
+			        url: 'im.html',
+			        id: 'im.html',
+			        styles: {
+			            "render": "always",//一直渲染
+			            "popGesture": "hide"
+			        }
+			    });
+			    
 		     	// 监听滑动事件
 		     	var changeTab = function(curTab, targetTab, targetTabTitle){
 		      		var curWebview = plus.webview.currentWebview();		     		
@@ -118,8 +128,18 @@
 				    	// 没有捕获到事件，直接退出
 				    	return ;
 				    }
-				    // 响应捕获事件
-				    console.log(id);
+				    // 响应捕获事件，打开聊天页面
+					// 获得聊天页面 webview
+					imWebview = plus.webview.getWebviewById('im.html');
+					// 注入数据
+					mui.fire(imWebview,'currentId',{
+						id:id
+					});
+					// 打开聊天页面 
+					mui.openWindow({
+						url:'im.html',
+						id:'im.html'
+					});
 				});
 			});
 		</script>
