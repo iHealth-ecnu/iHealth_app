@@ -12,31 +12,36 @@
 		loginInfo = loginInfo || {};
 		loginInfo.email = loginInfo.email || '';
 		loginInfo.password = loginInfo.password || '';
-		if (loginInfo.email.length < 5) {
+		if(loginInfo.email.length < 5) {
 			return callback('账号最短为 5 个字符');
 		}
-		if (loginInfo.password.length < 6) {
+		if(loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		}
-		
+
 		// 从服务端获取用户名密码的验证结果
-		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data){
+		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data) {
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			//获取认证结果
 			authed = data.reason;
-			if (authed) {
+			if(authed) {
+				// 添加本地设置
+				var settings = owner.getSettings();
+				settings.autoLogin = loginInfo.autoLogin;
+				owner.setSettings(settings);
+				// 创建本地状态
 				return owner.createState(data.data, callback);
 			} else {
 				return callback(data.info);
 			}
-		},'json');
-		
+		}, 'json');
+
 	};
 
 	owner.createState = function(data, callback) {
-//		var state = owner.getState();
-//		state.email = name;
-//		state.token = "token123456789";
+		//		var state = owner.getState();
+		//		state.email = name;
+		//		state.token = "token123456789";
 		console.log(JSON.stringify(data));
 		owner.setState(data);
 		return callback();
@@ -50,13 +55,13 @@
 		regInfo = regInfo || {};
 		regInfo.account = regInfo.account || '';
 		regInfo.password = regInfo.password || '';
-		if (regInfo.account.length < 5) {
+		if(regInfo.account.length < 5) {
 			return callback('用户名最短需要 5 个字符');
 		}
-		if (regInfo.password.length < 6) {
+		if(regInfo.password.length < 6) {
 			return callback('密码最短需要 6 个字符');
 		}
-		if (!checkEmail(regInfo.email)) {
+		if(!checkEmail(regInfo.email)) {
 			return callback('邮箱地址不合法');
 		}
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
@@ -86,7 +91,7 @@
 
 	var checkEmail = function(email) {
 		email = email || '';
-		return (email.length > 3 && email.indexOf('@') > -1);
+		return(email.length > 3 && email.indexOf('@') > -1);
 	};
 
 	/**
@@ -94,7 +99,7 @@
 	 **/
 	owner.forgetPassword = function(email, callback) {
 		callback = callback || $.noop;
-		if (!checkEmail(email)) {
+		if(!checkEmail(email)) {
 			return callback('邮箱地址不合法');
 		}
 		return callback(null, '新的随机密码已经发送到您的邮箱，请查收邮件。');
@@ -112,17 +117,17 @@
 	 * 设置应用本地配置
 	 **/
 	owner.getSettings = function() {
-			var settingsText = localStorage.getItem('$settings') || "{}";
-			return JSON.parse(settingsText);
-		}
-		/**
-		 * 获取本地是否安装客户端
-		 **/
+		var settingsText = localStorage.getItem('$settings') || "{}";
+		return JSON.parse(settingsText);
+	}
+	/**
+	 * 获取本地是否安装客户端
+	 **/
 	owner.isInstalled = function(id) {
-		if (id === 'qihoo' && mui.os.plus) {
+		if(id === 'qihoo' && mui.os.plus) {
 			return true;
 		}
-		if (mui.os.android) {
+		if(mui.os.android) {
 			var main = plus.android.runtimeMainActivity();
 			var packageManager = main.getPackageManager();
 			var PackageManager = plus.android.importClass(packageManager)
@@ -133,9 +138,9 @@
 			}
 			try {
 				return packageManager.getPackageInfo(packageName[id], PackageManager.GET_ACTIVITIES);
-			} catch (e) {}
+			} catch(e) {}
 		} else {
-			switch (id) {
+			switch(id) {
 				case "qq":
 					var TencentOAuth = plus.ios.import("TencentOAuth");
 					return TencentOAuth.iphoneQQInstalled();

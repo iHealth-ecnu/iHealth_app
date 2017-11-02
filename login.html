@@ -166,7 +166,7 @@
 			     	};
 					var toMain = function() {
 						// 登陆成功后的跳转页面
-						changeTab('chat.html','home.html','首页');
+						changeTab('chat.html','chat.html','交流');
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {
@@ -180,8 +180,8 @@
 								autoShow: false
 							}
 						});
-					} else if (settings.autoLogin && state.token) {
-						toMain();
+					} else if (settings.autoLogin){		// && state.token) {
+//						toMain();
 					} else {
 						app.setState(null);
 						//第三方登录
@@ -246,7 +246,8 @@
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
 							email: accountBox.value,
-							password: passwordBox.value
+							password: passwordBox.value,
+							autoLogin: autoLoginButton.classList.contains('mui-active') ? true : false
 						};
 						
 						app.login(loginInfo, function(err) {
