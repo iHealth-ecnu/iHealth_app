@@ -65,16 +65,19 @@
 			// 刷新好友列表函数
 			var refreshChatList = function(){
 				// 获取好友列表数据
-				var settings = app.getSettings();
-				if(!settings.hasOwnProperty('chatList')){
-					return ;
-				}
-				var chatList = settings.chatList;
+				var state = app.getState();
+				if(state.hasOwnProperty('chatList'))
+					var chatList = state.chatList;
+				else
+					var chatList = [];
 				// 更新页面的好友列表HTML
 				var html = template('chatlist-template', {'items':chatList});
 				var chatlist = document.getElementById('chatlist');
 				chatlist.innerHTML = html;
-				
+				// 清除搜索框的输入值
+				document.getElementById('search').value = '';
+				// 隐藏搜索框的弹出菜单
+	      		mui('#popover').popover('hide');
 			};
 			
 			mui.plusReady(function(){
@@ -102,6 +105,8 @@
 //					var index = curWebview.opener();
 		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
 					index.evalJS("document.getElementById('chat.html').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+					// 刷新chat页面 
+					refreshChatList();
 		     	};
 		      	document.querySelector('body').addEventListener('swipeleft',function(e){
 		      		changeTab('chat.html','setting.html','设置');
@@ -122,13 +127,18 @@
 		      		}
 		      		// 先隐藏之前的弹出菜单
 		      		mui('#popover').popover('hide');
+		      		// 获取当前登录用户名
+		      		var curUsername = app.getState().name;
 		      		// 模糊匹配指定用户名
-					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlist?name=' + name + '&limit=10',function(data){
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlist?name=' + name + '&selfname=' + curUsername + '&limit=10',function(data){
 						var searchResult = document.getElementById('popover');
 						// 根据模板将数据渲染成 HTML
 						var html = template('search-template', {'items':data});
 						if (html.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
-							html = '<div style="text-align:center;margin:10px;font-size:14px;">没有找到这个人耶  >_<|||</div>'; 
+							html = '<div style="text-align:center;margin:10px;font-size:14px;">没有找到这个人耶  ┑(￣Д ￣)┍</div>'; 
+							if (name == curUsername){
+								html = '<div style="text-align:center;margin:10px;font-size:14px;">这是你自己耶 (๑•́ ₃ •̀๑) </div>';
+							}
 						}
 						// 将HTML插入到弹出菜单中
 						searchResult.innerHTML = html;
@@ -138,7 +148,7 @@
 					});
 		      	});
 		      	
-		      	// 监听搜索框点击事件
+		      	// 监听搜索结果点击事件
 			    document.querySelector('body').addEventListener('tap',function (e) {
 			    	// 点击每个 card 上的 标题、图片、文字简介 时，捕获事件
 			    	// 获取选中用户的 id
@@ -158,6 +168,8 @@
 				    var settings = app.getSettings();
 				    settings.imTargetID = id;
 				    app.setSettings(settings);
+				    // 收回弹出的软键盘
+					document.activeElement.blur();
 					// 打开聊天页面 
 					mui.openWindow({
 						url:'im.html',

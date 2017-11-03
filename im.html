@@ -7,6 +7,29 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<style>
+			/*内滚动布局*/
+			html,
+			body {
+			    height: 100%;
+			    margin: 0px;
+			    padding: 0px;
+			    overflow: hidden;
+			    -webkit-touch-callout: none;
+			    -webkit-user-select: none;
+			}
+			.mui-content{
+			    height: 100%;
+			    margin-top:10px;
+			    padding: 0px 0px 50px 0px;
+			    overflow: auto;
+			    background-color: #eaeaea;
+			}
+			#msg-list {
+			    height: 100%;
+			    overflow: auto;
+			    -webkit-overflow-scrolling: touch;
+			}
+			/*聊天框布局*/
 			.chat-history-date{ 
 			    display: block;
 			    padding-top: 5px;
@@ -68,7 +91,8 @@
 			}
 			/*输入框部分*/
 			footer {
-			    position: fixed;
+				position:absolute;
+			    /*position: fixed;*/
 			    width: 100%;
 			    height: 50px;
 			    min-height: 50px;
@@ -130,27 +154,6 @@
 			    color: #0062CC;
 			    line-height: 30px;
 			}
-			/*内滚动布局*/
-			html,
-			body {
-			    height: 100%;
-			    margin: 0px;
-			    padding: 0px;
-			    overflow: hidden;
-			    -webkit-touch-callout: none;
-			    -webkit-user-select: none;
-			}
-			.mui-content{
-			    height: 100%;
-			    padding: 0px 0px 50px 0px;
-			    overflow: auto;
-			    background-color: #eaeaea;
-			}
-			#msg-list {
-			    height: 100%;
-			    overflow: auto;
-			    -webkit-overflow-scrolling: touch;
-			}
 		</style>
 	</head>
 	
@@ -164,11 +167,11 @@
 		<!--聊天框-->
 		<div class="mui-content" id="chat">
 			<!--聊天界面-->
-    		<div id="msg-list" style="padding-top:45px;">
+    		<div id="msg-list">
 			    <!--消息最后历史时间-->
-				<p class="chat-history-date">01:59</p>
+				<!--<p class="chat-history-date">01:59</p>-->
 				<!--接收文本消息-->
-				<div class="chat-receiver">
+				<!--<div class="chat-receiver">
 				    <div class="chat-avatar">
 				          <img src="./images/logo.png">
 				      </div>
@@ -176,9 +179,9 @@
 				          <div class="chat-triangle"></div>
 				          <span>如果是接受消息，请使用.chat-receiver类，如果是发送消息，请使用.chat-sender，头像是.chat-avatar类，内容是.chat-content类。.chat-content下如果是span标签则为文本消息，若为img标签则为图片消息。</span>
 				      </div>
-				</div>
+				</div>-->
 				<!--发送文本消息-->
-				<div class="chat-sender">
+				<!--<div class="chat-sender">
 				      <div class="chat-avatar">
 				          <img src="./images/logo.png">
 				      </div>
@@ -186,9 +189,9 @@
 				          <div class="chat-triangle"></div>
 				          <span>如果你要修改聊天气泡的背景颜色，请修改.chat-content的background-color和.chat-triangle的border-color</span>
 				      </div>
-				</div>
+				</div>-->
 				<!--发送图片消息-->
-				<div class="chat-sender">
+				<!--<div class="chat-sender">
 				      <div class="chat-avatar">
 				          <img src="./images/logo.png">
 				      </div>
@@ -196,7 +199,7 @@
 				          <div class="chat-triangle"></div>
 				          <img src="./images/1.png"/>
 				      </div>
-				</div>
+				</div>-->
     		</div>
 		</div>
 		<!--底部输入框-->
@@ -322,8 +325,7 @@
 					socket.emit('message', {
 						'roomid' : roomid,
 						'msg' : msg
-					});			
-					
+					});
 			        // 清空文本框
 			        ui.msgText.value = '';
 			        // 恢复输入框高度(因为我们这里是50px，你可以写一个全局变量)
@@ -338,18 +340,18 @@
 			}
 			
 			mui.plusReady(function(){
+				// 弹出软键盘时自动改变webview的高度
+				plus.webview.currentWebview().setStyle({
+				    softinputMode: "adjustResize"  
+				});
+				
+//				if(mui.os.ios){
+//					document.getElementById('chat').style = 'margin-bottom:50px;'; 
+//				}
+				
 				// 房间号码
 				var roomid = null;
-				
-				// 初始化scroll控件
-				var username = null;
-				if(mui.os.ios){
-					document.getElementById('chat').style = 'margin-top:-40px;padding-bottom:20px;';
-					username = 'ios';
-				}
-				else{
-					username = 'android';
-				}
+					
 				// 和即时通讯服务器建立连接
 				var socket = io.connect('http://yangyingming.com:8080');
 				
@@ -373,6 +375,7 @@
 				var currentWebview = plus.webview.currentWebview();
 				currentWebview.addEventListener('show',function(){
 					// 获得聊天对象信息
+					var state = app.getState();
 					var settings = app.getSettings();
 					if(!settings.hasOwnProperty('imTargetID')){
 						return ;
@@ -384,19 +387,19 @@
 						// 更新顶部标题
 						document.getElementById('navTitle').innerHTML = data.name + '（' + data.nickname + '）';
 						// 将该聊天对象添加到本地聊天列表
-						if ( !settings.hasOwnProperty('chatList') ){
-							settings.chatList = new Array();
+						if ( !state.hasOwnProperty('chatList') ){
+							state.chatList = new Array();
 						}
 						// 如果已经存在就不添加了
-						for (var i = 0 ; i < settings.chatList.length ; i++){
-							if( data._id == settings.chatList[i]._id ){
+						for (var i = 0 ; i < state.chatList.length ; i++){
+							if( data._id == state.chatList[i]._id ){
 								break;
 							}
 						}
 						// 如果不存在就添加
-						if ( i >= settings.chatList.length ){
-							settings.chatList.push(data);
-							app.setSettings(settings);
+						if ( i >= state.chatList.length ){
+							state.chatList.push(data);
+							app.setState(state);
 						}
 						// 刷新聊天列表
 						var chatWebview = plus.webview.getWebviewById('chat.html');

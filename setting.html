@@ -90,10 +90,14 @@
 	      	// 监听退出登录事件
 	      	document.getElementById('signout').addEventListener('tap',function(){
 	      		if ( JSON.stringify(app.getState()) == '{}' ){
-	      			mui.toast('您还没登录呢！')
+	      			mui.toast('您已处于离线状态！')
 	      		}
 	      		else{
+	      			// 清除用户数据
 		      		app.setState(null);
+		      		// 刷新用户聊天列表
+					var chatWebview = plus.webview.getWebviewById('chat.html');
+					chatWebview.evalJS('refreshChatList()');
 		      		mui.toast('退出登录成功');	
 	      		}
 	      		location.reload();
