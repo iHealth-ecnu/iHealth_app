@@ -217,21 +217,25 @@
 		
 		<!--消息框模板-->
 		<script id="msg-tpl" type="text/html">
-		    <div class="chat-{{who}}">
+		    <!--消息最后历史时间-->
+		    <div>
+				<p class="chat-history-date">{{sendtime}}</p>
+			    <div class="chat-{{who}}">
 		           <div class="chat-avatar">
 		               <img src="{{avatar}}">
 		           </div>
 		           <div class="chat-content">
 		               <div class="chat-triangle"></div>
 		               {{if type=="text"}}
-		                <span>{{msg}}</span>
-		            {{else if type=="url"}}
-		                <a href="{{msg}}">{{msg}}</a>
-		            {{else if type=="img"}}
-		                <img src="{{msg}}"/>
-		            {{/if}}
+			                <span>{{msg}}</span>
+			            {{else if type=="url"}}
+			                <a href="{{msg}}">{{msg}}</a>
+			            {{else if type=="img"}}
+			                <img src="{{msg}}"/>
+			            {{/if}}
 		           </div>
 		       </div>
+		    </div>
 		</script>
 		
 		<script src="js/mui.min.js"></script>
@@ -254,8 +258,10 @@
 			        who: who,
 			        type: type,
 			        avatar: who=='sender'?data.senderAvatar:data.receiverAvatar,
-			        msg: data.msg
+			        msg: data.msg,
+			        sendtime: data.sendtime
 			    });
+			    console.log(html);
 			    document.querySelector(data.el).innerHTML += html;
 			}
 			
@@ -274,12 +280,13 @@
 			 * @param {Object} type 消息类型,可选参数: {params} 'text','url','img'
 			 * @param {Object} msg ('text'和'url'类型的msg是文字，img类型的msg是img地址)
 			 */
-			var msgShow = function(who,type,msg){
+			var msgShow = function(who,type,msg,sendtime){
 			    appendMsg(who,type,{
 			        el: msgInit.el,
 			        senderAvatar: msgInit.senderAvatar,
 			        receiverAvatar: msgInit.receiverAvatar,
-			        msg: msg
+			        msg: msg,
+			        sendtime: sendtime
 			    });
 			}
 			
@@ -319,12 +326,15 @@
 			    msgTextFocus();
 			    if(validateReg.test(msg)){
 			        // 消息展示出来
-			        msgShow('sender','text',msg);
+			        var d = new Date();
+					var sendtime = d.toLocaleTimeString();
+			        msgShow('sender','text',msg,sendtime);
 			        
 			        // 发送文本消息到服务器
 					socket.emit('message', {
 						'roomid' : roomid,
-						'msg' : msg
+						'msg' : msg,
+						'sendtime' : sendtime
 					});
 			        // 清空文本框
 			        ui.msgText.value = '';
@@ -358,9 +368,9 @@
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {
-			    	console.log(data['msg']);
+			    	console.log(JSON.stringify(data));
 			        // 消息展示出来
-			        msgShow('receiver','text',data['msg']);
+			        msgShow('receiver','text',data['msg'],data['sendtime']);
 			        // 消息滚动
         			msgScrollTop();
 			    });
