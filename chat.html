@@ -23,17 +23,8 @@
 		</div>
 		
 		<!--好友列表-->
-		<div class="mui-content mui-scroll-wrapper" id="home">
-	        <div class="mui-scroll">
-				<div class="mui-card">
-					<div class="mui-card-header mui-card-media" style="height: 70px;">
-						<img src="./images/logo.png" style="height: 100%;width: auto;"/>
-						<div class="mui-media-body" style="padding: 8px 15px;">
-							<span style="font-size: 20px;">杨英明</span>
-							<p>发表于 2016-06-30 15:30</p>
-						</div>
-					</div>
-				</div>
+		<div class="mui-content mui-scroll-wrapper">
+	        <div class="mui-scroll" id="chatlist">
 	        </div>
 		</div>
 		
@@ -49,6 +40,21 @@
 			</div>
 	    	{{ /each }}
     	</script>
+    	
+		<!--HTML模板（好友列表）-->
+		<script id="chatlist-template" type="text/html">
+			{{ each items item }}
+			<div class="mui-card mui-navigate-right">
+				<div class="mui-card-header mui-card-media" style="height: 70px;" id="{{item._id}}">
+					<img src="./images/logo.png" style="height: 100%;width: auto;"/>
+					<div class="mui-media-body" style="padding: 8px 15px;">
+						<span style="font-size: 16px;">{{item.name}}（{{item.nickname}}）</span>
+						<p>{{item.introduction}}</p>
+					</div>
+				</div>
+			</div>
+			{{ /each }}
+		</script>
 		
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
@@ -56,7 +62,25 @@
 		<script type="text/javascript">
 			mui.init();
 			
+			// 刷新好友列表函数
+			var refreshChatList = function(){
+				// 获取好友列表数据
+				var settings = app.getSettings();
+				if(!settings.hasOwnProperty('chatList')){
+					return ;
+				}
+				var chatList = settings.chatList;
+				// 更新页面的好友列表HTML
+				var html = template('chatlist-template', {'items':chatList});
+				var chatlist = document.getElementById('chatlist');
+				chatlist.innerHTML = html;
+				
+			};
+			
 			mui.plusReady(function(){
+				// 刷新好友列表函数
+				refreshChatList();
+				
 			    //预加载 im 页
 			    mui.preload({
 			        url: 'im.html',
@@ -140,6 +164,7 @@
 						id:'im.html'
 					});
 				});
+				
 			});
 		</script>
 	</body>

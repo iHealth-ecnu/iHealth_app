@@ -309,7 +309,7 @@
 			    ui.footer.style.height = this.scrollHeight + 'px';
 			});
 			
-			var sendText = function(socket){
+			var sendText = function(socket, roomid){
 			    var msg = ui.msgText.value.replace(new RegExp('\n', 'gm'), '<br/>');
 			    var validateReg = /^\S+$/;
 			    // 获得键盘焦点
@@ -320,7 +320,7 @@
 			        
 			        // 发送文本消息到服务器
 					socket.emit('message', {
-						'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2',
+						'roomid' : roomid,
 						'msg' : msg
 					});			
 					
@@ -338,6 +338,8 @@
 			}
 			
 			mui.plusReady(function(){
+				// 房间号码
+				var roomid = null;
 				
 				// 初始化scroll控件
 				var username = null;
@@ -351,8 +353,6 @@
 				// 和即时通讯服务器建立连接
 				var socket = io.connect('http://yangyingming.com:8080');
 				
-				// 发送一个消息加入 room
-				socket.emit('join', { 'roomid' : '59f7eb66e6c80c2f684059b1_59f7eb66e6c80c2f684059b2' }); 
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {
@@ -366,7 +366,7 @@
 				
 				// 监听事件：发送文本消息
 				ui.msgSendText.addEventListener('tap',function(){
-				    sendText(socket);
+				    sendText(socket, roomid);
 				});
 				
 				// 监听当前页面显示事件
@@ -374,14 +374,42 @@
 				currentWebview.addEventListener('show',function(){
 					// 获得聊天对象信息
 					var settings = app.getSettings();
-					if(settings.hasOwnProperty('imTargetID')){
-						var targetID = settings.imTargetID;
-						mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
-							if ( !data.hasOwnProperty('_id') )
-								return ; 
-							document.getElementById('navTitle').innerHTML = data.name + '（' + data.nickname + '）';
-						});
+					if(!settings.hasOwnProperty('imTargetID')){
+						return ;
 					}
+					var targetID = settings.imTargetID;
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
+						if ( !data.hasOwnProperty('_id') )
+							return ; 
+						// 更新顶部标题
+						document.getElementById('navTitle').innerHTML = data.name + '（' + data.nickname + '）';
+						// 将该聊天对象添加到本地聊天列表
+						if ( !settings.hasOwnProperty('chatList') ){
+							settings.chatList = new Array();
+						}
+						// 如果已经存在就不添加了
+						for (var i = 0 ; i < settings.chatList.length ; i++){
+							if( data._id == settings.chatList[i]._id ){
+								break;
+							}
+						}
+						// 如果不存在就添加
+						if ( i >= settings.chatList.length ){
+							settings.chatList.push(data);
+							app.setSettings(settings);
+						}
+						// 刷新聊天列表
+						var chatWebview = plus.webview.getWebviewById('chat.html');
+						chatWebview.evalJS('refreshChatList()');
+					});
+					
+					// 计算 roomid
+					var hisID = targetID;
+					var myID = app.getState()._id;
+					roomid = hisID < myID ? hisID + '_' + myID : myID + '_' + hisID ;
+					
+					// 发送一个消息加入 room
+					socket.emit('join', { 'roomid' : roomid }); 
 				});
 				
 			});

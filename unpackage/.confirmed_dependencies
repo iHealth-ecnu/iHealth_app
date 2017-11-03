@@ -50,6 +50,8 @@
 			"css/mui.min.css",
 			"js/socket.io.js"
 		],
-		"refer": []
+		"refer": [
+			"im.html"
+		]
 	}
 }
