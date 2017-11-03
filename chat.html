@@ -118,23 +118,22 @@
 			    document.querySelector('body').addEventListener('tap',function (e) {
 			    	// 点击每个 card 上的 标题、图片、文字简介 时，捕获事件
 			    	// 获取选中用户的 id
+			    	var id = null;
 				    if ( e.target.parentNode.classList.contains('mui-card-header') ){
-				    	var id = e.target.parentNode.getAttribute('id');
+				    	id = e.target.parentNode.getAttribute('id');
 				    }
 				    else if( e.target.parentNode.className == 'mui-media-body' ){
-				    	var id = e.target.parentNode.parentNode.getAttribute('id');
+				    	id = e.target.parentNode.parentNode.getAttribute('id');
 				    }
 				    else{
 				    	// 没有捕获到事件，直接退出
 				    	return ;
 				    }
 				    // 响应捕获事件，打开聊天页面
-					// 获得聊天页面 webview
-					imWebview = plus.webview.getWebviewById('im.html');
-					// 注入数据
-					mui.fire(imWebview,'currentId',{
-						id:id
-					});
+				    // 将聊天对象id存入本地
+				    var settings = app.getSettings();
+				    settings.imTargetID = id;
+				    app.setSettings(settings);
 					// 打开聊天页面 
 					mui.openWindow({
 						url:'im.html',
