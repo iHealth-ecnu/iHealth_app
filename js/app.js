@@ -12,9 +12,9 @@
 		loginInfo = loginInfo || {};
 		loginInfo.email = loginInfo.email || '';
 		loginInfo.password = loginInfo.password || '';
-		if(loginInfo.email.length < 5) {
-			return callback('账号最短为 5 个字符');
-		}
+//		if(loginInfo.email.length < 3) {
+//			return callback('账号最短为 3 个字符');
+//		}
 		if(loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		}
@@ -23,8 +23,9 @@
 		mui.post('http://ihealth.yangyingming.com/api/v1/usercheck', loginInfo, function(data) {
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			//获取认证结果
-			authed = data.reason;
+			authed = data.result;
 			if(authed) {
+				// 登录成功
 				// 添加本地设置
 				var settings = owner.getSettings();
 				settings.autoLogin = loginInfo.autoLogin;
@@ -32,7 +33,7 @@
 				// 创建本地状态
 				return owner.createState(data.data, callback);
 			} else {
-				return callback(data.info);
+				return callback(data.msg);
 			}
 		}, 'json');
 
@@ -53,21 +54,30 @@
 	owner.reg = function(regInfo, callback) {
 		callback = callback || $.noop;
 		regInfo = regInfo || {};
-		regInfo.account = regInfo.account || '';
+		regInfo.email = regInfo.email || '';
 		regInfo.password = regInfo.password || '';
-		if(regInfo.account.length < 5) {
-			return callback('用户名最短需要 5 个字符');
-		}
+//		if(regInfo.email.length < 3) {
+//			return callback('用户名最短需要 5 个字符');
+//		}
 		if(regInfo.password.length < 6) {
 			return callback('密码最短需要 6 个字符');
 		}
 		if(!checkEmail(regInfo.email)) {
 			return callback('邮箱地址不合法');
 		}
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		users.push(regInfo);
-		localStorage.setItem('$users', JSON.stringify(users));
-		return callback();
+		// 发送注册数据到后台
+		mui.post('http://ihealth.yangyingming.com/api/v1/reguser',regInfo,function(data){
+			console.log('hhh');
+			console.log(JSON.stringify(data));
+			if(data.result){
+				// 注册成功
+				// 接着登录
+				owner.login({email: regInfo.email, password:regInfo.password, autoLogin: true})
+			}
+			else{
+				return callback(data.msg);
+			}
+		});
 	};
 
 	/**

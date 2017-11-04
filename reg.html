@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			.mui-input-group label {
+				width: 22%;
+			}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
+			}
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			.mui-btn {
+				padding: 10px;
+			}
+			/*自定义开关*/
+			.mui-input-row .mui-switch
+			{
+				float: left;
+			}
+			.sex-switch:before
+			{
+    			font-size: 16px;
+    			right:16px;
+			    content: '女';
+			}
+			.sex-switch.mui-active:before
+			{
+			    content: '男';
+			}
+			.type-switch:before
+			{
+    			font-size: 16px;
+    			right:7px;
+			    content: '医生';
+			}
+			.type-switch.mui-active:before
+			{
+				left:7px;
+			    content: '病人';
+			}
+			</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">注册</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>邮箱</label>
+					<input id='email' type="email" class="mui-input-clear mui-input" placeholder="输入您的邮箱">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-password mui-input-clear mui-input" placeholder="输入您的密码">
+					<span class="mui-icon mui-icon-eye"></span>
+				</div>
+				<div class="mui-input-row">
+					<label>确认</label>
+					<input id='password_confirm' type="password" class="mui-input-password mui-input-clear mui-input" placeholder="请再次输入密码">
+					<span class="mui-icon mui-icon-eye"></span>
+				</div>
+				<div class="mui-input-row">
+					<label>昵称</label>
+					<input id='nickname' type="text" class="mui-input-clear mui-input" placeholder="输入您的昵称">
+				</div>
+				<div class="mui-input-row">
+					<label>性别</label>
+					<!-- 蓝色开关打开状态 -->
+					<div id='sex' class="mui-switch mui-switch-blue mui-active sex-switch">
+					  <div class="mui-switch-handle"></div>
+					</div>
+					<input type="text" style="display:none;">
+				</div>
+				<div class="mui-input-row">
+					<label>类型</label>
+					<!-- 蓝色开关打开状态 -->
+					<div id='type' class="mui-switch mui-switch-blue mui-active type-switch">
+					  <div class="mui-switch-handle"></div>
+					</div>
+					<input type="text" style="display:none;">
+				</div>
+				<div class="mui-input-row">
+					<label>生日</label>
+				    <div>
+				        <button id='pickDateBtn' type="button" class="mui-btn" style="float:left;width:auto;margin:1px;border: hidden;font-size: 16px;padding-left: 0px;">选择您的出生日期</button>
+				    </div>
+				</div>
+				<div class="mui-input-row" style="height:80px;">
+					<label>简介</label> 
+					<textarea id="introduction" rows="4" placeholder="输入您的个人简介"></textarea>
+				</div>
+			</form>
+			
+			<div class="mui-content-padded">
+				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
+			</div>
+			<div class="mui-content-padded">
+				<p>注册真实可用，注册成功后的用户可用于登录，但是示例程序并未和服务端交互，用户相关数据仅存储于本地。</p>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					// 设置时间选择器
+					var birthday = '1970-1-1';
+					document.getElementById("pickDateBtn").addEventListener('tap', function() {
+					    var dDate = new Date();
+					    //设置当前日期（不设置默认当前日期）
+					    dDate.setFullYear(2016, 7, 16);
+					    var minDate = new Date();
+					    //最小时间
+					    minDate.setFullYear(2010, 0, 1);
+					    var maxDate = new Date();
+					    //最大时间
+					    maxDate.setFullYear(2016, 11, 31);
+					    plus.nativeUI.pickDate(function(e) {
+					        var d = e.date;
+					        birthday = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+					        document.getElementById("pickDateBtn").innerHTML = birthday;
+					        mui.toast('您选择的日期是:' + birthday);
+					    }, function(e) {
+					        mui.toast("您没有选择日期");
+					    }, {
+					        title: '请选择日期',
+					        date: dDate,
+					        minDate: minDate,
+					        maxDate: maxDate
+					    });
+					});           
+					// 提取输入数据
+					var settings = app.getSettings();
+					var regButton = doc.getElementById('reg');
+					var emailBox = doc.getElementById('email');
+					var passwordBox = doc.getElementById('password');
+					var passwordConfirmBox = doc.getElementById('password_confirm');
+					var nicknameBox = doc.getElementById('nickname');
+					var sexBox = doc.getElementById('sex');
+					var typeBox = doc.getElementById('type');
+					var introductionBox = doc.getElementById('introduction');
+					regButton.addEventListener('tap', function(event) {
+						if (passwordConfirmBox.value != passwordBox.value) {
+							plus.nativeUI.toast('密码两次输入不一致');
+							return;
+						}
+						var regInfo = {
+							email: emailBox.value,
+							password: passwordBox.value,
+							email: emailBox.value,
+							nickname: nicknameBox.value,
+							sex: sexBox.classList.contains("mui-active")? 1 : 0,
+							type: typeBox.classList.contains("mui-active")? 1 : 2,
+							birthday: birthday,
+							introduction: introductionBox.value
+						};
+						console.log(JSON.stringify(regInfo));
+						app.reg(regInfo, function(err) {
+							if (err) {
+								plus.nativeUI.toast(err);
+								return;
+							}
+							plus.nativeUI.toast('注册成功');
+							/*
+							 * 注意：
+							 * 1、因本示例应用启动页就是登录页面，因此注册成功后，直接显示登录页即可；
+							 * 2、如果真实案例中，启动页不是登录页，则需修改，使用mui.openWindow打开真实的登录页面
+							 */
+							// 注册成功，打开聊天页面
+				      		var curWebview = plus.webview.currentWebview();		     		
+				      		var targetWebview = plus.webview.getWebviewById('chat.html');
+				      		targetWebview.show();
+				      		curWebview.hide();
+						});
+					});
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

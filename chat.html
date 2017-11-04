@@ -30,7 +30,7 @@
 		
 		<!--好友列表-->
 		<div class="mui-content mui-scroll-wrapper">
-	        <ul class="mui-scroll mui-table-view" id="chatlist" style="margin: 5px;padding:0px;">
+	        <ul class="mui-scroll mui-table-view" id="chatlist" style="margin-top: 0px;padding:0px;">
 	        </ul>
 		</div>
 		
@@ -209,48 +209,6 @@
 						id:'im.html'
 					});
 				});
-				
-				// 监听左滑删除事件
-				var es = document.getElementsByClassName('mui-btn');
-				for(var i = 0; i<es.length; i++){
-					es[i].addEventListener('tap',function(e){
-						console.log('hhh');
-              			var li=this.parentNode.parentNode;
-						// 获得用户id
-						var delID = e.target.getAttribute('id');
-						console.log(delID);
-						// 从列表中找到该用户并删除
-						var state = app.getState();
-						for (var i = 0 ; i < state.chatList.length ; i++){
-							if( delID == state.chatList[i]._id ){
-								state.chatList.splice(i,1);
-							}
-						}
-						// 写回本地 
-						app.setState(state);
-						li.parentNode.removeChild(li);
-//                   	mui.swipeoutClose(li);
-						// 刷新好友列表
-//						refreshChatList();
-					})
-				}
-//				mui('.mui-disabled').on('tap','a',function(e){
-//					console.log('hhh');
-//					// 获得用户id
-//					var delID = e.target.getAttribute('id');
-//					console.log(delID);
-//					// 从列表中找到该用户并删除
-//					var state = app.getState();
-//					for (var i = 0 ; i < state.chatList.length ; i++){
-//						if( delID == state.chatList[i]._id ){
-//							state.chatList.splice(i,1);
-//						}
-//					}
-//					// 写回本地 
-//					app.setState(state);
-//					// 刷新好友列表
-////					refreshChatList();
-//				});
 				
 			});
 		</script>

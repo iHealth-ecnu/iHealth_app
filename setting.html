@@ -20,8 +20,8 @@
 				<div class="mui-card-header mui-card-media">
 					<img src="./images/logo.png" style="width:20%;height:auto;margin-left:10px;margin-right:20px;"/>
 					<div class="mui-media-body" style="padding:8px;">
-						<h3>{{item.name}}</h3>
-						<p>查看或编辑个人资料</p>
+						<h3>{{item.nickname}}</h3>
+						<p>{{item.introduction}}</p>
 					</div>
 				</div>
 				<!--内容区-->
@@ -58,7 +58,10 @@
 			var data = app.getState();
 			if (JSON.stringify(data) == '{}'){
 				// 用户未登录
-				data = {'name':'您还未登录'}
+				data = {
+					'nickname':'您还未登录',
+					'introduction' : '查看或编辑个人资料'
+				}
 			}
 			// 根据模板将数据渲染成 HTML
 			var html = template('setting-template', {'item':data});
@@ -90,7 +93,7 @@
 	      	// 监听退出登录事件
 	      	document.getElementById('signout').addEventListener('tap',function(){
 	      		if ( JSON.stringify(app.getState()) == '{}' ){
-	      			mui.toast('您已处于离线状态！')
+	      			mui.toast('您已处于离线状态！');
 	      		}
 	      		else{
 	      			// 清除用户数据
