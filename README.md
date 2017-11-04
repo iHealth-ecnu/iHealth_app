@@ -30,15 +30,18 @@ iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
     - [x] 单聊功能
     - [x] 搜索条
     - [x] 用户列表页面
+    - [x] 用户列表滑动删除
 - [x] 左右滑动切换选择卡
 - [x] 退出登录功能
 - [x] 自动登录开关
 - [ ] 设置页面
+- [ ] 手势图片锁屏
 - [ ] 点赞数动态增加
 - [ ] 评论
 - [x] 文章详情页面排版优化
     - [x] 文章图片自适应屏幕
     - [x] 替换 h3 标签为 strong 标签
+		- [ ] 图片预览
 - [ ] 下拉刷新
 
 ……
@@ -127,6 +130,10 @@ http://www.cnblogs.com/lout/p/6111739.html
       http://www.52im.net/thread-336-1-1.html
     * Socket.IO介绍：支持WebSocket、用于WEB端的即时通讯的框架  
       http://www.52im.net/forum.php?mod=viewthread&tid=190&ctid=15
+    * ios下弹出软键盘后header会随着页面的滚动而消失在顶部  
+      http://ask.dcloud.net.cn/question/10629
+    * Hbuilder MUI 收回弹出的软键盘  
+      http://www.bcty365.com/content-146-3158-1.html
 
 * 【手势滑动】解决选择卡左右滑动切换的问题
 	* MUI各种手势事件：滑动、拖动、点击等  
@@ -140,3 +147,8 @@ http://www.cnblogs.com/lout/p/6111739.html
 	* 用JS添加和删除class类名  
 	  http://www.cnblogs.com/dealblog/p/6885437.html
  
+* 【列表滑动删除】列表滑动删除的实现  
+  * HTML5培训第14节课堂笔记（列表滑动删除的实现、侧滑菜单的生成）  
+    http://blog.csdn.net/u013267266/article/details/51398333
+  * 关于输入框，mui-table-view中li的边框问题(去掉 li 下面的边框)  
+    http://ask.dcloud.net.cn/question/5411

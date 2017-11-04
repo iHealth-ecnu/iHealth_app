@@ -6,6 +6,12 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			/*去掉 mui-card-header 下面的线*/
+			.mui-card-header:after{
+				height:0;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -24,8 +30,8 @@
 		
 		<!--好友列表-->
 		<div class="mui-content mui-scroll-wrapper">
-	        <div class="mui-scroll" id="chatlist">
-	        </div>
+	        <ul class="mui-scroll mui-table-view" id="chatlist" style="margin: 5px;padding:0px;">
+	        </ul>
 		</div>
 		
 		<!--HTML模板（弹出菜单）-->
@@ -44,15 +50,18 @@
 		<!--HTML模板（好友列表）-->
 		<script id="chatlist-template" type="text/html">
 			{{ each items item }}
-			<div class="mui-card mui-navigate-right">
-				<div class="mui-card-header mui-card-media" style="height: 70px;" id="{{item._id}}">
-					<img src="./images/logo.png" style="height: 100%;width: auto;"/>
-					<div class="mui-media-body" style="padding: 8px 15px;">
+			<li class="mui-table-view-cell mui-transitioning">
+				<div class="mui-slider-right mui-disabled">
+					<a class="mui-btn mui-btn-red" style="transform: translate(0px, 0px);" id="{{item._id}}">删除</a>
+				</div>
+				<div class="mui-card-header mui-card-media mui-slider-handle" id="{{item._id}}">
+					<img src="./images/logo.png" />
+					<div class="mui-media-body">
 						<span style="font-size: 16px;">{{item.name}}（{{item.nickname}}）</span>
 						<p>{{item.introduction}}</p>
 					</div>
 				</div>
-			</div>
+			</li>
 			{{ /each }}
 		</script>
 		
@@ -76,8 +85,27 @@
 				chatlist.innerHTML = html;
 				// 清除搜索框的输入值
 				document.getElementById('search').value = '';
+				document.getElementById('search').blur();
 				// 隐藏搜索框的弹出菜单
 	      		mui('#popover').popover('hide');
+	      		
+				// 监听左滑删除事件
+				mui('.mui-disabled').on('tap','a',function(e){
+					// 获得用户id
+					var delID = e.target.getAttribute('id');
+					// 从列表中找到该用户并删除
+					var state = app.getState();
+					for (var i = 0 ; i < state.chatList.length ; i++){
+						if( delID == state.chatList[i]._id ){
+							state.chatList.splice(i,1);
+						}
+					}
+					// 写回本地 
+					app.setState(state);
+					// 在HTML中删除该节点
+          			var li=this.parentNode.parentNode;
+					li.parentNode.removeChild(li);
+				});
 			};
 			
 			mui.plusReady(function(){
@@ -176,6 +204,48 @@
 						id:'im.html'
 					});
 				});
+				
+				// 监听左滑删除事件
+				var es = document.getElementsByClassName('mui-btn');
+				for(var i = 0; i<es.length; i++){
+					es[i].addEventListener('tap',function(e){
+						console.log('hhh');
+              			var li=this.parentNode.parentNode;
+						// 获得用户id
+						var delID = e.target.getAttribute('id');
+						console.log(delID);
+						// 从列表中找到该用户并删除
+						var state = app.getState();
+						for (var i = 0 ; i < state.chatList.length ; i++){
+							if( delID == state.chatList[i]._id ){
+								state.chatList.splice(i,1);
+							}
+						}
+						// 写回本地 
+						app.setState(state);
+						li.parentNode.removeChild(li);
+//                   	mui.swipeoutClose(li);
+						// 刷新好友列表
+//						refreshChatList();
+					})
+				}
+//				mui('.mui-disabled').on('tap','a',function(e){
+//					console.log('hhh');
+//					// 获得用户id
+//					var delID = e.target.getAttribute('id');
+//					console.log(delID);
+//					// 从列表中找到该用户并删除
+//					var state = app.getState();
+//					for (var i = 0 ; i < state.chatList.length ; i++){
+//						if( delID == state.chatList[i]._id ){
+//							state.chatList.splice(i,1);
+//						}
+//					}
+//					// 写回本地 
+//					app.setState(state);
+//					// 刷新好友列表
+////					refreshChatList();
+//				});
 				
 			});
 		</script>
