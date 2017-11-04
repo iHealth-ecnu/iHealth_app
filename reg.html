@@ -87,6 +87,10 @@
 					<input id='nickname' type="text" class="mui-input-clear mui-input" placeholder="输入您的昵称">
 				</div>
 				<div class="mui-input-row">
+					<label>姓名</label>
+					<input id='name' type="text" class="mui-input-clear mui-input" placeholder="输入您的真实姓名">
+				</div>
+				<div class="mui-input-row">
 					<label>性别</label>
 					<!-- 蓝色开关打开状态 -->
 					<div id='sex' class="mui-switch mui-switch-blue mui-active sex-switch">
@@ -135,15 +139,15 @@
 					    dDate.setFullYear(2016, 7, 16);
 					    var minDate = new Date();
 					    //最小时间
-					    minDate.setFullYear(2010, 0, 1);
+					    minDate.setFullYear(1900, 0, 1);
 					    var maxDate = new Date();
 					    //最大时间
-					    maxDate.setFullYear(2016, 11, 31);
+//					    maxDate.setFullYear(2016, 11, 31);
 					    plus.nativeUI.pickDate(function(e) {
 					        var d = e.date;
 					        birthday = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 					        document.getElementById("pickDateBtn").innerHTML = birthday;
-					        mui.toast('您选择的日期是:' + birthday);
+//					        mui.toast('您选择的日期是:' + birthday);
 					    }, function(e) {
 					        mui.toast("您没有选择日期");
 					    }, {
@@ -162,23 +166,30 @@
 					var nicknameBox = doc.getElementById('nickname');
 					var sexBox = doc.getElementById('sex');
 					var typeBox = doc.getElementById('type');
+					var nameBox = doc.getElementById('name');
 					var introductionBox = doc.getElementById('introduction');
 					regButton.addEventListener('tap', function(event) {
 						if (passwordConfirmBox.value != passwordBox.value) {
 							plus.nativeUI.toast('密码两次输入不一致');
 							return;
 						}
+						// 计算年龄
+						var curdate = new Date();
+						var curyear = curdate.getFullYear();
+						var age = curyear - parseInt(birthday.split('-')[0]);
+						// 提取注册信息
 						var regInfo = {
 							email: emailBox.value,
 							password: passwordBox.value,
-							email: emailBox.value,
 							nickname: nicknameBox.value,
 							sex: sexBox.classList.contains("mui-active")? 1 : 0,
 							type: typeBox.classList.contains("mui-active")? 1 : 2,
 							birthday: birthday,
-							introduction: introductionBox.value
+							age: age,
+							introduction: introductionBox.value || '',
+							name: nameBox.value || '',
+							phone: ''
 						};
-						console.log(JSON.stringify(regInfo));
 						app.reg(regInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
@@ -190,11 +201,19 @@
 							 * 1、因本示例应用启动页就是登录页面，因此注册成功后，直接显示登录页即可；
 							 * 2、如果真实案例中，启动页不是登录页，则需修改，使用mui.openWindow打开真实的登录页面
 							 */
-							// 注册成功，打开聊天页面
-				      		var curWebview = plus.webview.currentWebview();		     		
-				      		var targetWebview = plus.webview.getWebviewById('chat.html');
-				      		targetWebview.show();
-				      		curWebview.hide();
+							
+							// 注册成功，登陆并打开聊天页面
+							app.login({email:regInfo.email,password:regInfo.password,autoLogin:true}, function(err) {
+								if (err) {
+									plus.nativeUI.toast(err);
+									return;
+								}
+								// 登陆成功，跳转
+					      		var curWebview = plus.webview.currentWebview();		     		
+					      		var targetWebview = plus.webview.getWebviewById('chat.html');
+					      		targetWebview.show();
+					      		curWebview.hide();
+					     	});
 						});
 					});
 				});

@@ -65,19 +65,20 @@
 		if(!checkEmail(regInfo.email)) {
 			return callback('邮箱地址不合法');
 		}
+		console.log(JSON.stringify(regInfo));
 		// 发送注册数据到后台
 		mui.post('http://ihealth.yangyingming.com/api/v1/reguser',regInfo,function(data){
 			console.log('hhh');
 			console.log(JSON.stringify(data));
-			if(data.result){
+			if( data.result ){
 				// 注册成功
-				// 接着登录
-				owner.login({email: regInfo.email, password:regInfo.password, autoLogin: true})
+				return callback();
 			}
 			else{
-				return callback(data.msg);
+				// 注册失败
+				return callback(data.msg + data.reason);
 			}
-		});
+		},'json');
 	};
 
 	/**
