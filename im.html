@@ -28,6 +28,7 @@
 			    height: 100%;
 			    overflow: auto;
 			    -webkit-overflow-scrolling: touch;
+			    padding-bottom: 20px;
 			}
 			/*聊天框布局*/
 			.chat-history-date{ 
@@ -218,24 +219,22 @@
 		<!--消息框模板-->
 		<script id="msg-tpl" type="text/html">
 		    <!--消息最后历史时间-->
-		    <div>
-				<p class="chat-history-date">{{sendtime}}</p>
-			    <div class="chat-{{who}}">
-		           <div class="chat-avatar">
-		               <img src="{{avatar}}">
-		           </div>
-		           <div class="chat-content">
-		               <div class="chat-triangle"></div>
-		               {{if type=="text"}}
-			                <span>{{msg}}</span>
-			            {{else if type=="url"}}
-			                <a href="{{msg}}">{{msg}}</a>
-			            {{else if type=="img"}}
-			                <img src="{{msg}}"/>
-			            {{/if}}
-		           </div>
-		       </div>
-		    </div>
+		    <div class="chat-{{who}}">
+				<p class="chat-history-date" style="display:{{display}};">{{msgtime}}</p>
+	           	<div class="chat-avatar">
+	            	<img src="{{avatar}}">
+	            </div>
+	            <div class="chat-content">
+	                <div class="chat-triangle"></div>
+	                {{if type=="text"}}
+		            	<span>{{msg}}</span>
+		            {{else if type=="url"}}
+		                <a href="{{msg}}">{{msg}}</a>
+		            {{else if type=="img"}}
+		                <img src="{{msg}}"/>
+		            {{/if}}
+	           </div>
+	        </div>
 		</script>
 		
 		<script src="js/mui.min.js"></script>
@@ -245,6 +244,8 @@
 		<script type="text/javascript">
 			mui.init();
 					
+			// 获取当前时间
+			var pretime = new Date(0);
 			
 			/**
 			 * @description 显示消息
@@ -259,7 +260,8 @@
 			        type: type,
 			        avatar: who=='sender'?data.senderAvatar:data.receiverAvatar,
 			        msg: data.msg,
-			        sendtime: data.sendtime
+			        msgtime: data.msgtime,
+			        display: data.display
 			    });
 			    console.log(html);
 			    document.querySelector(data.el).innerHTML += html;
@@ -280,13 +282,14 @@
 			 * @param {Object} type 消息类型,可选参数: {params} 'text','url','img'
 			 * @param {Object} msg ('text'和'url'类型的msg是文字，img类型的msg是img地址)
 			 */
-			var msgShow = function(who,type,msg,sendtime){
+			var msgShow = function(who,type,msg,msgtime,display){
 			    appendMsg(who,type,{
 			        el: msgInit.el,
 			        senderAvatar: msgInit.senderAvatar,
 			        receiverAvatar: msgInit.receiverAvatar,
 			        msg: msg,
-			        sendtime: sendtime
+			        msgtime: msgtime,
+			        display: display
 			    });
 			}
 			
@@ -324,17 +327,27 @@
 			    var validateReg = /^\S+$/;
 			    // 获得键盘焦点
 			    msgTextFocus();
-			    if(validateReg.test(msg)){
+//			    if(validateReg.test(msg)){
+				if( msg.replace(/^\s\s*/, '').replace(/\s\s*$/, '') !== '' ){
 			        // 消息展示出来
-			        var d = new Date();
-					var sendtime = d.toLocaleTimeString();
-			        msgShow('sender','text',msg,sendtime);
+			        var curtime = new Date();
+					var msgtime = curtime.toLocaleTimeString();
+					// 计算上一次发送或接受消息的时间差，单位为秒
+					var delta = (curtime.getTime() - pretime.getTime())/1000;
+					pretime = curtime;
+					// 根据两条消息的时间差判断是否显示发送时间
+					if (delta > 60*3){
+						var display = 'block';
+					}
+					else{
+						var display = 'none';
+					}
+			        msgShow('sender','text',msg,msgtime,display);
 			        
 			        // 发送文本消息到服务器
 					socket.emit('message', {
 						'roomid' : roomid,
-						'msg' : msg,
-						'sendtime' : sendtime
+						'msg' : msg
 					});
 			        // 清空文本框
 			        ui.msgText.value = '';
@@ -355,9 +368,9 @@
 				    softinputMode: "adjustResize"  
 				});
 				
-//				if(mui.os.ios){
-//					document.getElementById('chat').style = 'margin-bottom:50px;'; 
-//				}
+				if(mui.os.ios){
+					document.getElementById('msg-list').style = 'padding-bottom:60px;'; 
+				}
 				
 				// 房间号码
 				var roomid = null;
@@ -368,9 +381,20 @@
 				
 				// 接受发来的消息
 			    socket.on('message', function (data) {
-			    	console.log(JSON.stringify(data));
+					// 计算上一次发送或接受消息的时间差，单位为秒
+			        var curtime = new Date();
+					var msgtime = curtime.toLocaleTimeString();
+					var delta = (curtime.getTime() - pretime.getTime())/1000;
+					pretime = curtime;
+					// 根据两条消息的时间差判断是否显示发送时间
+					if (delta > 10){
+						var display = 'block';
+					}
+					else{
+						var display = 'none';
+					}
 			        // 消息展示出来
-			        msgShow('receiver','text',data['msg'],data['sendtime']);
+			        msgShow('receiver','text',data['msg'],msgtime,display);
 			        // 消息滚动
         			msgScrollTop();
 			    });

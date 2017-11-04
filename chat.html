@@ -194,6 +194,11 @@
 				    // 响应捕获事件，打开聊天页面
 				    // 将聊天对象id存入本地
 				    var settings = app.getSettings();
+				    // 如果换到新的聊天用户，清空原来的聊天记录
+				    if(settings.imTargetID != id){
+				    	var imWebview = plus.webview.getWebviewById('im.html');
+				    	imWebview.evalJS("document.getElementById('msg-list').innerHTML = '';pretime = new Date(0);");
+				    }
 				    settings.imTargetID = id;
 				    app.setSettings(settings);
 				    // 收回弹出的软键盘
