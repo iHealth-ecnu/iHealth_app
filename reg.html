@@ -213,6 +213,10 @@
 					      		var targetWebview = plus.webview.getWebviewById('chat.html');
 					      		targetWebview.show();
 					      		curWebview.hide();
+								// 获取首页面
+								var index = plus.webview.getLaunchWebview();
+					      		// 修改标题
+								index.evalJS("document.getElementById('title').innerHTML='交流';");
 					     	});
 						});
 					});

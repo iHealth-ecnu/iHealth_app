@@ -133,6 +133,19 @@
 					statusBarBackground: '#f7f7f7'
 				});
 				
+				// 页面跳转函数
+		     	var changeTab = function(curTab, targetTab, targetTabTitle){
+		      		var curWebview = plus.webview.currentWebview();		     		
+		      		var targetWebview = plus.webview.getWebviewById(targetTab);
+		      		targetWebview.show();
+		      		curWebview.hide();
+					// 获取当前页面的父页面（创建它的页面）
+					var index = plus.webview.getLaunchWebview();
+//						var index = curWebview.opener();
+		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+					index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+		     	};
+		     	
 				$.plusReady(function() {
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
@@ -152,18 +165,6 @@
 						main_loaded_flag = true;
 					});
 					
-					// 页面跳转函数
-			     	var changeTab = function(curTab, targetTab, targetTabTitle){
-			      		var curWebview = plus.webview.currentWebview();		     		
-			      		var targetWebview = plus.webview.getWebviewById(targetTab);
-			      		targetWebview.show();
-			      		curWebview.hide();
-						// 获取当前页面的父页面（创建它的页面）
-						var index = plus.webview.getLaunchWebview();
-//						var index = curWebview.opener();
-			      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
-						index.evalJS("document.getElementById('" + curTab + "').classList.remove('mui-active');document.getElementById('" + targetTab + "').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
-			     	};
 					var toMain = function() {
 						// 登陆成功后的跳转页面
 						changeTab('chat.html','chat.html','交流');

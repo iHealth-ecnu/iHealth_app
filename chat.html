@@ -71,8 +71,28 @@
 		<script type="text/javascript">
 			mui.init();
 			
+			var addTip = function(){
+				var tip = document.getElementById('tip');
+				if (tip == null){
+					// 没有好友且没有添加过tip的时候添加 tip 提示
+					var chatlist = document.getElementById('chatlist');
+					var tip = document.createElement("p");
+					tip.innerHTML = '您还没有聊天记录呢，可以找找朋友呦 ↑~';
+					tip.setAttribute('id','tip');
+					tip.setAttribute('style','text-align: center;margin-top: 5px;');
+					chatlist.parentNode.appendChild(tip);
+				}
+			}
+			var removeTip = function(){
+				// 删除 tip
+				var tip = document.getElementById('tip');
+				if (tip != null){
+					tip.parentNode.removeChild(tip);
+				}
+			}
 			// 刷新好友列表函数
 			var refreshChatList = function(){
+				
 				// 获取好友列表数据
 				var state = app.getState();
 				if(state.hasOwnProperty('chatList'))
@@ -80,9 +100,18 @@
 				else
 					var chatList = [];
 				// 更新页面的好友列表HTML
-				var html = template('chatlist-template', {'items':chatList});
 				var chatlist = document.getElementById('chatlist');
-				chatlist.innerHTML = html;
+				if (chatList.length==0){
+					// 添加 tip
+					addTip();
+				}
+				else{
+					// 移除 tip
+					removeTip();
+					// 列表中添加聊天对象
+					var html = template('chatlist-template', {'items':chatList});
+					chatlist.innerHTML = html;
+				}
 				// 清除搜索框的输入值
 				document.getElementById('search').value = '';
 				document.getElementById('search').blur();
@@ -105,6 +134,10 @@
 					// 在HTML中删除该节点
           			var li=this.parentNode.parentNode;
 					li.parentNode.removeChild(li);
+					
+					if (state.chatList.length==0){
+						addTip();
+					}
 				});
 			};
 			

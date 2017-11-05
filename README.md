@@ -153,3 +153,7 @@ http://www.cnblogs.com/lout/p/6111739.html
     http://blog.csdn.net/u013267266/article/details/51398333
   * 关于输入框，mui-table-view中li的边框问题(去掉 li 下面的边框)  
     http://ask.dcloud.net.cn/question/5411
+
+* 【时间选择器】  
+  * MUI - datepicker（时间选择器）  
+    http://www.hcoder.net/tutorials/info_86.html
