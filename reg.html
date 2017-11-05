@@ -101,7 +101,7 @@
 				<div class="mui-input-row">
 					<label>类型</label>
 					<!-- 蓝色开关打开状态 -->
-					<div id='type' class="mui-switch mui-switch-blue mui-active type-switch">
+					<div id='usertype' class="mui-switch mui-switch-blue mui-active type-switch">
 					  <div class="mui-switch-handle"></div>
 					</div>
 					<input type="text" style="display:none;">
@@ -165,7 +165,7 @@
 					var passwordConfirmBox = doc.getElementById('password_confirm');
 					var nicknameBox = doc.getElementById('nickname');
 					var sexBox = doc.getElementById('sex');
-					var typeBox = doc.getElementById('type');
+					var usertypeBox = doc.getElementById('usertype');
 					var nameBox = doc.getElementById('name');
 					var introductionBox = doc.getElementById('introduction');
 					regButton.addEventListener('tap', function(event) {
@@ -183,7 +183,7 @@
 							password: passwordBox.value,
 							nickname: nicknameBox.value,
 							sex: sexBox.classList.contains("mui-active")? 1 : 0,
-							type: typeBox.classList.contains("mui-active")? 1 : 2,
+							usertype: usertypeBox.classList.contains("mui-active")? 1 : 2,
 							birthday: birthday,
 							age: age,
 							introduction: introductionBox.value || '',
