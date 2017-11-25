@@ -1,0 +1,31 @@
+.article-content {
+	/*padding-top: 10px;
+	font-size: 18px;*/
+}
+.article-content p{
+	font-size: 18px;
+}
+.article-content strong,.article-content h3{
+	font-size: 20px;
+	color: green;
+}
+h3+p{
+	/*background-color: #8A6DE9;*/
+}
+p{
+	/*background-color: #8A6DE9;*/
+}
+.item{
+	color: #242424;
+	font-size: 18px;
+	
+	
+}
+.article-mid-title{
+	
+}
+
+.article-content img{ 
+	max-width:100%;
+	height:auto; 
+} 

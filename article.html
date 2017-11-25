@@ -6,19 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<style type="text/css">
-			.article-content {
-				padding-top: 10px;
-				font-size: 18px;
-			}
-			.article-content p{
-				font-size: 18px;
-			}
-			.article-content img{ 
-				max-width:100%;
-				height:auto; 
-			} 
-		</style>
+		<link href="css/article_style.css" rel="stylesheet" />
 	</head>
 
 	<body>
@@ -40,16 +28,33 @@
 		<script id="article-template" type="text/html">
 			<div style="padding: 10px;">
 		    	<h2>{{item.title}}</h2>
-				<div>
-					发表日期：{{item.pubdate}} <span>|</span> 
-					来源：<a href="{{item.publisher_src}}" style="color:#666;">{{item.publisher}}</a><span> |</span>
-					类别：{{item.category}}<span> |</span>
-			  		阅读量：{{item.read}}<span> |</span>
-			  		赞数：{{item.upvote}}
+				<div class="article-mid-title">
+					<span class="item item-pubdate">
+						日期：{{item.pubdate}}
+					</span>					 	
+					<br /> 
+					<span class="item item-category">
+						类别：{{item.category}}	
+					</span>
+						
 			  	</div>
 				<div class="article-content">
 					{{@item.content}}
 	  			</div>
+	  			<div>
+	  				<button id="votebtn" type="button" class="mui-btn-red mui-btn-block mui-btn-outlined" >
+	  					点赞：{{item.upvote}}
+	  				</button>
+	  				<button type="button" class="mui-btn-green mui-btn-block mui-btn-outlined">
+	  					阅读量：{{item.read}}
+	  				</button>
+	  				<button type="button" class="mui-btn-blue mui-btn-block mui-btn-outlined">
+	  					<a href="{{item.publisher_src}}" style="color:#666;">查看来源：{{item.publisher}}</a>
+	  				</button>
+	  				
+			  		
+	  			</div>
+	  			
 			</div>
 		</script>
 		
@@ -59,6 +64,9 @@
 			window.addEventListener('currentId',function(e){
 				// 获得参数
 				var id = e.detail.id;
+				mui.toast(id);
+				console.log(id);
+				
 				// 根据 id 请求文章详情
 				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id, function(data){
 					// 根据模板将数据渲染成 HTML
@@ -71,17 +79,29 @@
 					for(var i = 0; i < imgs.length; i++){
 						imgs[i].style = 'width:100%;';
 					}
-					// 替换 h3 标签为 strong 标签
-					h3s = articleElement.getElementsByTagName('h3');
-					for(var i = h3s.length-1; i >=0 ; i--){
-						strongTag = document.createElement('strong');
-						strongTagChild = document.createElement('p');
-						strongTagChild.innerHTML = h3s[i].innerText;
-						strongTag.appendChild(strongTagChild);
-						h3s[i].parentNode.replaceChild(strongTag,h3s[i]);
-					}
+					//wd-增加alert
+					//
+					var votebtn = document.getElementById('votebtn');
+					votebtn.addEventListener('tap',function(){
+						mui.alert('感谢您的投票！', '提示', function() {
+								votebtn.disabled=true;
+							});
+						
+					})
+					//wd
+//					 替换 h3 标签为 strong 标签
+//					h3s = articleElement.getElementsByTagName('h3');
+//					for(var i = h3s.length-1; i >=0 ; i--){
+//						strongTag = document.createElement('strong');
+//						strongTagChild = document.createElement('p');
+//						strongTagChild.innerHTML = h3s[i].innerText;
+//						strongTag.appendChild(strongTagChild);
+//						h3s[i].parentNode.replaceChild(strongTag,h3s[i]);
+//					}
 				});
 			});
+			
+			
 		</script>
 	</body>
 
