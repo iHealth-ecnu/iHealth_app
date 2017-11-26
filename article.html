@@ -29,10 +29,10 @@
 			<div style="padding: 10px;">
 		    	<h2>{{item.title}}</h2>
 				<div class="article-mid-title">
-					<span class="item item-pubdate">
+					<span class="item item-pubdate" id="pubdate">
 						日期：{{item.pubdate}}
 					</span>					 	
-					<br /> 
+					
 					<span class="item item-category">
 						类别：{{item.category}}	
 					</span>
@@ -64,8 +64,8 @@
 			window.addEventListener('currentId',function(e){
 				// 获得参数
 				var id = e.detail.id;
-				mui.toast(id);
-				console.log(id);
+//				mui.toast(id);
+//				console.log(id);
 				
 				// 根据 id 请求文章详情
 				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id, function(data){
@@ -89,6 +89,15 @@
 						
 					})
 					//wd
+					
+					//wd-日期更改
+					//添加id
+					var dateObj	=	document.getElementById('pubdate');
+					var dateNum	=	dateObj.innerHTML;
+					//mui.toast(dateNum.slice(0,20));
+					dateObj.innerHTML=dateNum.slice(0,20);
+					//-----wd
+																									
 //					 替换 h3 标签为 strong 标签
 //					h3s = articleElement.getElementsByTagName('h3');
 //					for(var i = h3s.length-1; i >=0 ; i--){
