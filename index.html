@@ -41,7 +41,7 @@
 		
 		
       	//创建子页面，显示首页选择卡，隐藏其余页面
-      	mui.plusReady(function(){
+      	mui.plusReady( function(){
       		var self = plus.webview.currentWebview();
       		for (var i = 0; i < subpages.length; i++){
       			var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
