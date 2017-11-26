@@ -64,8 +64,8 @@
 			window.addEventListener('currentId',function(e){
 				// 获得参数
 				var id = e.detail.id;
-				mui.toast(id);
-				console.log(id);
+				//mui.toast(id);
+				//console.log(id);
 				
 				// 根据 id 请求文章详情
 				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id, function(data){
