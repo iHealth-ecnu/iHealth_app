@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<!--头部-->
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+			<h1 class="mui-title">clinic history</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-card">
+				<!--页眉，放置标题-->
+				<div class="mui-card-header mui-card-media">
+					<img src="images/logo_M.png" />
+					<div class="mui-media-body">
+						 用户病例表
+						<p> 病例获取时间:</p>
+					</div>
+				</div>
+				<!--内容区-->
+				<div class="mui-card-header mui-card-media" id="personal_M_T" style="height:100vw;background-image:url(images/clinic_M.jpg)">
+
+				</div>
+				<!--页脚，放置补充信息或支持的操作-->
+				<div class="mui-card-footer" >
+				</div>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function(){
+	      		// 监听页面显示事件
+	            document.getElementById('personal_M_T').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'clinic_history_table.html',
+	            		id:'clinic_history_table.html'
+	            	});
+	            });
+	      	});
+			
+		</script>
+	</body>
+
+</html>
