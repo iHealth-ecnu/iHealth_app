@@ -28,7 +28,7 @@
 				<div class="mui-card-content" style="padding:10px">
 					<ul class="mui-table-view">
 					    <li class="mui-table-view-cell">
-					    	<a class="mui-navigate-right">个人病例</a>
+					    	<a class="mui-navigate-right" id="personal_M">个人病例</a>
 					    </li>
 					    <li class="mui-table-view-cell">
 					    	<a class="mui-navigate-right">主治医生</a>
@@ -111,6 +111,12 @@
 	            var self = plus.webview.currentWebview();
 	            self.addEventListener('show',function(){
 	            	location.reload();
+	            });
+	            document.getElementById('personal_M').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'clinic_history.html',
+	            		id:'clinic_history.html'
+	            	});
 	            });
 	      	});
 		</script>
