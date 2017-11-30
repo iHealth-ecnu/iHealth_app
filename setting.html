@@ -31,7 +31,7 @@
 					    	<a class="mui-navigate-right" id="personal_M">个人病例</a>
 					    </li>
 					    <li class="mui-table-view-cell">
-					    	<a class="mui-navigate-right">主治医生</a>
+					    	<a class="mui-navigate-right" id="mainDr">主治医生</a>
 					    </li>
 					    <li class="mui-table-view-cell">
 					    	<a class="mui-navigate-right">我的关注</a>
@@ -116,6 +116,12 @@
 	            	mui.openWindow({
 	            		url:'clinic_history.html',
 	            		id:'clinic_history.html'
+	            	});
+	            });
+	            document.getElementById('mainDr').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'mainDr.html',
+	            		id:'mainDr.html'
 	            	});
 	            });
 	      	});
