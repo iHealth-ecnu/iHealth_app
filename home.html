@@ -153,16 +153,16 @@
 				});
 				
 		     	// 监听滑动事件
-		     	var changeTab = function(curTab, targetTab, targetTabTitle){
-		      		var curWebview = plus.webview.currentWebview();		     		
-		      		var targetWebview = plus.webview.getWebviewById(targetTab);
-		      		targetWebview.show();
-		      		curWebview.hide();
-					// 获取当前页面的父页面（创建它的页面）
-					var index = curWebview.opener();
-		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
-					index.evalJS("document.getElementById('home.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
-		     	};
+//		     	var changeTab = function(curTab, targetTab, targetTabTitle){
+//		      		var curWebview = plus.webview.currentWebview();		     		
+//		      		var targetWebview = plus.webview.getWebviewById(targetTab);
+//		      		targetWebview.show();
+//		      		curWebview.hide();
+//					// 获取当前页面的父页面（创建它的页面）
+//					var index = curWebview.opener();
+//		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
+//					index.evalJS("document.getElementById('home.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
+//		     	};
 		      	document.querySelector('body').addEventListener('swipeleft',function(e){
 	      			if ( JSON.stringify(app.getState()) == '{}' ){
 		      			changeTab('home.html','login.html','登录');
