@@ -1,155 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="css/mui.min.css" rel="stylesheet" />
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<style>
+			
+		</style>
 	</head>
 
 	<body>
-		<!--内容-->
-		<div class="mui-content mui-scroll-wrapper" id="home">
-	        <div class="mui-scroll">
-	        </div>
-		</div>
-
-		<!--引用的 JS-->
-		<script src="js/mui.min.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/template-web.js"></script>
 		
-		<!--HTML模板-->
-		<script id="home-template" type="text/html">
-			{{each items item}}
-			<div class="mui-card">
-				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
-					<img src="./images/logo.png" />
-					<div class="mui-media-body">
-						{{item.publisher}}
-						<p>发表于 {{item.pubdate}}</p>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll">
+						<a class="mui-control-item mui-active" href="#item1mobile" data-wid="home-subpage-1.html">
+							推荐
+						</a>
+						<a class="mui-control-item" href="#item2mobile" data-wid="home-subpage-2.html">
+							食疗
+						</a>
+						<a class="mui-control-item" href="#item3mobile" data-wid="home-subpage-3.html">
+							中药
+						</a>
+						<a class="mui-control-item" href="#item4mobile" data-wid="home-subpage-4.html">
+							西药
+						</a>
+						<a class="mui-control-item" href="#item5mobile" data-wid="home-subpage-5.html">
+							中西混合
+						</a>
+						<!--<a class="mui-control-item" href="#item6mobile" data-wid="home-subpage-6.html">
+							科技
+						</a>-->
 					</div>
 				</div>
-				<!--内容区-->
-				<div class="mui-card-content" style="padding:10px;" id="{{item._id}}">
-					<h4 class='card-title'>{{item.title}}</h4>
-					<img class="card-img" alt="{{item.title}}" src="{{item.img}}" style="width: 100%;padding:4px 16px 2px 2px;" />
-					{{item.intro}}
-				</div>
-				<!--页脚，放置补充信息或支持的操作-->
-				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞{{item.upvote}}</a>
-					<a class="mui-card-link">阅读量{{item.read}}</a>
-					<a class="mui-card-link readmore" id="{{item._id}}">阅读更多</a>
-				</div>
-			</div>
-			{{/each}}
-		</script>
-		
-		<!--JS代码-->
-		<script type="text/javascript">
-			mui.init({
-				pullRefresh : {
-				    container:'#home',//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
-					up : {
-						height:50,//可选.默认50.触发上拉加载拖动距离
-						auto:true,//可选,默认false.自动上拉加载一次
-						contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
-						contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
-						callback :function() {
-			                var self = this; // 这里的this == mui('#refreshContainer').pullRefresh()
-			                // 加载更多的内容
-			                loadMore(this);
-			            } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-					}
-				}
-			});
-			// 当前应该加载的页数
-			var cur_page = 1;
-			var loadMore = function(pullRefresh) {
-			    // 加载更多的内容到列表中
-			    setTimeout(function(){
-					// 从后端获取数据
-//					mui.toast('正在加载第' + cur_page + '页数据……');
-					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + cur_page++ + '&limit=5',function(data){
-						var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
-						// 根据模板将数据渲染成 HTML
-						var html = template('home-template', {'items':data});
-						// 将 HTML 插入到列表后
-						article_list.innerHTML += html;
-				    	// 超过一定页数便不再加载。参数为 true 表示不再更新数据。
-						pullRefresh.endPullupToRefresh( (cur_page>6) );
-				    	// 重新计算布局
-				    	if(mui.os.ios){
-				    		mui('.mui-scroll-wrapper').scroll().reLayout();
-				    	}
-					});			    	
-			    }, 500);			    // 如果没有更多数据了，则关闭上拉加载
-			};
-			
-			mui.plusReady(function(){
-				// 初始化scroll控件
-				if(mui.os.ios){
-					mui('.mui-scroll-wrapper').scroll({
-						scrollY: true, //是否竖向滚动
-						startX: 0, //初始化时滚动至x
-						startY: 0, //初始化时滚动至y
-	   					indicators: false, //是否显示滚动条
-	   					bounce: false, //是否启用滚动条回弹
-						deceleration: 0.0025 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
-					});
-					document.getElementById('home').style = 'margin-top:-40px;';
-				}
 
-				// 渲染
-				// pass
-				
-			    //预加载详情页
-			    webview_article = mui.preload({
-			        url: 'article.html',
-			        id: 'article.html',
-			        styles: {
-			            "render": "always",//一直渲染
-			            "popGesture": "hide"
-			        }
-			    });
-			    
-			    //监听回到顶部事件
-			    window.addEventListener('backTop',function(){
-			    	if(mui.os.ios){
-				    	//重新计算布局
-				    	mui('.mui-scroll-wrapper').scroll().reLayout();
-				    	//500毫秒滚动到顶
-		      			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,500);
-			    	}
-			    	else if(mui.os.android){
-			    		//回到页面顶部
-			    		window.scrollTo(0, 0,500);
-			    	}
-			    });
-			    
-			    // 监听 阅读更多 事件
-			    document.querySelector('body').addEventListener('tap',function (e) {
-			    	// 点击每个 card 上的 标题、图片、文字简介 时，打开文章详情页面
-				    if (e.target.className == 'card-title' || e.target.className == 'card-img' || e.target.className == 'mui-card-content' || e.target.className == 'mui-card-link readmore'){
-				    	if (e.target.className == 'card-img' || e.target.className == 'card-title')
-							var id = e.target.parentNode.getAttribute('id');
-						else
-							var id = e.target.getAttribute('id');
-						// 获得文章详情页面 webview
-						articlePage = plus.webview.getWebviewById('article.html');
-						// 注入数据
-						mui.fire(articlePage,'currentId',{
-							id:id
-						});
-						// 打开详情页面 
-						mui.openWindow({
-							url:'article.html',
-							id:'article.html'
-						});
-				    }
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/webviewGroup.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			mui.init();
+			
+			mui.plusReady(function() {
+				var group = new webviewGroup("viewgroup", {
+					items: [{
+						id: "home-subpage-1.html",
+						url: "home-subpage-1.html",
+						extras: {}
+					}, {
+						id: "home-subpage-2.html",
+						url: "home-subpage-2.html",
+						extras: {}
+					}, {
+						id: "home-subpage-3.html",
+						url: "home-subpage-3.html",
+						extras: {}
+					}, {
+						id: "home-subpage-4.html",
+						url: "home-subpage-4.html",
+						extras: {}
+					}, {
+						id: "home-subpage-5.html",
+						url: "home-subpage-5.html",
+						extras: {}
+					}],
+					onChange: function(obj) {
+						var c = document.querySelector(".mui-control-item.mui-active");
+						if(c) {
+							c.classList.remove("mui-active");
+						}
+						document.querySelector(".mui-scroll .mui-control-item:nth-child(" + (parseInt(obj.index) + 1) + ")").classList.add("mui-active");
+					}
+				});
+				mui(".mui-scroll").on("tap", ".mui-control-item", function(e) {
+					var wid = this.getAttribute("data-wid");
+					group.switchTab(wid);
 				});
 				
 		     	// 监听滑动事件
@@ -172,7 +104,12 @@
 	      			}
 		      	});
 
+
 			});
+			mui.back = function() {
+				var _self = plus.webview.currentWebview();
+				_self.close("auto");
+			}
 		</script>
 	</body>
 
