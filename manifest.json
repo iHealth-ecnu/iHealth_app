@@ -161,7 +161,8 @@
 					"css/mui.min.css",
 					"fonts/mui.ttf",
 					"js/mui.min.js",
-					"js/template-web.js"
+					"js/template-web.js",
+					"css/article_style.css"
 				],
 				"refer": [
 					"config.html",
@@ -191,7 +192,8 @@
 					"fonts/mui.ttf",
 					"index_content.html",
 					"home.html",
-					"setting.html"
+					"setting.html",
+					"js/app.js"
 				],
 				"refer": [
 					"config.html",
@@ -206,18 +208,34 @@
 					"js/mui.min.js",
 					"js/template-web.js",
 					"fonts/mui.ttf",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"home-subpage-1.html",
+					"js/webviewGroup.js"
 				],
 				"refer": [
-					"article.html"
+					"article.html",
+					"home-subpage-2.html",
+					"home-subpage-3.html",
+					"home-subpage-4.html",
+					"home-subpage-5.html"
 				],
 				"priority": 0
 			},
 			"setting.html": {
 				"resources": [
-					"images/logo.png"
+					"images/logo.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"js/template-web.js",
+					"css/mui.min.css"
 				],
-				"refer": [],
+				"refer": [
+					"followDr.html",
+					"mainDr.html",
+					"clinic_history.html",
+					"setting_choose.html"
+				],
 				"priority": 0
 			},
 			"chat.html": {
@@ -233,6 +251,90 @@
 				"refer": [
 					"im.html"
 				],
+				"priority": 0
+			},
+			"home-subpage-1.html": {
+				"resources": [
+					"css/mui.min.css"
+				],
+				"refer": [
+					"article.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"followDr.html": {
+				"resources": [
+					"images/DrJia.jpg",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"images/DrHuang.jpg",
+					"css/mui.min.css",
+					"images/DrJiang.jpg"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"im.html": {
+				"resources": [
+					"js/socket.io.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"mainDr.html": {
+				"resources": [
+					"css/mui.min.css",
+					"images/DrJiang.jpg",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"clinic_history_table.html": {
+				"resources": [
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"clinic_history.html": {
+				"resources": [
+					"images/clinic_M.jpg",
+					"images/logo_M.png"
+				],
+				"refer": [
+					"clinic_history_table.html"
+				],
+				"priority": 0
+			},
+			"setting_choose.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"home-subpage-2.html": {
+				"resources": [
+					"js/app.js",
+					"images/logo.png",
+					"js/mui.min.js",
+					"js/template-web.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},
