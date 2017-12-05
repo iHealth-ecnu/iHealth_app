@@ -34,7 +34,7 @@
 					    	<a class="mui-navigate-right" id="mainDr">主治医生</a>
 					    </li>
 					    <li class="mui-table-view-cell">
-					    	<a class="mui-navigate-right">我的关注</a>
+					    	<a class="mui-navigate-right" id="followDr">我的关注</a>
 					    </li>
 					    <li class="mui-table-view-cell">
 					    	<a class="mui-navigate-right" id="setting_C">设置</a>
@@ -124,7 +124,13 @@
 	            		id:'mainDr.html'
 	            	});
 	            });
-	             document.getElementById('setting_C').addEventListener('tap',function(){
+	            document.getElementById('followDr').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'followDr.html',
+	            		id:'followDr.html'
+	            	});
+	            });
+	            document.getElementById('setting_C').addEventListener('tap',function(){
 	            	mui.openWindow({
 	            		url:'setting_choose.html',
 	            		id:'setting_choose.html'

@@ -1,57 +1,144 @@
 {
-  "index.html": {
-    "resources": [
-      "js/mui.min.js",
-      "fonts/mui.ttf",
-      "css/mui.min.css",
-      "home.html"
-    ],
-    "refer": [
-      "setting.html",
-      "chat.html",
-      "home.html",
-      "login.html"
-    ]
-  },
-  "home.html": {
-    "resources": [
-      "images/logo.png",
-      "js/mui.min.js",
-      "js/template-web.js",
-      "fonts/mui.ttf",
-      "css/mui.min.css"
-    ],
-    "refer": [
-      "article.html"
-    ]
-  },
-  "article.html": {
-    "resources": [
-      "js/mui.min.js",
-      "fonts/mui.ttf",
-      "js/template-web.js",
-      "css/mui.min.css"
-    ],
-    "refer": []
-  },
-  "setting.html": {
-    "resources": [
-      "images/logo.png"
-    ],
-    "refer": []
-  },
-  "chat.html": {
-    "resources": [
-      "js/mui.min.js",
-      "images/1.png",
-      "js/template-web.js",
-      "images/logo.png",
-      "fonts/mui.ttf",
-      "css/mui.min.css",
-      "js/socket.io.js"
-    ],
-    "refer": [
-      "im.html"
-    ]
-  }
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"home.html",
+			"js/app.js"
+		],
+		"refer": [
+			"setting.html",
+			"chat.html",
+			"home.html",
+			"login.html"
+		]
+	},
+	"home.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"js/template-web.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"home-subpage-1.html",
+			"js/webviewGroup.js"
+		],
+		"refer": [
+			"article.html",
+			"home-subpage-1.html",
+			"home-subpage-2.html",
+			"home-subpage-3.html",
+			"home-subpage-4.html",
+			"home-subpage-5.html"
+		]
+	},
+	"article.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"js/template-web.js",
+			"css/mui.min.css",
+			"css/article_style.css"
+		],
+		"refer": []
+	},
+	"setting.html": {
+		"resources": [
+			"images/logo.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"js/template-web.js",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"followDr.html",
+			"mainDr.html",
+			"clinic_history.html",
+			"setting_choose.html"
+		]
+	},
+	"chat.html": {
+		"resources": [
+			"js/mui.min.js",
+			"images/1.png",
+			"js/template-web.js",
+			"images/logo.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/socket.io.js"
+		],
+		"refer": [
+			"im.html"
+		]
+	},
+	"home-subpage-1.html": {
+		"resources": [
+			"css/mui.min.css"
+		],
+		"refer": [
+			"article.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"js/mui.enterfocus.js"
+		]
+	},
+	"followDr.html": {
+		"resources": [
+			"images/DrJia.jpg",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"images/DrHuang.jpg",
+			"css/mui.min.css",
+			"images/DrJiang.jpg"
+		]
+	},
+	"im.html": {
+		"resources": [
+			"js/socket.io.js"
+		]
+	},
+	"mainDr.html": {
+		"resources": [
+			"css/mui.min.css",
+			"images/DrJiang.jpg",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf"
+		]
+	},
+	"clinic_history_table.html": {
+		"resources": [
+			"css/mui.min.css"
+		]
+	},
+	"clinic_history.html": {
+		"resources": [
+			"images/clinic_M.jpg",
+			"images/logo_M.png"
+		],
+		"refer": [
+			"clinic_history_table.html"
+		]
+	},
+	"setting_choose.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"home-subpage-2.html": {
+		"resources": [
+			"js/app.js",
+			"images/logo.png",
+			"js/mui.min.js",
+			"js/template-web.js",
+			"css/mui.min.css"
+		]
+	}
 }

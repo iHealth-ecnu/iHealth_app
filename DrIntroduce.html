@@ -11,16 +11,15 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
-			<h1 class="mui-title">主治医生</h1>
+			<h1 class="mui-title">医生简介</h1>
 		</header>
-		<div class="mui-content" id="mainDrShow" style="display: ;">
 		<div class="mui-content">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell mui-media">
 					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/DrJiang.jpg" mui-media-body ">
-			            姜医生
-			            <p class='mui-ellipsis'>同济医院   眼科  主任医师  </p>
+						<img class="mui-media-object mui-pull-left" src="images/doctor_L.png" mui-media-body ">
+			            某医生
+			            <p class='mui-ellipsis'>某某医院   某科  某某等级  </p>
 			        </a>
 			    </li>
 			    
@@ -32,7 +31,7 @@
 				<p></p>
 			    <li class="mui-table-view-cell mui-media">  
 			                个人简介
-			        <p>专业方向:眼视光学和青光眼，如果您有眼科相关的问题可以来问我，我了解的一定详细给您解答，不了解的也会直接告诉您。喜欢写科普文章，微信公众号&nbsp;[姜医生看眼睛]&nbsp;，欢迎关注。</p>
+			        <p>专业方向:<br><br><br></p>
 			    </li>
 			</ul>	
 		</div>
@@ -41,24 +40,14 @@
 				<p></p>
 			    <li class="mui-table-view-cell mui-media">  
 			                医院信息
-			        <p>上海市同济医院 上海市新村路389号<br></p>
-			        <p>三甲级医院</p>
+			        <p>某某医院 某某地址<br></p>
+			        <p>某某等级医院</p>
 			    </li>
 			</ul>	
 		</div>
-		</div>
 		<script src="js/mui.min.js "></script>
-		<script src="js/app.js"></script>
 		<script type="text/javascript ">
 			mui.init()
-			var data = app.getState();
-			var ui = document.getElementById("mainDrShow");
-	      		if ( JSON.stringify(app.getState()) == '{}' ){
-	      			ui.style.display="none";//隐藏
-	      		}
-	      		else{
-	      			ui.style.display=" ";
-	      		}
 		</script>
 
 	</body>

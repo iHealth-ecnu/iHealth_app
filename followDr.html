@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+			<h1 class="mui-title">关注</h1>
+		</header>
+		<div class="mui-content" id="followDrShow" style="display: ;">
+			<ul class="mui-table-view" id="Dr1">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="images/DrJiang.jpg" mui-media-body ">
+			              姜医生
+			            <p class='mui-ellipsis'>眼科  主任医师  同济医院</p>
+			        </a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" id="Dr2">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="images/DrJia.jpg" mui-media-body ">
+			              贾医生
+			            <p class='mui-ellipsis'>妇科  主任医师  北京协和医院 </p>
+			        </a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" id="Dr3">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="images/DrHuang.jpg" mui-media-body ">
+			              黄医生
+			            <p class='mui-ellipsis'>儿科  主任医师  复旦大学附属医院 </p>
+			        </a>
+			    </li>
+			</ul>
+			
+		</div>
+
+	<body>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript ">
+			mui.init()
+			//不登录隐藏
+			var data = app.getState();
+			var ui = document.getElementById("followDrShow");
+	      	if ( JSON.stringify(app.getState()) == '{}' ){
+	      		ui.style.display="none";//隐藏
+	      	}
+	      	else{
+	      		ui.style.display=" ";
+	      	}
+	      	
+	      	mui.plusReady(function(){
+	      		// 监听页面显示事件
+	            var self = plus.webview.currentWebview();
+	            self.addEventListener('show',function(){
+	            	location.reload();
+	            });
+	            document.getElementById('Dr1').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'DrIntroduce.html',
+	            		id:'DrIntroduce.html'
+	            	});
+	            });
+	            document.getElementById('Dr2').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'DrIntroduce.html',
+	            		id:'DrIntroduce.html'
+	            	});
+	            });
+	            document.getElementById('Dr3').addEventListener('tap',function(){
+	            	mui.openWindow({
+	            		url:'DrIntroduce.html',
+	            		id:'DrIntroduce.html'
+	            	});
+	            });
+	      	});
+		</script>
+	</body>
+
+</html>
