@@ -161,10 +161,36 @@
 	<body>
 		<!--头部-->
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
-			<h1 class="mui-title" id="navTitle">聊天</h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="navTitle" class="mui-title">聊天</h1>
+			<span id="addChatObj" class="mui-icon mui-icon-plus mui-pull-right"></span>
 		</header>
 		
+        <!--弹出菜单 (默认隐藏)-->
+		<div id="popover" class="mui-popover">
+            <div class="mui-input-row mui-search"  style="margin-bottom:-15px;">
+         		<input id="search" type="search" class="mui-input-clear" placeholder="搜索 医生/朋友">
+            </div>
+            <div id="searchResult"></div>
+		</div>
+		
+		<!--HTML模板（弹出菜单）-->
+		<script id="chatobj-template" type="text/html">
+			{{ each items item }}
+			<div class="mui-card-header mui-card-media" id="{{item._id}}">
+				<img src="./images/logo.png"/>
+				<div class="mui-media-body">
+					<span>{{item.name}}（{{item.nickname}}）</span>
+	                {{if item.introduction!=""}}
+						<p>{{item.introduction}}</p>
+		            {{else}}
+						<p><br></p>
+		            {{/if}}
+				</div>
+			</div>
+	    	{{ /each }}
+    	</script>
+    	
 		<!--聊天框-->
 		<div class="mui-content" id="chat">
 			<!--聊天界面-->
@@ -263,7 +289,6 @@
 			        msgtime: data.msgtime,
 			        display: data.display
 			    });
-			    console.log(html);
 			    document.querySelector(data.el).innerHTML += html;
 			}
 			
@@ -419,7 +444,7 @@
 						if ( !data.hasOwnProperty('_id') )
 							return ; 
 						// 更新顶部标题
-						document.getElementById('navTitle').innerHTML = data.name + '（' + data.nickname + '）';
+						document.getElementById('navTitle').innerHTML = data.name;
 						// 将该聊天对象添加到本地聊天列表
 						if ( !state.hasOwnProperty('chatList') ){
 							state.chatList = new Array();
@@ -449,6 +474,98 @@
 					socket.emit('join', { 'roomid' : roomid }); 
 				});
 				
+				
+		      	// 监听 添加聊天对象 事件
+		      	var addChatObjButton = document.getElementById('addChatObj');
+		      	addChatObjButton.addEventListener('tap', function(e){
+		      		// 隐藏之前的弹出菜单
+		      		mui('#popover').popover('hide');
+					// 显示弹出菜单
+	      			mui('#popover').popover('toggle',document.getElementsByTagName('header')[0]);
+		      	});
+		      	
+		      	// 监听搜索框输入事件
+		      	var searchInput = document.getElementById('search');
+		      	searchInput.addEventListener('input', function(e){
+		      		// 获取搜索框内容
+		      		var name = searchInput.value;
+		      		// 输入空串不做处理
+//		      		if (name.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
+//		      			mui('#popover').popover('hide');
+//		      			return ;
+//		      		}
+		      		// 获取当前登录用户名
+		      		var curUsername = app.getState().name;
+		      		// 模糊匹配指定用户名
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlist?name=' + name + '&selfname=' + curUsername + '&limit=10',function(data){
+						var searchResult = document.getElementById('searchResult');
+						// 根据模板将数据渲染成 HTML
+						var html = template('chatobj-template', {'items':data});
+						if (html.replace(/^\s\s*/, '').replace(/\s\s*$/, '') === ''){
+							html = '<div style="text-align:center;margin:10px;font-size:14px;">没有找到这个人耶  ┑(￣Д ￣)┍</div>'; 
+							if (name == curUsername){
+								html = '<div style="text-align:center;margin:10px;font-size:14px;">这是你自己耶 (๑•́ ₃ •̀๑) </div>';
+							}
+						}
+						// 将HTML插入到弹出菜单中
+						searchResult.innerHTML = html;
+					});
+					
+		      	});
+		      	
+		      	// 监听搜索结果点击事件
+			    document.querySelector('body').addEventListener('tap',function (e) {
+					// 取消焦点
+					document.getElementById('search').value = '';
+					document.getElementById('search').blur();
+			    	// 点击每个 card 上的 标题、图片、文字简介 时，捕获事件
+			    	// 获取选中用户的 id
+			    	var id = null;
+				    if ( e.target.parentNode.classList.contains('mui-card-header') ){
+				    	id = e.target.parentNode.getAttribute('id');
+				    }
+				    else if( e.target.parentNode.className == 'mui-media-body' ){
+				    	id = e.target.parentNode.parentNode.getAttribute('id');
+				    }
+				    else{
+				    	// 没有捕获到事件，直接退出
+				    	return ;
+				    }
+				    mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + id, function(data){
+						// 获得聊天对象信息
+						var state = app.getState();
+						var settings = app.getSettings();
+						if(!settings.hasOwnProperty('imTargetID')){
+							return ;
+						}
+						var targetID = settings.imTargetID;
+						
+						// 计算 roomid
+						var hisID = targetID;
+						var myID = app.getState()._id;
+						if (data._id == hisID || data._id == myID){
+							// 聊天对象已存在，直接退出
+							mui.toast('聊天列表中已经有该用户啦');
+							return ;
+						}
+						var id_list = new Array(hisID, myID, data._id);
+						id_list.sort(function(a,b){
+            				return b<a;
+						});
+						roomid = id_list.join('_');
+						console.log(roomid);
+						
+						// 发送一个消息加入 room
+						socket.emit('join', { 'roomid' : roomid });
+						
+						// 更新标题
+				    	var navTitle = document.getElementById('navTitle');
+				    	navTitle.innerHTML += '、' + data.name;
+				    	
+			      		// 隐藏之前的弹出菜单
+			      		mui('#popover').popover('hide');
+				    });
+				});
 			});
 		</script>
 	</body>
