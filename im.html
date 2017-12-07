@@ -549,9 +549,7 @@
 							return ;
 						}
 						var id_list = new Array(hisID, myID, data._id);
-						id_list.sort(function(a,b){
-            				return b<a;
-						});
+						id_list.sort();
 						roomid = id_list.join('_');
 						console.log(roomid);
 						
