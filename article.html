@@ -23,7 +23,7 @@
 		<!--引用的 JS-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
-			
+		<script src="js/app.js"></script>
 		<!--HTML模板-->
 		<script id="article-template" type="text/html">
 			<div style="padding: 10px;">
@@ -83,7 +83,17 @@
 					//
 					var votebtn = document.getElementById('votebtn');
 					votebtn.addEventListener('tap',function(){
-						mui.alert('感谢您的投票！', '提示', function() {
+						mui.alert('感谢您的投票！', '提示', function() {						
+								mui.get('http://ihealth.yangyingming.com/api/v1/updateUpvote',{
+										id:id
+									},function(data){
+    								
+    								console.log(data);
+    								
+								    },'json'
+								);
+							
+								console.log(id);
 								votebtn.disabled=true;
 							});
 						

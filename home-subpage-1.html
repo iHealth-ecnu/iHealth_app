@@ -50,7 +50,7 @@
 				</div>
 				<!--页脚，放置补充信息或支持的操作-->
 				<div class="mui-card-footer">
-					<a class="mui-card-link">点赞{{item.upvote}}</a>
+					<a class="mui-card-link upvote" id="{{item._id}}">点赞{{item.upvote}}</a>
 					<a class="mui-card-link">阅读量{{item.read}}</a>
 					<a class="mui-card-link readmore" id="{{item._id}}">阅读更多</a>
 				</div>
@@ -155,6 +155,28 @@
 						});
 				    }
 				});
+				
+				//wd-监听点赞功能
+				document.querySelector('body').addEventListener('tap',function (e) {
+			    	// 点击每个 card 上的 标题、图片、文字简介 时，打开文章详情页面
+				    if ( e.target.className == 'mui-card-link upvote'){
+				    		
+							var id = e.target.getAttribute('id');
+//							console.log(id);
+							mui.alert('感谢您的投票！', '提示', function() {						
+								mui.get('http://ihealth.yangyingming.com/api/v1/updateUpvote',{
+										id:id
+									},function(data){
+//  								console.log(id);
+//  								console.log(data);
+    								
+								    },'json'
+								);
+							});
+						
+				    }
+				});
+				//-wd
 			});
 			
 	</script>
