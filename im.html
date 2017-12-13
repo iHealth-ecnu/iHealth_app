@@ -607,10 +607,13 @@
 							return ;
 						}
 						
-						// 计算 roomid
-						roomid = getRoomid( chatObjList );
+						// 退出原来的 room
+						socket.emit('leave', { 'roomid' : roomid });
 						
-						// 发送一个消息加入 room
+						// 计算新的 roomid
+						roomid = getRoomid( chatObjList );		
+						
+						// 加入新的 room
 						socket.emit('join', { 'roomid' : roomid });
 						
 						// 更新标题
