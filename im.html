@@ -6,6 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/md5.min.js"></script>  
 		<style>
 			/*内滚动布局*/
 			html,
@@ -166,12 +167,17 @@
 			<span id="addChatObj" class="mui-icon mui-icon-plus mui-pull-right"></span>
 		</header>
 		
-        <!--弹出菜单 (默认隐藏)-->
+        <!-- 添加好友-弹出菜单 (默认隐藏) -->
 		<div id="popover" class="mui-popover">
             <div class="mui-input-row mui-search"  style="margin-bottom:-15px;">
          		<input id="search" type="search" class="mui-input-clear" placeholder="搜索 医生/朋友">
             </div>
             <div id="searchResult"></div>
+		</div>
+
+        <!-- 聊天对象列表-弹出菜单 (默认隐藏) -->
+		<div id="popover_2" class="mui-popover">
+            <div id="chatObjList"></div>
 		</div>
 		
 		<!--HTML模板（弹出菜单）-->
@@ -272,6 +278,25 @@
 					
 			// 获取当前时间
 			var pretime = new Date(0);
+			
+			// 根据 id 列表计算 roomid
+			var getRoomid = function(id_list){
+				id_list.sort();
+				var roomid_temp = id_list.join('_');
+				roomid_temp = md5(roomid_temp);
+				return roomid_temp;			
+			};
+			
+			// 判断元素是否在数组内 
+			var contains = function (arr, obj) {
+				var i = arr.length;
+				while (i--) {
+					if (arr[i] === obj) {
+			    		return true;
+				    }
+				}
+				return false;
+			}
 			
 			/**
 			 * @description 显示消息
@@ -440,6 +465,7 @@
 						return ;
 					}
 					var targetID = settings.imTargetID;
+					
 					mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
 						if ( !data.hasOwnProperty('_id') )
 							return ; 
@@ -452,11 +478,25 @@
 						// 如果已经存在就不添加了
 						for (var i = 0 ; i < state.chatList.length ; i++){
 							if( data._id == state.chatList[i]._id ){
+								var allChatObjID =  state.chatList[i].allChatObjID;
+								// 取第一个元素之后的所有元素
+								allChatObjID = allChatObjID.slice(1);
+								mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlistbyid?id=' + allChatObjID.join(','), function(data){
+									data = data.data; 
+									var name_list = new Array(); 
+									// 拼装标题
+									for(var i=0; i<data.length; i++){
+										name_list.push(data[i].name);
+									}
+									var navtitle = name_list.join('、');
+									document.getElementById('navTitle').innerHTML = navtitle;
+								});
 								break;
 							}
 						}
 						// 如果不存在就添加
 						if ( i >= state.chatList.length ){
+							data['allChatObjID'] = new Array(app.getState()._id, targetID);
 							state.chatList.push(data);
 							app.setState(state);
 						}
@@ -468,7 +508,7 @@
 					// 计算 roomid
 					var hisID = targetID;
 					var myID = app.getState()._id;
-					roomid = hisID < myID ? hisID + '_' + myID : myID + '_' + hisID ;
+					roomid = getRoomid( new Array(hisID, myID) );
 					
 					// 发送一个消息加入 room
 					socket.emit('join', { 'roomid' : roomid }); 
@@ -540,18 +580,35 @@
 						}
 						var targetID = settings.imTargetID;
 						
-						// 计算 roomid
-						var hisID = targetID;
-						var myID = app.getState()._id;
-						if (data._id == hisID || data._id == myID){
-							// 聊天对象已存在，直接退出
-							mui.toast('聊天列表中已经有该用户啦');
+						// 找到当前聊天窗口
+						var chatObjList = null;
+						for(var i = 0; i< state.chatList.length; i++){
+							if (targetID == state.chatList[i]._id){
+								// 找到了当前聊天窗口
+								// 获取该聊天窗口的所有聊天对象
+								chatObjList = state.chatList[i].allChatObjID;
+								
+								// 判断聊天列表中是否已经有该用户了
+								if ( contains(chatObjList, data._id) ){
+									// 聊天对象已存在，直接退出
+									mui.toast('聊天列表中已经有该用户啦');
+									return ;
+								}
+								
+								// 添加该用户，将新的聊天列表写回本地
+								chatObjList.push(data._id);
+								state.chatList[i].allChatObjID = chatObjList;
+								app.setState(state);
+								break;
+							}
+						}
+						if (chatObjList == null){
+							console.log('[ERROR]: 没找到当前的聊天窗口！');
 							return ;
 						}
-						var id_list = new Array(hisID, myID, data._id);
-						id_list.sort();
-						roomid = id_list.join('_');
-						console.log(roomid);
+						
+						// 计算 roomid
+						roomid = getRoomid( chatObjList );
 						
 						// 发送一个消息加入 room
 						socket.emit('join', { 'roomid' : roomid });
@@ -564,6 +621,48 @@
 			      		mui('#popover').popover('hide');
 				    });
 				});
+			
+				// 监听点击导航栏标题处事件（显示聊天对象列表）
+		      	var navTitle = document.getElementById('navTitle');
+		      	navTitle.addEventListener('tap', function(e){
+					// 获得聊天对象信息
+					var state = app.getState();
+					var settings = app.getSettings();
+					if(!settings.hasOwnProperty('imTargetID')){
+						return ;
+					}
+					var targetID = settings.imTargetID;
+					
+					// 找到当前聊天窗口
+					var chatObjList = null;
+					for(var i = 0; i< state.chatList.length; i++){
+						console.log(state.chatList[i]._id);
+						if (targetID == state.chatList[i]._id){
+							// 找到了当前聊天窗口
+							chatObjList = state.chatList[i].allChatObjID;
+						}
+					}
+					if (chatObjList == null){
+						console.log('[ERROR]: 没找到当前的聊天窗口！');
+						return ;
+					}
+					
+		      		// 隐藏之前的弹出菜单
+		      		mui('#popover_2').popover('hide');
+	      			
+					// 批量获得用户信息
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlistbyid?id=' + chatObjList.join(','), function(data){
+						var data = data.data;
+						var chatObjList = document.getElementById('chatObjList');
+						// 根据模板将数据渲染成 HTML
+						var html = template('chatobj-template', {'items':data});
+						// 将HTML插入到弹出菜单中
+						chatObjList.innerHTML = html;
+						// 显示弹出菜单
+		      			mui('#popover_2').popover('toggle',document.getElementsByTagName('header')[0]);
+					});
+		      	});
+			
 			});
 		</script>
 	</body>
