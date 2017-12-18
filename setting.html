@@ -17,7 +17,7 @@
 		<script id="setting-template" type="text/html">
 			<div class="mui-card">
 				<!--页眉，放置标题-->
-				<div class="mui-card-header mui-card-media">
+				<div class="mui-card-header mui-card-media" id="idcard">
 					<img src="./images/logo.png" style="width:20%;height:auto;margin-left:10px;margin-right:20px;"/>
 					<div class="mui-media-body" style="padding:8px;">
 						<h3>{{item.nickname}}</h3>
@@ -111,6 +111,20 @@
 	            var self = plus.webview.currentWebview();
 	            self.addEventListener('show',function(){
 	            	location.reload();
+	            });
+	            document.getElementById('idcard').addEventListener('tap',function(){
+	               if ( JSON.stringify(app.getState()) == '{}' ){
+	                  mui.openWindow({
+	            		   url:'login.html',
+	            		   id:'login.html'
+	            	   });
+	               }
+	               else{
+	            	   mui.openWindow({
+	            		   url:'setting_choose.html',
+	            		   id:'setting_choose.html'
+	            	   });
+	               }
 	            });
 	            document.getElementById('personal_M').addEventListener('tap',function(){
 	            	mui.openWindow({
