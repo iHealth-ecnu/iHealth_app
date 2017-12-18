@@ -65,10 +65,20 @@
 				// 获得参数
 				var id = e.detail.id;
 
-
+				// 从本地取出用户数据
+				var data = app.getState();
+				var userid = '';
+				if (JSON.stringify(data) != '{}'){
+					// 用户已登录
+					userid = data._id;
+				}
 				
 				// 根据 id 请求文章详情
-				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id, function(data){
+				var userID_str = '';
+				if (userid != ''){
+					userID_str = '&userID=' + userid;
+				}
+				mui.getJSON('http://ihealth.yangyingming.com/api/v1/article?id=' + id + userID_str, function(data){
 					// 根据模板将数据渲染成 HTML
 					var html = template('article-template', {'item':data});
 					// 将 HTML 插入到页面中
@@ -82,11 +92,23 @@
 					//wd-增加alert
 					//
 					var votebtn = document.getElementById('votebtn');
+					
+					// 从本地取出用户数据
+					var data = app.getState();
+					var userid = '';
+					if (JSON.stringify(data) != '{}'){
+						// 用户已登录
+						userid = data._id;
+					}
 					votebtn.addEventListener('tap',function(){
-						mui.alert('感谢您的投票！', '提示', function() {						
-								mui.get('http://ihealth.yangyingming.com/api/v1/updateUpvote',{
-										id:id
-									},function(data){
+						mui.alert('感谢您的投票！', '提示', function() {		
+								var data = {
+									id:id
+								}
+								if (userid != ''){
+									data.userID = userid;
+								}				
+								mui.get('http://ihealth.yangyingming.com/api/v1/updateUpvote',data,function(data){
     								
     								console.log(data);
     								

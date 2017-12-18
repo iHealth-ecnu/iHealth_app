@@ -19,6 +19,7 @@
 		<script src="js/app.js"></script>
 		<script src="js/template-web.js"></script>
 		<!--下拉刷新的框架-->
+
 		<div id="home" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<!--文本放在这里才会使用刷新-->
@@ -36,7 +37,9 @@
 					<img src="./images/logo.png" />
 					<div class="mui-media-body">
 						{{item.publisher}}
-						<p>发表于 {{item.pubdate}}</p>
+						<p id="pubdate">发表于 {{item.pubdate}}</p>
+						
+						
 					</div>
 				</div>
 				<!--内容区-->
@@ -106,7 +109,7 @@
 			    // 加载更多的内容到列表中
 			    setTimeout(function(){
 					// 从后台取数据
-					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + 1 + '&limit=5', function(data){
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + 1 + '&limit=5&cate=养生保健', function(data){
 						var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
 						// 根据模板将数据渲染成 HTML
 						var html = template('home-template', {'items':data});
@@ -125,16 +128,19 @@
 			// 当前应该加载的页数
 			var cur_page = 1;
 			var loadMore = function(pullRefresh) {
+				
 			    // 加载更多的内容到列表中
-//			    pullRefresh.endPullupToRefresh( (cur_page>6) );
+			    pullRefresh.endPullupToRefresh( (cur_page>6) );
 			    setTimeout(function(){
 					// 从后端获取数据
 					mui.toast('正在加载第' + cur_page + '页数据……');
-					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + cur_page++ + '&limit=5',
+					mui.getJSON('http://ihealth.yangyingming.com/api/v1/articlelist?page=' + cur_page++ + '&limit=5&cate=养生保健',
 					function(data){
 						var article_list = document.getElementById('home').getElementsByClassName('mui-scroll')[0];
 						// 根据模板将数据渲染成 HTML
 						var html = template('home-template', {'items':data});
+						//wd-日期更改
+				
 						// 将 HTML 插入到列表后
 						article_list.innerHTML += html;
 				    	// 超过一定页数便不再加载。参数为 true 表示不再更新数据。
@@ -145,6 +151,7 @@
 			};
 			//----------------------------------------
 			mui.plusReady(function(){
+				
 //				if(mui.os.ios){
 //					mui('.mui-scroll-wrapper').scroll({
 //						scrollY: true, //是否竖向滚动
@@ -162,7 +169,7 @@
                     reload();
                 }
 				
-				
+					
 				 //预加载详情页
 				webview_article = mui.preload({
 			        url: 'article.html',
@@ -221,6 +228,7 @@
 						
 				    }
 				});
+				//-wd
 			});
 			
 	</script>

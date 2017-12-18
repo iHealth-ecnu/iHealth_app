@@ -24,16 +24,22 @@
 							推荐
 						</a>
 						<a class="mui-control-item" href="#item2mobile" data-wid="home-subpage-2.html">
-							食疗
+							最新
 						</a>
 						<a class="mui-control-item" href="#item3mobile" data-wid="home-subpage-3.html">
-							中药
+							养生常识
 						</a>
 						<a class="mui-control-item" href="#item4mobile" data-wid="home-subpage-4.html">
-							西药
+							饮食养生
 						</a>
 						<a class="mui-control-item" href="#item5mobile" data-wid="home-subpage-5.html">
-							中西混合
+							冬季养生
+						</a>
+						<a class="mui-control-item" href="#item6mobile" data-wid="home-subpage-6.html">
+							人群养生
+						</a>
+						<a class="mui-control-item" href="#item7mobile" data-wid="home-subpage-7.html">
+							养生保健
 						</a>
 						<!--<a class="mui-control-item" href="#item6mobile" data-wid="home-subpage-6.html">
 							科技
@@ -70,6 +76,14 @@
 						id: "home-subpage-5.html",
 						url: "home-subpage-5.html",
 						extras: {}
+					}, {
+						id: "home-subpage-6.html",
+						url: "home-subpage-6.html",
+						extras: {}
+					}, {
+						id: "home-subpage-7.html",
+						url: "home-subpage-7.html",
+						extras: {}
 					}],
 					onChange: function(obj) {
 						var c = document.querySelector(".mui-control-item.mui-active");
@@ -95,14 +109,14 @@
 //		      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
 //					index.evalJS("document.getElementById('home.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
 //		     	};
-		      	document.querySelector('body').addEventListener('swipeleft',function(e){
-	      			if ( JSON.stringify(app.getState()) == '{}' ){
-		      			changeTab('home.html','login.html','登录');
-		      		}
-	      			else{
-		      			changeTab('home.html','chat.html','交流');	      				
-	      			}
-		      	});
+//		      	document.querySelector('body').addEventListener('swipeleft',function(e){
+//	      			if ( JSON.stringify(app.getState()) == '{}' ){
+//		      			changeTab('home.html','login.html','登录');
+//		      		}
+//	      			else{
+//		      			changeTab('home.html','chat.html','交流');	      				
+//	      			}
+//		      	});
 
 
 			});
