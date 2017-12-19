@@ -67,9 +67,21 @@
 		
 		<script src="js/mui.min.js"></script>
 		<script src="js/template-web.js"></script>
+		<script src="js/socket.io.js"></script>
 		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init();
+			
+			// 判断元素是否在数组内 
+			var contains = function (arr, obj) {
+				var i = arr.length;
+				while (i--) {
+					if (arr[i] === obj) {
+			    		return true;
+				    }
+				}
+				return false;
+			}
 			
 			var addTip = function(){
 				var tip = document.getElementById('tip');
@@ -90,6 +102,18 @@
 					tip.parentNode.removeChild(tip);
 				}
 			}
+			
+			var getTargetIDbyChatList = function(id, chatList){
+				// 找到第一个不是自身id的id 作为targetID
+				chatList.sort();
+				for(var i=0;i<chatList.length;i++){
+					if (chatList[i] != id){
+						return chatList[i];
+					}
+				}
+				return chatList[0];
+			}
+			
 			// 刷新好友列表函数
 			var refreshChatList = function(){
 				
@@ -99,6 +123,27 @@
 					var chatList = state.chatList;
 				else
 					var chatList = [];
+				// 检查聊天列表中是否有不符合的
+				for(var i=0;i<chatList.length;i++){
+					var targetID = getTargetIDbyChatList(state._id, chatList[i].allChatObjID);
+					console.log(targetID);
+					if(chatList[i]._id != targetID){
+						// 更新这个聊天室标识
+						// 获得 targetID 对应的用户信息
+						mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
+							data.allChatObjID = chatList[i].allChatObjID;
+							chatList[i] = data;
+						});
+					}
+				}
+				console.log(JSON.stringify(chatList));
+				// 等一会儿将修改后的结果写会本地
+				setTimeout(function(){
+					state.chatList = chatList;
+					console.log(JSON.stringify(chatList));
+					app.setState(state);
+				},1500);
+				
 				// 更新页面的好友列表HTML
 				var chatlist = document.getElementById('chatlist');
 				if (chatList.length==0){
@@ -140,10 +185,13 @@
 					}
 				});
 			};
-			
+
 			mui.plusReady(function(){
 				// 刷新好友列表函数
 				refreshChatList();
+				
+				// 和即时通讯服务器建立连接
+				var socket = io.connect('http://yangyingming.com:8080');
 				
 			    //预加载 im 页
 			    mui.preload({
@@ -155,6 +203,54 @@
 			        }
 			    });
 			    
+				// 接受发来的转移聊天室消息
+			    socket.on('move', function (data) {
+			    	// 获取当前用户的id
+					var state = app.getState();
+					var id = state._id;
+					// 判断当前用户是否属于被通知的用户
+					if (contains(data.new_chatList, id)){
+						// 退出原来的 room
+						socket.emit('leave', { 'roomid' : data.old_roomid });
+						
+						// 更新对应的聊天列表
+						var new_chatList = data.new_chatList;
+						new_chatList.sort();
+						var targetID = id;
+						for(var i=0;i<new_chatList.length;i++){
+							if(new_chatList[i] != targetID){
+								targetID = new_chatList[i];
+								break;
+							}
+						}
+						
+						// 计算 roomid
+						var i = 0;
+						for (i = 0 ; i < state.chatList.length ; i++){
+							if( state.chatList[i]._id == targetID ){
+								// 如果当前聊天对象中已存在对应的聊天室，那么更新该聊天室的聊天对象列表
+								state.chatList[i].allChatObjID = new_chatList;
+								app.setState(state);
+								// 刷新聊天列表
+								refreshChatList();
+								break;
+							}
+						}
+						// 如果当前聊天对象中不存在该聊天室，那么添加一个
+						if ( i >= state.chatList.length ){
+							// 获得 targetID 对应的用户信息
+							mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
+								data.allChatObjID = new_chatList;
+								state.chatList.push(data);
+								app.setState(state);
+								// 刷新聊天列表
+								refreshChatList();
+							});
+						}
+						
+					}
+			    });
+
 		     	// 监听滑动事件
 //		     	var changeTab = function(curTab, targetTab, targetTabTitle){
 //		      		var curWebview = plus.webview.currentWebview();		     		
