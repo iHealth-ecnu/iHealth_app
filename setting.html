@@ -37,7 +37,7 @@
 					    	<a class="mui-navigate-right" id="followDr">我的关注</a>
 					    </li>
 					    <li class="mui-table-view-cell">
-					    	<a class="mui-navigate-right" id="setting_C">设置</a>
+					    	<a class="mui-navigate-right" id="setting_C">个人详情</a>
 					    </li>
 					    <li class="mui-table-view-cell" id="signout">
 					    	<a class="mui-navigate-right">退出登录</a>
@@ -125,14 +125,15 @@
 	            		   url:'login.html',
 	            		   id:'login.html'
 	            	   });
+	            	   self.hide();
 	               }
 	               else{
 	            	   mui.openWindow({
-	            		   url:'setting_choose.html',
-	            		   id:'setting_choose.html'
+	            		   url:'personal_choose.html',
+	            		   id:'personal_choose.html'
 	            	   });
 	               }
-	               self.hide();
+	               
 	            });
 	            document.getElementById('personal_M').addEventListener('tap',function(){
 	            	mui.openWindow({
@@ -154,8 +155,8 @@
 	            });
 	            document.getElementById('setting_C').addEventListener('tap',function(){
 	            	mui.openWindow({
-	            		url:'setting_choose.html',
-	            		id:'setting_choose.html'
+	            		url:'personal_choose.html',
+	            		id:'personal_choose.html'
 	            	});
 	            });
 	      	});

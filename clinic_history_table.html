@@ -7,10 +7,10 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<style>
-			.mui-font{
+			.mui-font {
 				margin-top: 10px;
 				margin-left: 10px;
-				font-size:larger;
+				font-size: larger;
 				font-weight: bold;
 				font-family: "微软雅黑";
 			}
@@ -26,13 +26,29 @@
 		</header>
 		<div class="mui-content">
 			<div>
-				<p class="mui-font">姓名：</p>
-				<p class="mui-font">性别：</p>
-				<p class="mui-font">年龄：</p>
-				<p class="mui-font">联系电话：</p>
-				<p class="mui-font">联系电话：</p>
-				<p class="mui-font">诊断时间：</p>
-				<p class="mui-font">诊断结果：</p>
+				<p class="mui-font">
+					<span>姓名：</span>
+					<span style="float:center;" id="name"></span>
+				</p>
+				<p class="mui-font">
+					<span>性别：</span>
+					<span style="float:center;" id="sex"></span>
+				</p>
+				<p class="mui-font">
+					<spa你>年龄：</span>
+						<span style="float:center;" id="age"></span>
+				</p>
+				<p class="mui-font">
+					<span>联系电话：</span>
+					<span style="float:center;" id="phone"></span>
+				</p>
+				<p class="mui-font">
+					<span>诊断时间：</span>
+					<span style="float:center;">2017.10.27</span>
+				</p>
+				<p class="mui-font">
+					诊断结果：
+				</p>
 				<div class="mui-input-row" style="margin: 10px 5px;">
 					<textarea id="textarea" rows="5" placeholder=""></textarea>
 				</div>
@@ -40,8 +56,23 @@
 
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
 		<script type="text/javascript">
 			mui.init()
+			var data = app.getState();
+			if(JSON.stringify(data) != '{}') {
+			document.getElementById('name').innerHTML = data.name;
+			if(data.sex == '1') {
+				document.getElementById('sex').innerHTML = '男';
+			} else {
+				document.getElementById('sex').innerHTML = '女';
+			}
+			document.getElementById('age').innerHTML = data.age;
+			document.getElementById('phone').innerHTML = data.phone;
+			
+			}
+			
+			
 		</script>
 	</body>
 

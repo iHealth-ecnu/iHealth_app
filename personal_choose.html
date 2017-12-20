@@ -1,0 +1,335 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/mui.picker.min.css" rel="stylesheet" />
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left "></a>
+			<h1 class="mui-title">个人详情</h1>
+		</header>
+		<div class="mui-content">
+
+			<!--内容区-->
+			<div class="mui-card-content" style="padding:10px">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate" id="promptR">
+							<span>姓名</span>
+							<span style="float:right;" id="name"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate" id="promptN">
+							<span>昵称</span>
+							<span style="float:right;" id="nickname"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate" id="promptS">
+							<span>性别</span>
+							<span style="float:right;" id="sex"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate">
+							<span>类型</span>
+							<span style="float:right;" id="usertype"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate" id="pickDate">
+							<span>生日</span>
+							<span style="float:right;" id="birthday"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate" id="promptMP">
+							<span>手机号</span>
+							<span style="float:right;" id="phone"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" id="promptP">
+							<span>密码</span>
+							<span style="float:right;"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate">
+							<span>微信</span>
+							<span style="float:right;"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate">
+							<span>邮箱</span>
+							<span style="float:right;" id="email"></span>
+
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" id="about">关于我们</a>
+					</li>
+
+				</ul>
+			</div>
+
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/mui.picker.min.js"></script>
+		<script src="js/md5.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init()
+			var state = app.getState();
+			if(JSON.stringify(state) != '{}') {
+
+				document.getElementById('name').innerHTML = state.name;
+				document.getElementById('nickname').innerHTML = state.nickname;
+				if(state.sex == '1') {
+					document.getElementById('sex').innerHTML = '男';
+				} else {
+					document.getElementById('sex').innerHTML = '女';
+				}
+				if(state.usertype = '1') {
+					document.getElementById('usertype').innerHTML = '病人';
+				} else {
+					document.getElementById('usertype').innerHTML = '医生';
+				}
+				document.getElementById('birthday').innerHTML = state.birthday;
+				document.getElementById('phone').innerHTML = state.phone;
+				document.getElementById('email').innerHTML = state.email;
+
+				mui.plusReady(function() {
+
+					document.getElementById("promptR").addEventListener('tap', function(e) {
+						e.detail.gesture.preventDefault();
+						var btnArray = ['取消', '确定'];
+						mui.prompt('请输入你的姓名：', '姓名', '', btnArray, function(e) {
+							if(e.index == 1) {
+								var name = e.value;
+								var data = {
+									id: state._id,
+									newName: name,
+									password: state.password,
+								};
+								console.log(JSON.stringify(data));
+								mui.post('http://ihealth.yangyingming.com/api/v1/changeName', data, function(Data) {
+									console.log(JSON.stringify(Data));
+									if(Data.result) {
+										plus.nativeUI.toast('姓名修改成功');
+										document.getElementById('name').innerHTML = name;
+										state.name = name;
+										app.setState(state);
+									}
+								}, 'json');
+							}
+						});
+
+					});
+					document.getElementById("promptN").addEventListener('tap', function(e) {
+						e.detail.gesture.preventDefault();
+						var btnArray = ['取消', '确定'];
+						mui.prompt('请输入你的昵称：', '新昵称', '', btnArray, function(e) {
+							if(e.index == 1) {
+								var nickName = e.value;
+								var data = {
+									id: state._id,
+									newName: nickName,
+									password: state.password
+								};
+								mui.post('http://ihealth.yangyingming.com/api/v1/changeNickname', data, function(Data) {
+									console.log(JSON.stringify(Data));
+									if(Data.result) {
+										plus.nativeUI.toast('昵称修改成功');
+										document.getElementById('nickname').innerHTML = nickName;
+										state.nickname = nickName;
+										app.setState(state);
+									}
+								}, 'json');
+							}
+						})
+					});
+					document.getElementById("promptS").addEventListener('tap', function(e) {
+						var userPicker = new mui.PopPicker();
+						userPicker.setData([{
+							value: 1,
+							text: '男'
+						}, {
+							value: 0,
+							text: '女'
+						}]);
+						var id = state._id;
+						var sex;
+
+						userPicker.show(function(items) {
+							sex = items[0].value;
+							data = {
+								id : state._id,
+								newSex : sex,
+								password: state.password
+							};
+							mui.post('http://ihealth.yangyingming.com/api/v1/changeSex', data, function(Data) {
+								console.log(Data);
+
+								if(Data.result) {
+									plus.nativeUI.toast('性别修改成功');
+									document.getElementById('sex').innerHTML = items[0].text;
+									state.sex = sex;
+									app.setState(state);
+								}
+							}, 'json');
+
+						});
+					});
+
+					var birthday = '1970-1-1';
+					document.getElementById("pickDate").addEventListener('tap', function() {
+						var dDate = new Date();
+						//设置当前日期（不设置默认当前日期）
+						dDate.setFullYear(2016, 7, 16);
+						var minDate = new Date();
+						//最小时间
+						minDate.setFullYear(1900, 0, 1);
+						var maxDate = new Date();
+						//最大时间
+						//					    maxDate.setFullYear(2016, 11, 31);
+						plus.nativeUI.pickDate(function(e) {
+							var d = e.date;
+							birthday = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+							
+							var data = {
+								id : state._id,
+								newBirthday : birthday,
+								password : state.password
+								
+							};
+							mui.post('http://ihealth.yangyingming.com/api/v1/changeBirthday', data, function(Data) {
+								console.log(Data);
+								if(Data.result) {
+									plus.nativeUI.toast('生日修改成功');
+									document.getElementById('birthday').innerHTML = birthday;
+									state.birthday = birthday;
+									app.setState(state);
+								}
+							}, 'json');
+
+							//					        mui.toast('您选择的日期是:' + birthday);
+						}, function(e) {
+
+						}, {
+							title: '请选择日期',
+							date: dDate,
+							minDate: minDate,
+							maxDate: maxDate
+						});
+					});
+
+					document.getElementById("promptMP").addEventListener('tap', function(e) {
+						e.detail.gesture.preventDefault();
+						var btnArray = ['取消', '确定'];
+						var phoneNumReg = /(^[0-9]{3,4}\-[0-9]{7}$)|(^[0-9]{7}$)|(^[0-9]{3,4}[0-9]{7}$)|(^0{0,1}13[0-9]{9}$)/;
+						mui.prompt('请输入你的手机号：', '手机号', '', btnArray, function(e) {
+							if(phoneNumReg.test(e.value)) {
+								var newPhone = e.value;
+								var data = {
+									id : state._id,
+									newPhone : newPhone,
+									password : state.password
+									
+								};
+								mui.post('http://ihealth.yangyingming.com/api/v1/changePhone', data, function(Data) {
+									console.log(Data);
+									if(Data.result) {
+										plus.nativeUI.toast('手机号修改成功');
+										document.getElementById('phone').innerHTML = newPhone;
+										state.phone = newPhone;
+										app.setState(state);
+
+									}
+								}, 'json');
+							} else if(e.index == 1) {
+								plus.nativeUI.toast('请输入正确的手机号码');
+							}
+						})
+					});
+					document.getElementById("promptP").addEventListener('tap', function(e) {
+						e.detail.gesture.preventDefault();
+						var btnArray = ['取消', '确定'];
+						var id = state._id;
+						var oldScrect;
+						var newScrect;
+						var reg = /^.{6,}$/;
+
+						mui.prompt('请输入你的原始密码：', '原始密码', '', btnArray, function(e) {
+							if(e.index == 1) {
+								oldScrect = e.value;
+								var password = state.password;
+								console.log(password);
+								console.log(oldScrect);
+								console.log(md5(oldScrect));
+								
+								
+								if (password == md5(oldScrect)){
+									mui.prompt('请输入你的新密码：', '新密码', '', btnArray, function(e) {
+										if(reg.test(e.value)) {
+											newScrect = e.value;
+											
+											mui.prompt('请确认你的新密码：', '确认新密码', '', btnArray, function(e) {
+												if(e.value = newScrect) {
+													var data = {
+														id : state._id,
+														oldPassword : oldScrect,
+														newPassword : newScrect
+													};
+													mui.post('http://ihealth.yangyingming.com/api/v1/changePassword', data, function(Data) {
+														console.log(JSON.stringify(Data));
+														if(Data.result) {
+															plus.nativeUI.toast('密码修改成功');
+															state.password = md5(newScrect);
+															app.setState(state);
+														} else {
+															plus.nativeUI.toast('你的原始密码输入错误！！');
+	
+														}
+													}, 'json');
+	
+												} else {
+													plus.nativeUI.toast('两次新密码不一致！！');
+												}
+											})
+											
+										} else if(e.index == 1) {
+											plus.nativeUI.toast('新密码最少六位！！');
+										}
+									})
+								}
+								else{
+									mui.toast('原始密码输入错误！');
+								}
+							}
+						})
+					});
+
+				});
+			}
+			document.getElementById('about').addEventListener('tap', function() {
+				mui.openWindow({
+					url: 'about.html',
+					id: 'about.html'
+				});
+			});
+		</script>
+	</body>
+
+</html>
