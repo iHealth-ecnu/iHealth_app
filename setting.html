@@ -69,6 +69,17 @@
 			settingElement = document.getElementById('setting');
 			settingElement.innerHTML = html;
 			
+			document.querySelector('body').addEventListener('swiperight',function(e){
+	      		if ( JSON.stringify(app.getState()) == '{}' ){
+	      			changeTab('setting.html','login.html','登录');
+	      		}
+	      		else{
+	      			changeTab('setting.html','chat.html','交流');
+	      		}
+	      	});
+			
+			
+			
 				    	
 	     	// 监听滑动事件
 //	     	var changeTab = function(curTab, targetTab, targetTabTitle){
@@ -81,14 +92,7 @@
 //	      		// 在父页面执行JS，激活父页面中对应选择卡，修改标题
 //				index.evalJS("document.getElementById('setting.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');document.getElementById('title').innerHTML='" + targetTabTitle + "';");
 //	     	};
-	      	document.querySelector('body').addEventListener('swiperight',function(e){
-	      		if ( JSON.stringify(app.getState()) == '{}' ){
-	      			changeTab('setting.html','login.html','登录');
-	      		}
-	      		else{
-	      			changeTab('setting.html','chat.html','交流');
-	      		}
-	      	});
+
 	      	
 	      	// 监听退出登录事件
 	      	document.getElementById('signout').addEventListener('tap',function(){
@@ -105,6 +109,7 @@
 	      		}
 	      		location.reload();
 	      	});
+
 	      	
 	      	mui.plusReady(function(){
 	      		// 监听页面显示事件
@@ -114,6 +119,8 @@
 	            });
 	            document.getElementById('idcard').addEventListener('tap',function(){
 	               if ( JSON.stringify(app.getState()) == '{}' ){
+	               	  var index = plus.webview.getLaunchWebview();
+                      index.evalJS("document.getElementById('setting.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');");
 	                  mui.openWindow({
 	            		   url:'login.html',
 	            		   id:'login.html'
@@ -125,6 +132,7 @@
 	            		   id:'setting_choose.html'
 	            	   });
 	               }
+	               self.hide();
 	            });
 	            document.getElementById('personal_M').addEventListener('tap',function(){
 	            	mui.openWindow({
