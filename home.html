@@ -10,7 +10,9 @@
 
 		<link rel="stylesheet" href="css/mui.min.css">
 		<style>
-			
+		.mui-showincenter{
+			width: 50%;
+		}
 		</style>
 	</head>
 
@@ -21,10 +23,10 @@
 				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
 						<a class="mui-control-item mui-active" href="#item1mobile" data-wid="home-subpage-1.html">
-							推荐
+							推荐列表
 						</a>
 						<a class="mui-control-item" href="#item2mobile" data-wid="home-subpage-2.html">
-							最新
+							最新消息
 						</a>
 						<a class="mui-control-item" href="#item3mobile" data-wid="home-subpage-3.html">
 							养生常识
@@ -91,6 +93,19 @@
 							c.classList.remove("mui-active");
 						}
 						document.querySelector(".mui-scroll .mui-control-item:nth-child(" + (parseInt(obj.index) + 1) + ")").classList.add("mui-active");
+						mui('.mui-scroll-wrapper').scroll({
+							 scrollY: false, //是否竖向滚动
+							 scrollX: true, //是否横向滚动
+							 startX: 0, //初始化时滚动至x
+							 startY: 0, //初始化时滚动至y
+							 indicators: true, //是否显示滚动条
+							 deceleration:0.0006, //阻尼系数,系数越小滑动越灵敏
+							 bounce: false //是否启用回弹
+						});
+						
+						
+						mui('.mui-scroll-wrapper').scroll().scrollTo((parseInt(obj.index)*(-80)),0);
+						
 					}
 				});
 				mui(".mui-scroll").on("tap", ".mui-control-item", function(e) {
