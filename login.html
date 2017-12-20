@@ -170,6 +170,8 @@
                         var index = plus.webview.getLaunchWebview();
                         index.evalJS("document.getElementById('chat.html').classList.remove('mui-active');document.getElementById('setting.html').classList.add('mui-active');");
 						changeTab('setting.html','setting.html','设置');
+                        //index.evalJS("document.getElementById('setting.html').classList.remove('mui-active');document.getElementById('chat.html').classList.add('mui-active');");
+						//changeTab('chat','chat.html','交流');
 					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {

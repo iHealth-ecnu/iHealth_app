@@ -285,7 +285,8 @@
 			"im.html": {
 				"resources": [
 					"js/socket.io.js",
-					"js/md5.min.js"
+					"js/md5.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
