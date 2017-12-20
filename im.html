@@ -275,17 +275,9 @@
 		<script src="js/md5.min.js"></script>  
 		<script type="text/javascript">
 			mui.init();
-					
+			
 			// 获取当前时间
 			var pretime = new Date(0);
-			
-			// 根据 id 列表计算 roomid
-			var getRoomid = function(id_list){
-				id_list.sort();
-				var roomid_temp = id_list.join('_');
-				roomid_temp = md5(roomid_temp);
-				return roomid_temp;			
-			};
 			
 			// 判断元素是否在数组内 
 			var contains = function (arr, obj) {
@@ -298,6 +290,14 @@
 				return false;
 			}
 			
+			// 根据 id 列表计算 roomid
+			var getRoomid = function(id_list){
+				id_list.sort();
+				var roomid_temp = id_list.join('_');
+				roomid_temp = md5(roomid_temp);
+				return roomid_temp;			
+			};
+			
 			// 找到第一个不是自身id的id 作为targetID
 			var getTargetIDbyChatList = function(id, chatList){
 				chatList.sort();
@@ -308,6 +308,7 @@
 				}
 				return chatList[0];
 			};
+			
 			/**
 			 * @description 显示消息
 			 * @param {String} who 消息来源,可选参数: {params} 'sender','receiver'
@@ -436,9 +437,139 @@
 				var roomid = null;
 					
 				// 和即时通讯服务器建立连接
-				var socket = io.connect('http://yangyingming.com:8080');
+				var socket = null;
 				
+				// 建立连接
+				socket = io.connect('http://yangyingming.com:8080');
 				
+			    
+			    var updateTitle = function(){
+			    	// 根据存在本地的用户聊天对象列表更新标题
+			    	var targetID = app.getSettings().imTargetID;
+			    	var state = app.getState();
+			    	var id = state._id;
+			    	for(var i=0;i < state.chatList.length;i++){
+			    		if(state.chatList[i]._id == targetID){
+			    			// 找到对应聊天室
+							var allChatObjID =  state.chatList[i].allChatObjID;
+							// 排除当前用户id的所有用户
+							var new_allChatObjID = Array();
+							for(var j=0;j<allChatObjID.length;j++){
+								if (allChatObjID[j] != id){
+									new_allChatObjID.push(allChatObjID[j]);
+								}
+							}
+							console.log(id);
+							console.log(JSON.stringify(allChatObjID));
+							mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlistbyid?id=' + new_allChatObjID.join(','), function(data){
+								data = data.data; 
+								var name_list = new Array(); 
+								// 拼装标题
+								for(var j=0; j<data.length; j++){
+									name_list.push(data[j].name);
+								}
+								var navtitle = name_list.join('、');
+								document.getElementById('navTitle').innerHTML = navtitle;
+							});
+			    		}
+			    	}
+			    }
+			    
+				
+				// 接受发来的转移聊天室消息
+			    socket.on('move', function (data) {
+			    	console.log('111');
+			    	// 获取当前用户的id
+					var state = app.getState();
+					var id = state._id;
+					// 判断当前用户是否属于被通知的用户
+					if (contains(data.new_chatList, id)){
+						// 退出原来的 room
+						socket.emit('leave', { 'roomid' : data.old_roomid });
+						
+						// 加入新的 room
+						socket.emit('join', { 'roomid' : data.new_roomid });
+						
+						// 更新对应的聊天列表
+//						var new_chatList = data.new_chatList;
+//						var targetID = app.getSettings().imTargetID;
+						
+						// 如果原聊天室已存在，则更新聊天室的成员
+						var isExist = false;
+						if ( !state.hasOwnProperty("chatList") ){
+							state.chatList = Array();
+						}
+						for(var i=0;i<state.chatList.length;i++){
+							if( getRoomid(state.chatList[i].allChatObjID) == data.old_roomid ){
+								isExist = true;
+								break;
+							}
+						}
+						if (isExist){
+							// 更新对应聊天室的成员
+							// 聊天室标识（targetID）不变
+							state.chatList[i].allChatObjID = data.new_chatList;
+							app.setState(state);
+							// 更新聊天标题
+							updateTitle();
+							// 刷新聊天列表
+							var chatWebview = plus.webview.getWebviewById('chat.html');
+							chatWebview.evalJS('refreshChatList()');
+						}
+						else{
+							// 如果聊天室不存在，则创建一个新的聊天室，聊天室标识（targetid）为第一个不是自己的用户
+							// 获取新聊天室的标识（targetID）
+							var targetID = getTargetIDbyChatList(state._id, data.new_chatList);
+							var new_chatList = data.new_chatList;
+							
+							// 获得 targetID 对应的用户信息
+							mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
+								data.allChatObjID = new_chatList;
+								state.chatList.push(data);
+								app.setState(state);
+								// 更新聊天标题
+								updateTitle();
+								// 刷新聊天列表
+								var chatWebview = plus.webview.getWebviewById('chat.html');
+								chatWebview.evalJS('refreshChatList()');
+							});
+						
+						}
+//						// 计算 roomid
+//						var i = 0;
+//						console.log(JSON.stringify(state.chatList));
+//						for (i = 0 ; i < state.chatList.length ; i++){
+//							if( state.chatList[i]._id == targetID ){
+//								// 如果当前聊天对象中已存在对应的聊天室，那么更新该聊天室的聊天对象列表
+//								state.chatList[i].allChatObjID = new_chatList;
+//								app.setState(state);
+//								// 更新聊天标题
+//								updateTitle();
+//								// 刷新聊天列表
+//								var chatWebview = plus.webview.getWebviewById('chat.html');
+//								chatWebview.evalJS('refreshChatList()');
+//								break;
+//							}
+//						}
+//						// 如果当前聊天对象中不存在该聊天室，那么添加一个
+//						if ( i >= state.chatList.length ){
+//							console.log(11);
+//							// 获得 targetID 对应的用户信息
+//							mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
+//								data.allChatObjID = new_chatList;
+//								state.chatList.push(data);
+//								app.setState(state);
+//								// 更新聊天标题
+//								updateTitle();
+//								// 刷新聊天列表
+//								var chatWebview = plus.webview.getWebviewById('chat.html');
+//								chatWebview.evalJS('refreshChatList()');
+//							});
+//						}
+						
+					}
+			    });
+			    
 				// 接受发来的消息
 			    socket.on('message', function (data) {
 					// 计算上一次发送或接受消息的时间差，单位为秒
@@ -458,91 +589,6 @@
 			        // 消息滚动
         			msgScrollTop();
 			    });
-			    
-			    var updateTitle = function(){
-			    	// 根据存在本地的用户聊天对象列表更新标题
-			    	var targetID = app.getSettings().imTargetID;
-			    	var state = app.getState();
-			    	for(var i=0;i < state.chatList.length;i++){
-			    		if(state.chatList[i]._id == targetID){
-			    			// 找到对应聊天室
-							var allChatObjID =  state.chatList[i].allChatObjID;
-							// 取第一个元素之后的所有元素
-							allChatObjID = allChatObjID.slice(1);
-							mui.getJSON('http://ihealth.yangyingming.com/api/v1/userlistbyid?id=' + allChatObjID.join(','), function(data){
-								data = data.data; 
-								var name_list = new Array(); 
-								// 拼装标题
-								for(var i=0; i<data.length; i++){
-									name_list.push(data[i].name);
-								}
-								var navtitle = name_list.join('、');
-								document.getElementById('navTitle').innerHTML = navtitle;
-							});
-			    		}
-			    	}
-			    }
-			    
-				// 接受发来的转移聊天室消息
-			    socket.on('move', function (data) {
-			    	// 获取当前用户的id
-					var state = app.getState();
-					var id = state._id;
-					// 判断当前用户是否属于被通知的用户
-					if (contains(data.new_chatList, id)){
-						// 退出原来的 room
-						socket.emit('leave', { 'roomid' : data.old_roomid });
-						
-						// 加入新的 room
-						socket.emit('join', { 'roomid' : data.new_roomid });
-						
-						// 更新对应的聊天列表
-						var new_chatList = data.new_chatList;
-						var targetID = app.getSettings().imTargetID;
-						
-//						// 获取新的 targetID
-//						new_chatList.sort();
-//						var targetID = id;
-//						for(var i=0;i<new_chatList.length;i++){
-//							if(new_chatList[i] != targetID){
-//								targetID = new_chatList[i];
-//								break;
-//							}
-//						}
-						// 计算 roomid
-						var i = 0;
-						for (i = 0 ; i < state.chatList.length ; i++){
-							if( state.chatList[i]._id == targetID ){
-								// 如果当前聊天对象中已存在对应的聊天室，那么更新该聊天室的聊天对象列表
-								state.chatList[i].allChatObjID = new_chatList;
-								app.setState(state);
-								// 更新聊天标题
-								updateTitle();
-								// 刷新聊天列表
-								var chatWebview = plus.webview.getWebviewById('chat.html');
-								chatWebview.evalJS('refreshChatList()');
-								break;
-							}
-						}
-						// 如果当前聊天对象中不存在该聊天室，那么添加一个
-						if ( i >= state.chatList.length ){
-							// 获得 targetID 对应的用户信息
-							mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
-								data.allChatObjID = new_chatList;
-								state.chatList.push(data);
-								app.setState(state);
-								// 更新聊天标题
-								updateTitle();
-								// 刷新聊天列表
-								var chatWebview = plus.webview.getWebviewById('chat.html');
-								chatWebview.evalJS('refreshChatList()');
-							});
-						}
-						
-					}
-			    });
-			    
-				
 				
 				// 监听事件：发送文本消息
 				ui.msgSendText.addEventListener('tap',function(){
@@ -552,6 +598,7 @@
 				// 监听当前页面显示事件
 				var currentWebview = plus.webview.currentWebview();
 				currentWebview.addEventListener('show',function(){
+					
 					// 获得聊天对象信息
 					var state = app.getState();
 					var settings = app.getSettings();
@@ -592,7 +639,7 @@
 							'new_roomid' : roomid,
 							'new_chatList' : state.chatList[i].allChatObjID
 						};
-//						socket.emit('join', { 'roomid' : roomid });
+						socket.emit('join', { 'roomid' : roomid });
 						socket.emit('move', move_data); 
 						
 						// 刷新聊天列表
@@ -601,23 +648,16 @@
 						
 					});
 					
-//					// 计算 roomid
-//					for (var i = 0 ; i < state.chatList.length ; i++){
-//						if( targetID == state.chatList[i]._id ){
-//							var allChatObjID =  state.chatList[i].allChatObjID;
-//							roomid = getRoomid( allChatObjID );
-//						}
-//					}
-//					
-//					// 发送一个消息加入 room
-//					var move_data = {
-//						'old_roomid' : roomid,
-//						'new_roomid' : roomid,
-//						'new_chatList' : allChatObjID
-//					};
-////					socket.emit('join', { 'roomid' : roomid }); 
-//					socket.emit('move', move_data); 
+					
+					
+					
 				});
+				
+//				// 监听当前页面隐藏事件
+//				currentWebview.addEventListener('hide',function(){
+//					// 页面隐藏时关闭连接
+//					socket.close();
+//				});
 				
 				
 		      	// 监听 添加聊天对象 事件

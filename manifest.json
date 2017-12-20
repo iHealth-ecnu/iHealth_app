@@ -234,7 +234,8 @@
 					"followDr.html",
 					"mainDr.html",
 					"clinic_history.html",
-					"setting_choose.html"
+					"setting_choose.html",
+					"personal_choose.html"
 				],
 				"priority": 0
 			},
