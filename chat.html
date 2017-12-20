@@ -123,26 +123,6 @@
 					var chatList = state.chatList;
 				else
 					var chatList = [];
-				// 检查聊天列表中是否有不符合的
-				for(var i=0;i<chatList.length;i++){
-					var targetID = getTargetIDbyChatList(state._id, chatList[i].allChatObjID);
-					console.log(targetID);
-					if(chatList[i]._id != targetID){
-						// 更新这个聊天室标识
-						// 获得 targetID 对应的用户信息
-						mui.getJSON('http://ihealth.yangyingming.com/api/v1/user?id=' + targetID, function(data){
-							data.allChatObjID = chatList[i].allChatObjID;
-							chatList[i] = data;
-						});
-					}
-				}
-				console.log(JSON.stringify(chatList));
-				// 等一会儿将修改后的结果写会本地
-				setTimeout(function(){
-					state.chatList = chatList;
-					console.log(JSON.stringify(chatList));
-					app.setState(state);
-				},1500);
 				
 				// 更新页面的好友列表HTML
 				var chatlist = document.getElementById('chatlist');
