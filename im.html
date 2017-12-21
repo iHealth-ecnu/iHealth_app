@@ -663,10 +663,16 @@
 		      	// 监听 添加聊天对象 事件
 		      	var addChatObjButton = document.getElementById('addChatObj');
 		      	addChatObjButton.addEventListener('tap', function(e){
-		      		// 隐藏之前的弹出菜单
-		      		mui('#popover').popover('hide');
-					// 显示弹出菜单
-	      			mui('#popover').popover('toggle',document.getElementsByTagName('header')[0]);
+		      		var state = app.getState();
+		      		if (state.usertype == 2){
+			      		// 隐藏之前的弹出菜单
+			      		mui('#popover').popover('hide');
+						// 显示弹出菜单
+		      			mui('#popover').popover('toggle',document.getElementsByTagName('header')[0]);
+		      		}
+		      		else{
+		      			mui.toast('只有医生才能拉取用户呦！');
+		      		}
 		      	});
 		      	
 		      	// 监听搜索框输入事件
