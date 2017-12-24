@@ -127,6 +127,7 @@
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script>
 			(function($, doc) {
 				$.init();
@@ -177,10 +178,15 @@
 						var curdate = new Date();
 						var curyear = curdate.getFullYear();
 						var age = curyear - parseInt(birthday.split('-')[0]);
+						//MD5 加密
+						var passwd_md5 = md5(passwordBox.value);
+						console.log('这是reg页面调试信息');
+						console.log(passwordBox.value);
+						console.log(passwd_md5);
 						// 提取注册信息
 						var regInfo = {
 							email: emailBox.value,
-							password: passwordBox.value,
+							password: passwd_md5,     //passwordBox.value的md5加密
 							nickname: nicknameBox.value,
 							sex: sexBox.classList.contains("mui-active")? 1 : 0,
 							usertype: usertypeBox.classList.contains("mui-active")? 1 : 2,
