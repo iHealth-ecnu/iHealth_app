@@ -24,6 +24,8 @@
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			//获取认证结果
 			authed = data.result;
+			console.log("这里是app.js");
+			console.log(authed);
 			if(authed) {
 				// 登录成功
 				// 添加本地设置

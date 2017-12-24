@@ -127,6 +127,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/app.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
@@ -248,12 +249,20 @@
 					var autoLoginButton = doc.getElementById("autoLogin");
 					var regButton = doc.getElementById('reg');
 					var forgetButton = doc.getElementById('forgetPassword');
+					
 					loginButton.addEventListener('tap', function(event) {
+						//MD5 加密
+						var passwd_md5 = md5(passwordBox.value);
+						console.log('这是login页面调试信息');
+						console.log(passwordBox.value);
+						console.log(passwd_md5);
 						var loginInfo = {
 							email: accountBox.value,
-							password: passwordBox.value,
+							password: passwd_md5,    //passwordBox.value 的md5
 							autoLogin: autoLoginButton.classList.contains('mui-active') ? true : false
 						};
+						console.log("这里是login");
+						console.log(JSON.stringify(loginInfo));
 						
 						app.login(loginInfo, function(err) {
 							if (err) {

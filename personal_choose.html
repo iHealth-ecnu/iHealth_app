@@ -285,18 +285,26 @@
 										if(reg.test(e.value)) {
 											newScrect = e.value;
 											
+											//MD5 加密
+											var oldScrect_md5 = md5(oldScrect);
+											var newScrect_md5 = md5(newScrect);
+											console.log('这是person_chose页面调试信息');
+											console.log(oldScrect);
+											console.log(newScrect);
+											console.log(oldScrect_md5);
+											console.log(newScrect_md5);
 											mui.prompt('请确认你的新密码：', '确认新密码', '', btnArray, function(e) {
 												if(e.value = newScrect) {
 													var data = {
 														id : state._id,
-														oldPassword : oldScrect,
-														newPassword : newScrect
+														oldPassword : oldScrect_md5,
+														newPassword : newScrect_md5
 													};
 													mui.post('http://ihealth.yangyingming.com/api/v1/changePassword', data, function(Data) {
 														console.log(JSON.stringify(Data));
 														if(Data.result) {
 															plus.nativeUI.toast('密码修改成功');
-															state.password = md5(newScrect);
+															state.password = newScrect_md5;
 															app.setState(state);
 														} else {
 															plus.nativeUI.toast('你的原始密码输入错误！！');
