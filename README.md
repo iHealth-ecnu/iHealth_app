@@ -1,6 +1,5 @@
 ## iHealth
 iHealth 的 demo 示例程序，是一个 MUI 实现的 webapp。
-我是王东添加的代码
 
 ### 使用技术及工具
 * [MUI](http://www.dcloud.io/mui.html)（前端框架）
